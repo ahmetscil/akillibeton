@@ -1,0 +1,208 @@
+$sidebarWidth: 240px
+$headerHeight: 40px
+$dark: #10172a
+$darkText: #d3d3d3
+$darkGradient: linear-gradient(90deg, #0e111d, #0f142400)
+$light: #ebf0e7
+$lightText: #464646
+$main: #f3f6ff
+$mainText: #333
+$boxShadow: 1px 5px 10px #cdcdcd
+$color1: #7794ff !important
+$color1Text: #fff !important
+*
+  text-decoration: none
+a
+  text-decoration: none
+  color: #000
+  &:hover
+    color: #333
+body
+  font-size: 11px
+  background: $main
+  color: #333
+  font-family: 'Inter', sans-serif
+.input--alert
+  & input
+    border-color: red !important
+.asc_pariette
+  position: relative
+  width: 100%
+  min-height: 100%
+.asc_pariette-auth,
+.asc_pariette-default
+  position: relative
+  background: $main
+  color: $mainText
+  min-height: 100vh
+  width: 100%
+  transition: .3s
+// ***************
+// HEADER CLASS
+// ***************
+.asc_pariette-header
+  height: $headerHeight
+  width: calc(100% - $sidebarWidth)
+  background: $main
+  border-radius: 0 0 0 10px
+  position: fixed
+  top: 0
+  transition: .3s
+  left: $sidebarWidth
+  z-index: 999
+  display: block
+  color: $lightText
+  padding-left: 10px
+  & h1
+    font-weight: bold
+    letter-spacing: -0.1rem
+    font-size: 26px
+  .asc_pariette-header-operations
+    text-align: right
+    padding-top: 5px
+    padding-right: 25px
+    .asc_pariette-header-operations-opt
+      width: 30px
+      padding: 5px 0 3px 0
+      border-radius: 5px
+      text-align: center
+      display: inline-block
+      background: $light
+      color: $lightText
+      border: 1px lighten($light, 10) solid
+  .asc_pariette-breadcrumb
+    list-style: none
+    line-height: $headerHeight
+    display: inline-block
+    padding: 0
+    & li.asc_pariette-breadcrumb-links
+      display: inline-block
+      margin-right: 20px
+    .asc_pariette-breadcrumb-active
+      display: inline-block
+      font-weight: 600
+  .asc_pariette-sitename-mobile
+    display: inline-block
+    margin-right: 10px
+    font-weight: 900
+    line-height: 40px
+    font-size: 14px
+.asc_pariette-header-full
+  width: 100%
+  transition: .3s
+  left: 0px
+// ***************
+// SIDEBAR CLASS
+// ***************
+.asc_pariette-sidebar
+  position: fixed
+  left: 0
+  height: 100vh
+  transition: .3s
+  width: $sidebarWidth
+  color: $darkText
+  background: $darkGradient
+  & a
+    color: $darkText
+.asc_pariette-sidebar-hide
+  left: -100vw
+  transition: .3s
+// ***************
+// MAIN CLASS
+// ***************
+.asc_pariette-main
+  position: relative
+  color: $mainText
+  min-height: 100vh
+  width: calc(100% - $sidebarWidth - 10px)
+  margin-left: $sidebarWidth
+  transition: .3s
+  padding-top: calc($headerHeight + 5px)
+.asc_pariette-main-full
+  width: calc(100% - 20px)
+  transition: .3s
+  margin-left: 10px
+.asc_pariette-pagecard
+  position: relative
+  border-radius: 10px
+  background: #fff
+  overflow: hidden
+  padding: 10px
+  box-shadow: $boxShadow
+  min-height: 80vh
+.asc_pariette-card
+  position: relative
+  border-radius: 10px
+  background: #fff
+  overflow: hidden
+  padding: 10px
+  box-shadow: $boxShadow
+  min-height: 40vh
+  & h1
+    font-size: 20px
+    font-weight: 600
+    letter-spacing: 0
+    padding: 0
+// ***************
+// PRIMEVUE CLASS
+// ***************
+.asc_pariette-table-operations
+  display: inline-block
+  float: right
+  margin-right: .5rem
+  & span
+    background: $light
+    border-radius: 5px
+    color: $lightText
+    display: inline-block
+    text-align: center
+    line-height: 38px
+    height: 33px
+    width: 33px
+    & a
+      display: block
+      height: 33px
+      width: 33px
+    &:hover
+      background: darken($light, 10)
+.p-datatable
+  font-size: 12px !important
+  .p-datatable-header
+    border: none !important
+    background: none !important
+    padding: 0 !important
+    & h1
+      font-size: 24px !important
+  .p-datatable-tbody
+    & tr
+      & td
+        border: 1px solid #f3f3f3 !important
+    .p-highlight
+      background: $color1
+      color: $color1Text
+.p-inputtext,
+.p-multiselect,
+.p-dropdown
+  border: none !important
+  .p-dropdown-label.p-placeholder
+    font-size: 10px !important
+.p-inputtext.p-inputtext-sm
+  font-size: 10px !important
+.p-link,
+.p-paginator
+  .p-paginator-current
+  font-size: 10px !important
+.p-button.p-button-sm
+  padding: 0.35em 0.5rem
+.p-tooltip-text
+  font-size: 10px !important
+  background: $dark !important
+  color: $darkText !important
+.p-dialog
+  .p-dialog-header,
+  .p-dialog-content,
+  .p-dialog-footer
+    background: $main !important
+    color: $mainText !important
+  .p-field
+    font-size: 10px
