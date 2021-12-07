@@ -1,24 +1,23 @@
 <template>
   <div class="asc_pariette-pagecard">
     <Table
-      v-if="tableData"
-      :items="tableData"
       :head="tableHead"
       :operation="tableOperation"
+      :api="pageApi"
     />
-    <Loader v-else />
   </div>
 </template>
-
 <script>
-import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
   data () {
     return {
+      pageApi: 'Uplink',
       tableHead: [],
       tableOperation: {
+        create: true,
+        export: true,
         stop: false,
         actions: false,
         status: true,
@@ -27,16 +26,13 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapState(['tableData'])
-  },
   mounted () {
     this.getData()
-    this.$store.commit('setBreadcrumb', { active: 'Uplink', items: { label: 'Uplink' } })
   },
   methods: {
     getData () {
-      this.$store.dispatch('getTableData', { link: 'Uplink' })
+      this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
+      this.$store.dispatch('getTableData', { link: this.pageApi })
       this.tableHead = [
         { col: 'sku', label: this.$t('action.sku'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },

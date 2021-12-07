@@ -97,12 +97,11 @@ export default {
       }
     }
   },
-  async getTableData ({ state, commit }, data) {
+  async getTableData ({ commit }, data) {
     commit('setLoader', true)
     commit('setTableData', [])
     await this.$axios.$get(data.link)
       .then((res) => {
-        commit('setLoader', false)
         switch (res.code) {
           case 200:
             commit('setTableData', res.data)
@@ -111,39 +110,22 @@ export default {
             commit('setTableData', res.error)
             break
         }
+        commit('setLoader', false)
       })
       .catch((err) => {
+        commit('setLoader', false)
         commit('setError', err.error)
       })
   },
-  async createData ({ state, commit }, data) {
-    commit('setReturn', 0)
+  async createData ({ commit }, data) {
     commit('setLoader', true)
-    await this.$axios.$post(`${state.companyToken}/${data.api}`, data.info)
+    await this.$axios.$post(data.api, data.query)
       .then((res) => {
         commit('setLoader', false)
-        if (res.status) {
-          switch (res.code) {
-            case 404:
-              commit('setTableData', res.error)
-              break
-            case 200:
-              commit('setReturn', data.retcount)
-              if (res.data.data) {
-                commit('setLog', res.data.data)
-              }
-              break
-            default:
-              this.$toast.error(res.error)
-              commit('setError', res.error)
-              break
-          }
-        } else {
-          this.$toast.error(res.error)
-          commit('setError', res.error)
-        }
+        this.$router.push(this.localeLocation({ name: `Admin-${data.api}` }))
       })
       .catch((err) => {
+        commit('setLoader', false)
         commit('setError', err.message)
       })
   },

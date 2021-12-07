@@ -60,7 +60,25 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
     ['primevue/nuxt', {
-      components: ['ProgressSpinner', 'Badge', 'DataTable', 'Card', 'Column', 'Button', 'Calendar', 'Dropdown', 'MultiSelect', 'InputText', 'Password', 'Dialog', 'Checkbox', 'Chart', 'Tooltip', 'Textarea'],
+      components: [
+        'ProgressSpinner',
+        'Badge',
+        'DataTable',
+        'Card',
+        'Column',
+        'Button',
+        'Calendar',
+        'Dropdown',
+        'MultiSelect',
+        'InputText',
+        'Password',
+        'Dialog',
+        'Checkbox',
+        'Chart',
+        'Tooltip',
+        'Textarea',
+        'InputNumber'
+      ],
       directives: ['Tooltip', 'Badge']
     }],
     // 'nuxtjs-darkmode-js-module',

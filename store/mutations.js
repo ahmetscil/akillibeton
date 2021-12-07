@@ -99,7 +99,9 @@ export default {
     state.getMe = payload
   },
   setTableData (state, payload) {
+    state.loader = true
     state.tableData = payload
+    state.loader = false
   },
   setTableRows (state, payload) {
     state.tableRows = payload

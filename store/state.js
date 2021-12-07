@@ -35,7 +35,7 @@ export default () => ({
     name: '',
     image: ''
   },
-  loader: false,
+  loader: true,
   tableData: [],
   locale: 'de-DE',
   registeredUser: '',

@@ -1,42 +1,56 @@
 <template>
   <div class="asc_pariette-pagecard">
     <Table
-      v-if="tableData"
-      :items="tableData"
       :head="tableHead"
       :operation="tableOperation"
+      :api="pageApi"
+      :create="formData"
     />
-    <Loader v-else />
   </div>
 </template>
-
 <script>
-import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
   data () {
     return {
+      pageApi: 'Measurement',
       tableHead: [],
-      tableOperation: {
+      tableOperation: {},
+      formData: []
+    }
+  },
+  mounted () {
+    this.getData()
+  },
+  methods: {
+    getData () {
+      this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
+      this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.tableOperation = {
+        create: true,
+        export: true,
         stop: false,
         actions: false,
         status: true,
         preview: true,
         edit: true
       }
-    }
-  },
-  computed: {
-    ...mapState(['tableData'])
-  },
-  mounted () {
-    this.getData()
-    this.$store.commit('setBreadcrumb', { active: 'Measurement', items: { label: 'Measurement' } })
-  },
-  methods: {
-    getData () {
-      this.$store.dispatch('getTableData', { link: 'Measurement' })
+      this.formData = [
+        { label: 'name', type: 'InputText' },
+        { label: 'description', type: 'InputText' },
+        { label: 'mix', type: 'InputNumber' },
+        { label: 'sensor', type: 'InputText' },
+        { label: 'max_temp', type: 'Temperature' },
+        { label: 'min_temp', type: 'Temperature' },
+        { label: 'last_temp', type: 'Temperature' },
+        { label: 'readed_max', type: 'Temperature' },
+        { label: 'readed_min', type: 'Temperature' },
+        { label: 'started_at', type: 'Calendar' },
+        { label: 'ended_at', type: 'Calendar' },
+        { label: 'deployed_at', type: 'Calendar' },
+        { label: 'last_data_at', type: 'Calendar' }
+      ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
