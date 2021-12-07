@@ -4,19 +4,19 @@
       <b-col cols="12" lg="3">
         <div class="asc_pariette-card">
           <h1>title</h1>
-          <Chart type="bar" :data="basicData" :options="basicOptions" height="500" />
+          <Chart type="bar" :data="basicData" :options="chartOptions" />
         </div>
       </b-col>
       <b-col cols="12" lg="3">
         <div class="asc_pariette-card">
           <h1>title</h1>
-          <Chart type="pie" :data="chartData" :options="chartOptions" height="500" />
+          <Chart type="pie" :data="chartData" :options="chartOptions" />
         </div>
       </b-col>
       <b-col cols="12" lg="6">
         <div class="asc_pariette-card">
           <h1>title</h1>
-          <Chart type="doughnut" :data="chartData" :options="chartOptions" height="500" />
+          <Chart type="doughnut" :data="chartData" :options="chartOptions" />
         </div>
       </b-col>
     </b-row>
@@ -29,6 +29,7 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
+      chartOptions: {},
       basicData: {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [

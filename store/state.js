@@ -1,10 +1,10 @@
 export default () => ({
   siteInfo: {
-    name: 'PARIETTE',
+    name: 'AKILLIBETON',
     logo: 'pariette-header-logo.svg',
     cdn_url: 'https://pariette-cdn.s3.eu-central-1.amazonaws.com/uploads/',
     copyright: '© 2021 CANVAS TEKNOLOJI',
-    footer: '© 2021 PARIETTE. All Rights Reserved.'
+    footer: '© 2021 AKILLI BETON. All Rights Reserved.'
   },
   myStore: {
     cdn_url: 'https://pariette-cdn.s3.eu-central-1.amazonaws.com/uploads/',
@@ -12,6 +12,7 @@ export default () => ({
     css: '',
     name: ''
   },
+  user: process.browser ? localStorage.getItem('userData') : {},
   breadcrumb: {
     active: '',
     items: []
@@ -40,16 +41,5 @@ export default () => ({
   registeredUser: '',
   lookup: {},
   canvas: {},
-  navigation: [],
-  loginUser: {
-    signed: process.browser ? localStorage.getItem('signed') : '',
-    userPortalId: process.browser ? localStorage.getItem('userPortalId') : '',
-    email: process.browser ? localStorage.getItem('userEmail') : '',
-    name: process.browser ? localStorage.getItem('userName') : '',
-    phoneNumber: process.browser ? localStorage.getItem('phoneNumber') : '',
-    faxNumber: process.browser ? localStorage.getItem('faxNumber') : '',
-    address: process.browser ? localStorage.getItem('address') : '',
-    ip: process.browser ? localStorage.getItem('userIP') : '',
-    token: process.browser ? localStorage.getItem('userToken') : ''
-  }
+  navigation: []
 })

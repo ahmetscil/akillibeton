@@ -1,8 +1,8 @@
 <template>
   <div class="asc_pariette-pagecard">
     <Table
-      v-if="tableData.products"
-      :items="tableData.products.data"
+      v-if="tableData"
+      :items="tableData"
       :head="tableHead"
       :operation="tableOperation"
     />
@@ -32,11 +32,11 @@ export default {
   },
   mounted () {
     this.getData()
-    this.$store.commit('setBreadcrumb', { active: 'Actions', items: { label: 'Actions' } })
+    this.$store.commit('setBreadcrumb', { active: 'Uplink', items: { label: 'Uplink' } })
   },
   methods: {
     getData () {
-      this.$store.dispatch('getTableData', { link: 'pr/categoryProduct/marble' })
+      this.$store.dispatch('getTableData', { link: 'Uplink' })
       this.tableHead = [
         { col: 'sku', label: this.$t('action.sku'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },

@@ -15,6 +15,7 @@
         </ul>
       </b-col>
       <b-col class="asc_pariette-header-operations">
+        {{ user.name }}
         <div class="asc_pariette-header-operations-opt" @click="hamburger()">
           <i class="pi pi-bars" />
         </div>
@@ -34,8 +35,9 @@ export default {
   data: () => ({
     defaultIcon: 'far fa-circle'
   }),
-  computed: mapState(['siteInfo', 'breadcrumb', 'template']),
+  computed: mapState(['siteInfo', 'user', 'breadcrumb', 'template']),
   mounted () {
+    this.$store.commit('setUser')
   },
   methods: {
     async logoutUser () {

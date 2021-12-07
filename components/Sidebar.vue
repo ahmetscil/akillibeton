@@ -43,18 +43,52 @@ export default {
         icon: 'pi pi-folder'
       },
       {
-        title: 'header.Action',
-        route: 'Admin-Action',
+        title: 'router.Measurement',
+        route: 'Admin-Measurement',
         icon: 'pi pi-folder'
       },
       {
-        title: 'header.Company',
-        route: 'Admin-Dashboard',
+        title: 'router.Sensors',
+        route: 'Admin-Sensors',
+        icon: 'pi pi-folder'
+      },
+      {
+        title: 'router.Downlink',
+        route: 'Admin-Downlink',
+        icon: 'pi pi-folder'
+      },
+      {
+        title: 'router.Mix',
+        icon: 'pi pi-folder',
+        route: 'Admin-Mix'
+      },
+      {
+        title: 'router.Projects',
+        route: 'Admin-Projects',
+        icon: 'pi pi-folder'
+      },
+      {
+        title: 'router.Uplink',
+        route: 'Admin-Uplink',
+        icon: 'pi pi-folder'
+      },
+      {
+        title: 'router.Companies',
         icon: 'pi pi-folder',
         sub: [
           {
-            title: 'header.Dashboard',
-            route: 'Admin-Dashboard',
+            title: 'router.Companies',
+            route: 'Admin-Companies',
+            icon: 'pi pi-folder'
+          },
+          {
+            title: 'router.Log',
+            route: 'Admin-Log',
+            icon: 'pi pi-folder'
+          },
+          {
+            title: 'router.Users',
+            route: 'Admin-Users',
             icon: 'pi pi-folder'
           }
         ]
@@ -91,6 +125,7 @@ export default {
       background: lighten(#2d3344, 10) !important
     .asc_pariette-sidebar-menu-list
       height: calc(99vh - 100px)
+      overflow: scroll
       & ul
         list-style: none
         padding: 10px

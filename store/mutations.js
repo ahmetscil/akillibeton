@@ -21,20 +21,14 @@ export default {
     state.loader = payload
   },
   setLogin (state, payload) {
-    state.returnCount = 0
     if (process.browser) {
-      localStorage.setItem('customerData', JSON.stringify(payload.customer.customer))
-      localStorage.setItem('customerToken', payload.customer.customer.token)
-      localStorage.setItem('companyToken', payload.customer.customer.company)
-      localStorage.setItem('companyTitle', process.env.DEMCOM_SITE_TITLE ? process.env.DEMCOM_SITE_TITLE : 'DEMPINS')
-      state.customerData = JSON.parse(localStorage.getItem('customerData'))
-      state.customerToken = localStorage.getItem('customerToken')
-      state.companyToken = localStorage.getItem('companyToken')
-      if (payload.customer.isAdmin === 1) {
-        state.returnCount = 662
-      } else {
-        state.returnCount = 661
-      }
+      localStorage.setItem('userData', JSON.stringify(payload.user))
+      state.user = localStorage.getItem('userData')
+    }
+  },
+  setUser (state) {
+    if (process.browser) {
+      state.user = JSON.parse(localStorage.getItem('userData'))
     }
   },
   killLogin (state) {

@@ -68,12 +68,8 @@ export default {
       } else {
         this.loginError = false
         try {
-          const login = await this.$auth.loginWith('laravelJWT', { data: this.form })
-          const userdata = {
-            customer: login.data.customer[0],
-            login: login.data
-          }
-          this.$store.commit('setLogin', userdata)
+          await this.$auth.loginWith('laravelJWT', { data: this.form })
+          this.$store.commit('setLogin', this.$auth.$state)
           this.$toast.success(this.$t('auth.pleaseWait'))
         } catch (err) {
         }
