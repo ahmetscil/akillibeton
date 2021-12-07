@@ -188,8 +188,20 @@ export default {
     ...mapState(['breadcrumb', 'tableData'])
   },
   methods: {
-    createData () {
-      this.$store.dispatch('createData', { api: this.api, query: this.form })
+    async createData () {
+      this.$store.commit('setLoader', true)
+      await this.$axios.$post(this.api, this.form)
+        .then((res) => {
+          this.createModal = false
+          this.$store.commit('setLoader', false)
+          this.$store.dispatch('getTableData', { link: this.api })
+        })
+        .catch((err) => {
+          this.createModal = false
+          this.$store.commit('setLoader', false)
+          this.$store.commit('setError', err.message)
+        })
+      // this.$store.dispatch('createData', { api: this.api, query: this.form })
     },
     exportTable () {
       this.$refs.dataTable.exportCSV()
