@@ -35,6 +35,7 @@ export default () => ({
     name: '',
     image: ''
   },
+  createModal: false,
   loader: true,
   tableData: [],
   locale: 'de-DE',

@@ -4,6 +4,7 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
+      :create="formData"
     />
   </div>
 </template>
@@ -15,15 +16,8 @@ export default {
     return {
       pageApi: 'Sensors',
       tableHead: [],
-      tableOperation: {
-        create: true,
-        export: true,
-        stop: false,
-        actions: false,
-        status: true,
-        preview: true,
-        edit: true
-      }
+      tableOperation: {},
+      formData: []
     }
   },
   mounted () {
@@ -31,6 +25,8 @@ export default {
   },
   methods: {
     getData () {
+      this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
+      this.$store.dispatch('getState', { api: 'Lookup/sensorTypeList', label: 'sensorTypeList' })
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.tableHead = [
@@ -40,6 +36,22 @@ export default {
         { col: 'project', label: this.$t('action.project'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'type', label: this.$t('action.type'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'InputText', filter: true, sortable: true, options: [] }
+      ]
+      this.tableOperation = {
+        create: true,
+        export: true,
+        stop: false,
+        actions: false,
+        status: true,
+        preview: true,
+        edit: true
+      }
+      this.formData = [
+        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
+        { label: 'DevEUI', type: 'InputText' },
+        { label: 'title', type: 'InputText' },
+        { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id' },
+        { label: 'description', type: 'Textarea' }
       ]
     }
   }

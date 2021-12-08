@@ -126,7 +126,6 @@ export default {
   },
   methods: {
     async save (form) {
-      this.$store.commit('setReturn', 0)
       this.$store.commit('setUploadedStatus', false)
       this.currentStatus = STATUS_SAVING
       const upl = await this.$axios.$post(`upload/${this.where}`, form)
@@ -143,7 +142,6 @@ export default {
             this.$store.commit('setUploadedImages', upl.data)
             break
         }
-        this.$store.commit('setReturn', 25)
       } else {
         this.uploadError = upl
         this.currentStatus = STATUS_FAILED

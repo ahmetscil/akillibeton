@@ -9,9 +9,8 @@ export default {
   },
   async getState ({ state, commit }, data) {
     commit('setState', { data: [], label: data.label })
-    commit('setReturn', 0)
     commit('setLoader', true)
-    await this.$axios.$get(`${state.companyToken}/${data.api}`)
+    await this.$axios.$get(data.api)
       .then((res) => {
         commit('setLoader', false)
         switch (res.code) {
@@ -37,7 +36,6 @@ export default {
   },
   async getTableState ({ state, commit }, data) {
     commit('setState', { data: [], label: data.label })
-    commit('setReturn', 0)
     commit('setTableLoader', true)
     await this.$axios.$get(`${state.companyToken}/${data.api}`)
       .then((res) => {
@@ -131,14 +129,12 @@ export default {
   },
   async updateData ({ state, commit }, data) {
     commit('setLoader', true)
-    commit('setReturn', 0)
     await this.$axios.$put(`${state.companyToken}/${data.api}/${data.id}`, data.info)
       .then((res) => {
         commit('setLoader', false)
         if (res.status) {
           switch (res.code) {
             case 200:
-              commit('setReturn', data.retcount)
               break
           }
         } else {
@@ -147,18 +143,13 @@ export default {
       })
       .catch((err) => {
         commit('setLoader', false)
-        commit('setReturn', 0)
         commit('setError', err.message)
       })
   },
   async deleteData ({ state, commit }, data) {
     await this.$axios.$delete(`${state.companyToken}/${data.api}/${data.info}`)
       .then((res) => {
-        if (res.status) {
-          commit('setReturn', data.retcount)
-        } else {
-          commit('setError', res.error)
-        }
+        commit('setError', res.error)
       })
       .catch((err) => {
         commit('setError', err.message)

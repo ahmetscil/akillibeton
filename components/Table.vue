@@ -30,11 +30,10 @@
           </b-col>
           <b-col align-self="end">
             <div class="float-right">
-              <Button v-if="operation.create" icon="pi pi-plus" :label="$t('general.newRecord')" class="p-button-sm p-button-primary" @click="newData()" />
-              <Button v-if="operation.export" icon="pi pi-external-link" :v-tooltip="$t('general.exportTable')" class="p-button-sm p-button-secondary" @click="exportTable($event)" />
+              <Button v-if="operation.create" icon="pi pi-plus" :label="$t('general.newRecord')" class="p-button-sm p-button-primary" @click="createModal = true" />
+              <Button v-if="operation.export" icon="pi pi-file-excel" :v-tooltip="$t('general.exportTable')" class="p-button-sm p-button-secondary" @click="$refs.dataTable.exportCSV()" />
             </div>
             <div v-if="selectedRow" class="asc_pariette-table-operations">
-              {{ selectedRow.sku }}
               <span v-if="operation.edit" v-tooltip="$t('general.edit')">
                 <nuxt-link :to="'/' + selectedRow.id"><i class="pi pi-pencil" /></nuxt-link>
               </span>
@@ -67,11 +66,11 @@
       >
         <template v-if="column.filter" #filter>
           <template v-if="column.type === 'InputText'">
-            <InputText v-model="filters[column.label]" type="text" class="p-column-filter p-inputtext-sm" :placeholder="$t('general.searchBy', { x: column.label})" />
+            <InputText v-model="filters[column.col]" type="text" class="p-column-filter p-inputtext-sm" :placeholder="$t('general.searchBy', { x: column.label})" />
           </template>
           <template v-if="column.type === 'MultiSelect'">
             <MultiSelect
-              v-model="filters[column.label]"
+              v-model="filters[column.col]"
               :options="column.options"
               placeholder="All"
               class="p-column-filter"
@@ -84,10 +83,10 @@
             </MultiSelect>
           </template>
           <template v-if="column.type === 'Calendar'">
-            <Calendar v-model="filters[column.label]" date-format="yyyy-mm-dd" class="p-column-filter" :placeholder="$t('general.searchBy', { x: column.label})" />
+            <Calendar v-model="filters[column.col]" date-format="yyyy-mm-dd" class="p-column-filter" :placeholder="$t('general.searchBy', { x: column.label})" />
           </template>
           <template v-if="column.type === 'Dropdown'">
-            <Dropdown v-model="filters[column.label]" :options="column.options" :placeholder="$t('general.searchBy', { x: column.label})" class="p-column-filter" :show-clear="true">
+            <Dropdown v-model="filters[column.col]" :options="column.options" :placeholder="$t('general.searchBy', { x: column.label})" class="p-column-filter" :show-clear="true">
               <template #option="slot">
                 <span :class="'customer-badge status-' + slot.option">{{ slot.option }}</span>
               </template>
@@ -103,7 +102,7 @@
         </template>
       </Column>
     </DataTable>
-    <Dialog :visible.sync="createModal">
+    <Dialog :visible.sync="createModal" :modal="true" :maximizable="true">
       <template #header>
         <h3>{{ $t('form.newRecord') }}</h3>
       </template>
@@ -128,12 +127,21 @@
             :show-icon="true"
             date-format="yy-mm-dd"
           />
+          <Dropdown
+            v-if="row.type === 'Dropdown'"
+            v-model="select[row.label]"
+            :options="lookup[row.option]"
+            option-label="title"
+            :filter="true"
+            :show-clear="true"
+            @change="setModel(row.label, $event, row.selector)"
+          />
+        </div>
+        <div class="col-12 mt-5">
+          <Button :label="$t('form.cancel')" icon="pi pi-times" class="p-button-text" @click="close()" />
+          <Button :label="$t('form.confirm')" icon="pi pi-check" autofocus @click="createData()" />
         </div>
       </div>
-      <template #footer>
-        <Button :label="$t('form.cancel')" icon="pi pi-times" class="p-button-text" @click="createModal = false" />
-        <Button :label="$t('form.confirm')" icon="pi pi-check" autofocus @click="createData()" />
-      </template>
     </Dialog>
   </div>
 </template>
@@ -175,17 +183,18 @@ export default {
   data () {
     return {
       selectionMode: 'single',
-      createModal: false,
       search: '',
       perpage: 10,
       customers: null,
       selectedRow: null,
       filters: {},
-      form: {}
+      form: {},
+      select: {},
+      createModal: false
     }
   },
   computed: {
-    ...mapState(['breadcrumb', 'tableData'])
+    ...mapState(['breadcrumb', 'tableData', 'lookup'])
   },
   methods: {
     async createData () {
@@ -193,6 +202,7 @@ export default {
       await this.$axios.$post(this.api, this.form)
         .then((res) => {
           this.createModal = false
+          this.form = {}
           this.$store.commit('setLoader', false)
           this.$store.dispatch('getTableData', { link: this.api })
         })
@@ -201,13 +211,12 @@ export default {
           this.$store.commit('setLoader', false)
           this.$store.commit('setError', err.message)
         })
-      // this.$store.dispatch('createData', { api: this.api, query: this.form })
     },
-    exportTable () {
-      this.$refs.dataTable.exportCSV()
-    },
-    newData () {
-      this.createModal = true
+    setModel (model, event, selector) {
+      if (event.value !== null) {
+        this.select[model] = event.value.title
+        this.form[model] = event.value[selector]
+      }
     },
     filterDate (value, filter) {
       if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {

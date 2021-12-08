@@ -25,6 +25,8 @@ export default {
   },
   methods: {
     getData () {
+      this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
+      this.$store.dispatch('getState', { api: 'Sensors', label: 'sensorList' })
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.tableOperation = {
@@ -39,8 +41,8 @@ export default {
       this.formData = [
         { label: 'name', type: 'InputText' },
         { label: 'description', type: 'InputText' },
-        { label: 'mix', type: 'InputNumber' },
-        { label: 'sensor', type: 'InputText' },
+        { label: 'mix', type: 'Dropdown', option: 'mixList', selector: 'id' },
+        { label: 'sensor', type: 'Dropdown', option: 'sensorList', selector: 'id' },
         { label: 'max_temp', type: 'Temperature' },
         { label: 'min_temp', type: 'Temperature' },
         { label: 'last_temp', type: 'Temperature' },

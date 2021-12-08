@@ -20,6 +20,15 @@ export default {
   setLoader (state, payload) {
     state.loader = payload
   },
+  setState (state, payload) {
+    state.lookup[payload.label] = payload.data
+  },
+  setReturn (state, payload) {
+    return payload
+  },
+  setCreateModal (state, payload) {
+    state.createModal = payload
+  },
   setLogin (state, payload) {
     if (process.browser) {
       localStorage.setItem('userData', JSON.stringify(payload.user))
