@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     getData () {
+      this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.tableOperation = {
@@ -37,8 +38,7 @@ export default {
         edit: true
       }
       this.formData = [
-        { label: 'user', type: 'InputNumber' },
-        { label: 'project', type: 'InputNumber' },
+        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
         { label: 'title', type: 'InputText' },
         { label: 'description', type: 'Textarea' },
         { label: 'activation_energy', type: 'Temperature' },
@@ -47,7 +47,7 @@ export default {
         { label: 'b', type: 'InputText' }
       ]
       this.tableHead = [
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'projectName', label: this.$t('action.projectName'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'activation_energy', label: this.$t('action.activation_energy'), type: 'InputText', filter: true, sortable: true, options: [] },

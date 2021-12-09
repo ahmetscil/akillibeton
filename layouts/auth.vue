@@ -29,7 +29,7 @@ export default {
 <style lang="sass">
   .asc_pariette-auth-form
     position: fixed
-    background: #fff
+    background: #f7f7f7
     height: 100vh
     width: 35vw
     right: 0

@@ -127,19 +127,30 @@
             :show-icon="true"
             date-format="yy-mm-dd"
           />
+          <Password
+            v-if="row.type === 'Password'"
+            v-model="select[row.label]"
+            :feedback="false"
+            toggle-mask
+          />
           <Dropdown
             v-if="row.type === 'Dropdown'"
             v-model="select[row.label]"
             :options="lookup[row.option]"
-            option-label="title"
+            :option-label="row.val ? row.val : 'title'"
             :filter="true"
             :show-clear="true"
             @change="setModel(row.label, $event, row.selector)"
           />
         </div>
-        <div class="col-12 mt-5">
+      </div>
+      <div class="row mt-5">
+        <div class="col-12 col-md-3">
           <Button :label="$t('form.cancel')" icon="pi pi-times" class="p-button-text" @click="close()" />
-          <Button :label="$t('form.confirm')" icon="pi pi-check" autofocus @click="createData()" />
+        </div>
+        <div class="col-12 col-md-6" />
+        <div class="col-12 col-md-3">
+          <Button :label="$t('form.confirm')" class="float-right" icon="pi pi-check" autofocus @click="createData()" />
         </div>
       </div>
     </Dialog>

@@ -34,12 +34,12 @@ export default {
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.tableHead = [
-        { col: 'sku', label: this.$t('action.sku'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'available', label: this.$t('action.available'), type: 'Dropdown', filter: true, sortable: true, options: [] },
-        { col: 'sale_price', label: this.$t('action.sale_price'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'stock', label: this.$t('action.stock'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'Dropdown', filter: true, sortable: true, options: [] }
+        { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'LrrRSSI', label: this.$t('action.LrrRSSI'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'LrrSNR', label: this.$t('action.LrrSNR'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'maturity', label: this.$t('action.maturity'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'measurement', label: this.$t('action.measurement'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
     }
   }

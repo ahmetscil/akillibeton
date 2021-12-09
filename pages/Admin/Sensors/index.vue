@@ -26,7 +26,7 @@ export default {
   methods: {
     getData () {
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
-      this.$store.dispatch('getState', { api: 'Lookup/sensorTypeList', label: 'sensorTypeList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/sensorTypes', label: 'sensorTypeList' })
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.tableHead = [
@@ -50,7 +50,7 @@ export default {
         { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
         { label: 'DevEUI', type: 'InputText' },
         { label: 'title', type: 'InputText' },
-        { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id' },
+        { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
         { label: 'description', type: 'Textarea' }
       ]
     }

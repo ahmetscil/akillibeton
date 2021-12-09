@@ -34,6 +34,15 @@ export default {
         commit('setError', err.message)
       })
   },
+  async getLookup ({ commit }, data) {
+    await this.$axios.$get(data.api)
+      .then((res) => {
+        commit('setState', { data: res.data.items, label: data.label })
+      })
+      .catch((err) => {
+        commit('setError', err.message)
+      })
+  },
   async getTableState ({ state, commit }, data) {
     commit('setState', { data: [], label: data.label })
     commit('setTableLoader', true)

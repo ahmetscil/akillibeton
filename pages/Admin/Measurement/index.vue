@@ -54,7 +54,7 @@ export default {
         { label: 'last_data_at', type: 'Calendar' }
       ]
       this.tableHead = [
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'sensorsTitle', label: this.$t('action.sensorsTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'mixTitle', label: this.$t('action.mixTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
@@ -63,10 +63,10 @@ export default {
         { col: 'min_temp', label: this.$t('action.min_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'readed_max', label: this.$t('action.readed_max'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'readed_min', label: this.$t('action.readed_min'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'started_at', label: this.$t('action.started_at'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'deployed_at', label: this.$t('action.deployed_at'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'ended_at', label: this.$t('action.ended_at'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'started_at', label: this.$t('action.started_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
+        { col: 'deployed_at', label: this.$t('action.deployed_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
+        { col: 'ended_at', label: this.$t('action.ended_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
+        { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
       ]
     }
   }
