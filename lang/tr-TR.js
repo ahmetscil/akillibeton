@@ -46,6 +46,8 @@ export default {
     description: 'İçerik'
   },
   action: {
+    telephone_title: 'Telefon Açıklama',
+    email_title: 'Email Açıklama',
     title: 'Title',
     status: 'Status',
     created_at: 'Created At',
@@ -85,6 +87,17 @@ export default {
     email: 'Email',
     phone: 'Phone',
     telephone: 'Telephone',
-    sensor: 'Sensor'
+    sensor: 'Sensor',
+    sensor_no: 'sensor_no',
+    LrrRSSI: 'LrrRSSI',
+    LrrSNR: 'LrrSNR',
+    maturity: 'maturity',
+    Uplink: 'Uplink',
+    company: 'company',
+    code: 'code',
+    last_mail_sended_at: 'Last mail sended at',
+    password: 'Password',
+    ip: 'IP',
+    photo: 'Photo'
   }
 }

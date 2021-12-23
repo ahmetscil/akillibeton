@@ -5,6 +5,8 @@
       :operation="tableOperation"
       :api="pageApi"
       :create="formData"
+      :show-modal="false"
+      :data-fields="dataFields"
     />
   </div>
 </template>
@@ -17,7 +19,8 @@ export default {
       pageApi: 'Projects',
       tableHead: [],
       tableOperation: {},
-      formData: []
+      formData: [],
+      dataFields: []
     }
   },
   mounted () {
@@ -25,18 +28,24 @@ export default {
   },
   methods: {
     getData () {
+      let apilink = this.pageApi
+      if (process.browser) {
+        if (window.location.search) {
+          apilink = this.pageApi + window.location.search
+        }
+      }
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
-      this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
         export: true,
-        stop: false,
-        actions: false,
-        status: true,
-        preview: true,
-        edit: true
+        edit: true,
+        links: [
+          { route: 'Sensors', query: '?project=' }
+        ]
       }
+      this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'ended_at', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.formData = [
         { label: 'company', type: 'InputText' },
         { label: 'code', type: 'InputText' },

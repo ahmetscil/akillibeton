@@ -34,20 +34,40 @@
               <Button v-if="operation.export" icon="pi pi-file-excel" :v-tooltip="$t('general.exportTable')" class="p-button-sm p-button-secondary" @click="$refs.dataTable.exportCSV()" />
             </div>
             <div v-if="selectedRow" class="asc_pariette-table-operations">
-              <span v-if="operation.edit" v-tooltip="$t('general.edit')">
-                <nuxt-link :to="'/' + selectedRow.id"><i class="pi pi-pencil" /></nuxt-link>
-              </span>
+              <template v-if="showModal">
+                <span v-if="operation.edit" v-tooltip="$t('general.edit')">
+                  <i class="pi pi-pencil" @click="getData(`${api}/${selectedRow[selectionLabel]}`)" />
+                </span>
+              </template>
+              <template v-else>
+                <span v-if="operation.edit" v-tooltip="$t('general.edit')">
+                  <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`"><i class="pi pi-pencil" /></nuxt-link>
+                </span>
+              </template>
               <span v-if="operation.preview" v-tooltip="$t('general.preview')">
-                <nuxt-link :to="'/' + selectedRow.id"><i class="pi pi-link" /></nuxt-link>
+                <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`"><i class="pi pi-link" /></nuxt-link>
               </span>
               <span v-if="operation.stop" v-tooltip="$t('general.stop')">
-                <nuxt-link :to="'/' + selectedRow.id"><i class="pi pi-ban" /></nuxt-link>
+                <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`"><i class="pi pi-ban" /></nuxt-link>
               </span>
               <span v-if="operation.actions" v-tooltip="$t('general.actions')">
-                <nuxt-link :to="'/' + selectedRow.id"><i class="pi pi-bolt" /></nuxt-link>
+                <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`"><i class="pi pi-bolt" /></nuxt-link>
               </span>
               <span v-if="operation.status" v-tooltip="$t('general.status')">
-                <nuxt-link :to="'/' + selectedRow.id"><i class="pi pi-bookmark" /></nuxt-link>
+                <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`"><i class="pi pi-bookmark" /></nuxt-link>
+              </span>
+              <span v-if="operation.redirect" v-tooltip="$t('general.status')">
+                <nuxt-link :to="`${operation.redirect}${selectedRow[selectionLabel]}`"><i class="pi pi-link" /></nuxt-link>
+              </span>
+              <span v-if="operation.links">
+                <nuxt-link
+                  v-for="(link, l) in operation.links"
+                  :key="'link' + l"
+                  v-tooltip="$t('general.' + link.route)"
+                  :to="`${link.route}${link.query}${selectedRow[selectionLabel]}`"
+                >
+                  <i class="pi pi-link" />
+                </nuxt-link>
               </span>
             </div>
           </b-col>
@@ -102,6 +122,7 @@
         </template>
       </Column>
     </DataTable>
+
     <Dialog :visible.sync="createModal" :modal="true" :maximizable="true">
       <template #header>
         <h3>{{ $t('form.newRecord') }}</h3>
@@ -154,6 +175,18 @@
         </div>
       </div>
     </Dialog>
+
+    <Dialog :visible.sync="showDataModal" :modal="true">
+      <template #header>
+        <h3>{{ $t('form.detail') }}</h3>
+      </template>
+      <div class="row p-fluid" :style="{maxWidth: '1000px', width: '50vw'}">
+        <div v-for="(row, c) in dataFields" :key="'show' + c" :class="dataFields.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
+          <h6>{{ row }}</h6>
+          <h4>{{ showingData[row] }}</h4>
+        </div>
+      </div>
+    </Dialog>
   </div>
 </template>
 <script>
@@ -169,6 +202,20 @@ export default {
     api: {
       type: [String],
       default: ''
+    },
+    selectionLabel: {
+      type: [String],
+      default: 'id'
+    },
+    showModal: {
+      type: [Boolean],
+      default: false
+    },
+    dataFields: {
+      type: [Array],
+      default () {
+        return ['title', 'id']
+      }
     },
     operation: {
       type: [Object],
@@ -201,7 +248,9 @@ export default {
       filters: {},
       form: {},
       select: {},
-      createModal: false
+      createModal: false,
+      showingData: [],
+      showDataModal: false
     }
   },
   computed: {
@@ -221,6 +270,22 @@ export default {
           this.createModal = false
           this.$store.commit('setLoader', false)
           this.$store.commit('setError', err.message)
+        })
+    },
+    async getData (e) {
+      this.$store.commit('setLoader', true)
+      await this.$axios.$get(e)
+        .then((res) => {
+          this.$store.commit('setBreadcrumb', { active: res.data.name, items: { label: this.api } })
+          this.$store.commit('setLoader', false)
+          this.showingData = res.data
+          this.showDataModal = true
+        })
+        .catch((err) => {
+          this.createModal = false
+          this.$store.commit('setLoader', false)
+          this.$store.commit('setError', err.message)
+          this.showDataModal = false
         })
     },
     setModel (model, event, selector) {

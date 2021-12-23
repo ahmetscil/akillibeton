@@ -4,6 +4,8 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
+      :show-modal="true"
+      :data-fields="dataFields"
     />
   </div>
 </template>
@@ -23,7 +25,8 @@ export default {
         status: true,
         preview: true,
         edit: true
-      }
+      },
+      dataFields: []
     }
   },
   mounted () {
@@ -31,8 +34,15 @@ export default {
   },
   methods: {
     getData () {
+      let apilink = this.pageApi
+      if (process.browser) {
+        if (window.location.search) {
+          apilink = this.pageApi + window.location.search
+        }
+      }
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
-      this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.$store.dispatch('getTableData', { link: apilink })
+      this.dataFields = ['name', 'email', 'ip', 'phone', 'photo', 'status', 'created_at', 'updated_at']
       this.tableHead = [
         { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] },

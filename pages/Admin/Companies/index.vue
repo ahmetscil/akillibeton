@@ -5,6 +5,8 @@
       :operation="tableOperation"
       :api="pageApi"
       :create="formData"
+      :show-modal="false"
+      :data-fields="dataFields"
     />
   </div>
 </template>
@@ -17,7 +19,8 @@ export default {
       pageApi: 'Companies',
       tableHead: [],
       tableOperation: {},
-      formData: []
+      formData: [],
+      dataFields: []
     }
   },
   mounted () {
@@ -25,18 +28,24 @@ export default {
   },
   methods: {
     getData () {
+      let apilink = this.pageApi
+      if (process.browser) {
+        if (window.location.search) {
+          apilink = this.pageApi + window.location.search
+        }
+      }
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
-      this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
         export: true,
-        stop: false,
-        actions: false,
-        status: true,
-        preview: true,
-        edit: true
+        edit: true,
+        links: [
+          { route: 'Projects', query: '?company=' }
+        ]
       }
+      this.dataFields = ['address', 'city', 'country', 'created_at', 'email', 'email_title', 'id', 'logo', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.formData = [
         { label: 'title', type: 'InputText' },
         { label: 'email_title', type: 'InputText' },

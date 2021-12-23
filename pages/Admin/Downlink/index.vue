@@ -4,6 +4,8 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
+      :show-modal="true"
+      :data-fields="dataFields"
     />
   </div>
 </template>
@@ -23,7 +25,8 @@ export default {
         status: true,
         preview: true,
         edit: true
-      }
+      },
+      dataFields: []
     }
   },
   mounted () {
@@ -33,6 +36,7 @@ export default {
     getData () {
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.dataFields = ['DevEUI', 'created_at', 'id', 'measurement', 'payload_hex', 'updated_at']
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },

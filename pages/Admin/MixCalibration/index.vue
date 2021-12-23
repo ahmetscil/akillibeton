@@ -5,6 +5,8 @@
       :operation="tableOperation"
       :api="pageApi"
       :create="formData"
+      :show-modal="true"
+      :data-fields="dataFields"
     />
   </div>
 </template>
@@ -17,7 +19,8 @@ export default {
       pageApi: 'MixCalibration',
       tableHead: [],
       tableOperation: {},
-      formData: []
+      formData: [],
+      dataFields: []
     }
   },
   mounted () {
@@ -25,8 +28,14 @@ export default {
   },
   methods: {
     getData () {
+      let apilink = this.pageApi
+      if (process.browser) {
+        if (window.location.search) {
+          apilink = this.pageApi + window.location.search
+        }
+      }
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
-      this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
         export: true,
@@ -36,6 +45,7 @@ export default {
         preview: true,
         edit: true
       }
+      this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']
       this.formData = [
         { label: 'mix', type: 'InputNumber' },
         { label: 'days', type: 'InputNumber' },

@@ -5,6 +5,8 @@
       :operation="tableOperation"
       :api="pageApi"
       :create="formData"
+      :show-modal="false"
+      :data-fields="dataFields"
     />
   </div>
 </template>
@@ -17,7 +19,8 @@ export default {
       pageApi: 'Mix',
       tableHead: [],
       tableOperation: {},
-      formData: []
+      formData: [],
+      dataFields: []
     }
   },
   mounted () {
@@ -25,18 +28,24 @@ export default {
   },
   methods: {
     getData () {
+      let apilink = this.pageApi
+      if (process.browser) {
+        if (window.location.search) {
+          apilink = this.pageApi + window.location.search
+        }
+      }
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
-      this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
         export: true,
-        stop: false,
-        actions: false,
-        status: true,
-        preview: true,
-        edit: true
+        edit: true,
+        links: [
+          { route: 'MixCalibration', query: '?mix=' }
+        ]
       }
+      this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']
       this.formData = [
         { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
         { label: 'title', type: 'InputText' },

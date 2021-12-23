@@ -4,6 +4,9 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
+      :show-modal="true"
+      :data-fields="dataFields"
+      selection-label="DevEUI"
     />
   </div>
 </template>
@@ -23,7 +26,8 @@ export default {
         status: true,
         preview: true,
         edit: true
-      }
+      },
+      dataFields: []
     }
   },
   mounted () {
@@ -33,12 +37,13 @@ export default {
     getData () {
       this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
+      this.dataFields = ['DevEUI', 'LrrRSSI', 'LrrSNR', 'created_at', 'id', 'maturity', 'measurement', 'payload_hex', 'strength', 'temperature', 'updated_at']
       this.tableHead = [
+        { col: 'measurementName', label: this.$t('action.measurement'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'LrrRSSI', label: this.$t('action.LrrRSSI'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'LrrSNR', label: this.$t('action.LrrSNR'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'maturity', label: this.$t('action.maturity'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'measurement', label: this.$t('action.measurement'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
     }

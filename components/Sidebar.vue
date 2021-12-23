@@ -43,55 +43,49 @@ export default {
         icon: 'pi pi-folder'
       },
       {
-        title: 'router.Measurement',
-        route: 'Admin-Measurement',
-        icon: 'pi pi-folder'
-      },
-      {
-        title: 'router.Sensors',
-        route: 'Admin-Sensors',
-        icon: 'pi pi-folder'
-      },
-      {
-        title: 'router.Downlink',
-        route: 'Admin-Downlink',
-        icon: 'pi pi-folder'
-      },
-      {
-        title: 'router.Mix',
-        icon: 'pi pi-folder',
-        route: 'Admin-Mix'
+        title: 'router.Companies',
+        route: 'Admin-Companies',
+        icon: 'pi pi-building'
       },
       {
         title: 'router.Projects',
         route: 'Admin-Projects',
-        icon: 'pi pi-folder'
+        icon: 'pi pi-map'
       },
       {
-        title: 'router.Uplink',
-        route: 'Admin-Uplink',
-        icon: 'pi pi-folder'
+        title: 'router.Mix',
+        route: 'Admin-Mix',
+        icon: 'pi pi-palette'
       },
       {
-        title: 'router.Companies',
-        icon: 'pi pi-folder',
-        sub: [
-          {
-            title: 'router.Companies',
-            route: 'Admin-Companies',
-            icon: 'pi pi-folder'
-          },
-          {
-            title: 'router.Log',
-            route: 'Admin-Log',
-            icon: 'pi pi-folder'
-          },
-          {
-            title: 'router.Users',
-            route: 'Admin-Users',
-            icon: 'pi pi-folder'
-          }
-        ]
+        title: 'router.Sensors',
+        route: 'Admin-Sensors',
+        icon: 'pi pi-wifi'
+      },
+      {
+        title: 'router.Measurement',
+        route: 'Admin-Measurement',
+        icon: 'pi pi-briefcase'
+      },
+      // {
+      //   title: 'router.Downlink',
+      //   route: 'Admin-Downlink',
+      //   icon: 'pi pi-folder'
+      // },
+      // {
+      //   title: 'router.Uplink',
+      //   route: 'Admin-Uplink',
+      //   icon: 'pi pi-folder'
+      // },
+      {
+        title: 'router.Users',
+        route: 'Admin-Users',
+        icon: 'pi pi-users'
+      },
+      {
+        title: 'router.Log',
+        route: 'Admin-Log',
+        icon: 'pi pi-server'
       }
     ]
   }),
