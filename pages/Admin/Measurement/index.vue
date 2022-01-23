@@ -7,6 +7,7 @@
       :create="formData"
       :show-modal="false"
       :data-fields="dataFields"
+      selection-label="DevEUI"
     />
   </div>
 </template>
@@ -42,7 +43,10 @@ export default {
       this.tableOperation = {
         create: true,
         export: true,
-        edit: true
+        edit: true,
+        links: [
+          { route: 'Uplink', query: '/', after: '?measurement=', afterLabel: 'id' }
+        ]
       }
       this.dataFields = ['name', 'description', 'mix', 'sensor', 'max_temp', 'min_temp', 'last_temp', 'readed_max', 'readed_min', 'started_at', 'ended_at', 'deployed_at', 'last_data_at', 'created_at', 'updated_at']
       this.formData = [

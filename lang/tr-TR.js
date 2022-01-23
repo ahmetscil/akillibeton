@@ -26,6 +26,8 @@ export default {
     edit: 'Düzenle',
     update: 'Güncelle',
     Projects: 'Projeler',
+    Measurement: 'Ölçümler',
+    Uplink: 'UPLINK',
     Sensors: 'Sensörler',
     Mix: 'Mix'
   },

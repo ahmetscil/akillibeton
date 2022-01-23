@@ -1,25 +1,50 @@
 <template>
-  <div class="asc_pariette-pagecard">
-    <b-row class="">
-      <b-col cols="12" lg="6">
+  <b-row>
+    <b-col cols="12" lg="12" class="mb-3">
+      <div class="asc_pariette-card asc_pariette-minheightInherit py-3">
+        <h5 class="float-left">
+          {{ projectInfo.title }} / {{ sensorInfo.title }}
+        </h5>
+        <div class="float-right">
+          <Dropdown v-model="dataLimit" :options="dataLimits" @change="setLimit" />
+        </div>
+        <div class="clearfix" />
+      </div>
+    </b-col>
+    <b-col cols="12" :lg="dataLimit === 10 ? 6 : 12" class="mb-3">
+      <div class="asc_pariette-card">
+        <h5>
+          {{ $t('action.temperature') }}
+        </h5>
         <Chart type="line" :data="temperatureChart" />
-      </b-col>
-      <b-col cols="12" lg="6">
+      </div>
+    </b-col>
+    <b-col cols="12" :lg="dataLimit === 10 ? 6 : 12" class="mb-3">
+      <div class="asc_pariette-card">
+        <h5>
+          {{ $t('action.maturity') }}
+        </h5>
         <Chart type="line" :data="maturityChart" />
-      </b-col>
-      <b-col cols="12" lg="6">
+      </div>
+    </b-col>
+    <b-col cols="12" lg="6" class="mb-3">
+      <div class="asc_pariette-card">
         <DataTable :value="LrrRSSI" responsive-layout="scroll">
           <Column field="created_at" header="CreatedAt" />
           <Column field="data" header="Data" />
         </DataTable>
-      </b-col>
-      <b-col cols="12" lg="6">
+      </div>
+    </b-col>
+    <b-col cols="12" lg="6" class="mb-3">
+      <div class="asc_pariette-card">
         <DataTable :value="LrrSNR" responsive-layout="scroll">
           <Column field="created_at" header="CreatedAt" />
           <Column field="data" header="Data" />
         </DataTable>
-      </b-col>
-      <b-col cols="12" lg="12">
+      </div>
+    </b-col>
+    <b-col cols="12" lg="12" class="mb-3">
+      <div class="asc_pariette-card">
         <DataTable :value="uplData" responsive-layout="scroll">
           <Column field="created_at" header="created_at" />
           <Column field="payload_hex" header="payload_hex" />
@@ -30,9 +55,9 @@
           <Column field="LrrRSSI" header="LrrRSSI" />
           <Column field="LrrSNR" header="LrrSNR" />
         </DataTable>
-      </b-col>
-    </b-row>
-  </div>
+      </div>
+    </b-col>
+  </b-row>
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -43,7 +68,10 @@ export default {
     return {
       pageApi: 'Uplink',
       uplData: [],
+      projectInfo: {},
+      sensorInfo: {},
       dataLimit: 10,
+      dataLimits: [10, 50, 100, 250, 500],
       dataset: [],
       uplink: {
         DevEUI: '',
@@ -88,15 +116,21 @@ export default {
   },
   computed: mapState(['companyToken']),
   mounted () {
-    this.firstData()
+    this.getData()
     setInterval(() => {
-      this.firstData()
+      this.getData()
     }, 30000)
   },
   methods: {
-    async firstData () {
-      await this.$axios.$get(`${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}`)
+    async getData () {
+      let apiquery = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}`
+      if (this.$route.query.measurement) {
+        apiquery = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}&measurement=${this.$route.query.measurement}`
+      }
+      await this.$axios.$get(apiquery)
         .then((res) => {
+          this.projectInfo = res.data.project
+          this.sensorInfo = res.data.sensor
           this.uplData = res.data.uplinkdata
           const sensorData = res.data.uplinkdata
 
@@ -141,6 +175,10 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    setLimit (e) {
+      this.dataLimit = e.value
+      this.getData()
     }
   }
 }

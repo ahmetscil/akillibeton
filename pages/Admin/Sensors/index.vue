@@ -7,7 +7,7 @@
       :create="formData"
       :show-modal="false"
       :data-fields="dataFields"
-      selection-label="DevEUI"
+      selection-label="id"
     />
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
         export: true,
         edit: true,
         links: [
-          { route: 'Uplink', query: '/' }
+          { route: 'Measurement', query: '?sensor=', after: null, afterLabel: null }
         ]
       }
       this.dataFields = ['DevEUI', 'created_at', 'description', 'id', 'project', 'status', 'title', 'type', 'updated_at']
