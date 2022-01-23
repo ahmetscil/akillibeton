@@ -19,7 +19,7 @@
     >
       <template #header>
         <b-row class="mb-1">
-          <b-col cols="12" lg="6">
+          <b-col cols="12" lg="3">
             <h1 class="float-left mr-2">
               {{ breadcrumb.active }}
             </h1>
@@ -28,12 +28,23 @@
               <InputText v-model="filters['global']" :placeholder="$t('general.searchTable')" class="p-inputtext-sm" />
             </span>
           </b-col>
-          <b-col align-self="end">
+          <b-col cols="12" lg="9" align-self="end">
             <div class="float-right">
-              <Button v-if="operation.create" icon="pi pi-plus" :label="$t('general.newRecord')" class="p-button-sm p-button-primary" @click="createModal = true" />
+              <Button v-if="operation.create" icon="pi pi-plus" :label="$t('general.newRecord')" class="p-button-sm p-button-primary" @click="setCreateForm(true)" />
               <Button v-if="operation.export" icon="pi pi-file-excel" :v-tooltip="$t('general.exportTable')" class="p-button-sm p-button-secondary" @click="$refs.dataTable.exportCSV()" />
             </div>
             <div v-if="selectedRow" class="asc_pariette-table-operations">
+              <template v-if="operation.links">
+                <span v-for="(link, l) in operation.links" :key="'link' + l" class="mr-1">
+                  <nuxt-link
+                    v-tooltip="$t('general.' + link.route)"
+                    :to="`${link.route}${link.query}${selectedRow[selectionLabel]}`"
+                  >
+                    <i :class="link.icon ? link.icon : 'pi pi-link'" />
+                  </nuxt-link>
+                </span>
+                |
+              </template>
               <template v-if="showModal">
                 <span v-if="operation.edit" v-tooltip="$t('general.edit')">
                   <i class="pi pi-pencil" @click="getData(`${api}/${selectedRow[selectionLabel]}`)" />
@@ -58,16 +69,6 @@
               </span>
               <span v-if="operation.redirect" v-tooltip="$t('general.status')">
                 <nuxt-link :to="`${operation.redirect}${selectedRow[selectionLabel]}`"><i class="pi pi-link" /></nuxt-link>
-              </span>
-              <span v-if="operation.links">
-                <nuxt-link
-                  v-for="(link, l) in operation.links"
-                  :key="'link' + l"
-                  v-tooltip="$t('general.' + link.route)"
-                  :to="`${link.route}${link.query}${selectedRow[selectionLabel]}`"
-                >
-                  <i class="pi pi-link" />
-                </nuxt-link>
               </span>
             </div>
           </b-col>
@@ -127,9 +128,10 @@
       <template #header>
         <h3>{{ $t('form.newRecord') }}</h3>
       </template>
-      <div class="row p-fluid" :style="{maxWidth: '1000px', width: '50vw'}">
-        <div v-for="(row, c) in create" :key="'input' + c" :class="create.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
+      <div v-if="createForm" class="row p-fluid" :style="{maxWidth: '1000px', width: '50vw'}">
+        <div v-for="(row, c) in createForm" :key="'input' + c" :class="create.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
           <label>{{ $t('action.' + row.label) }}</label>
+          <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
           <InputText v-if="row.type === 'InputText'" v-model="form[row.label]" type="text" />
           <InputNumber v-if="row.type === 'InputNumber'" v-model="form[row.label]" />
           <InputNumber
@@ -240,6 +242,7 @@ export default {
   },
   data () {
     return {
+      createForm: {},
       selectionMode: 'single',
       search: '',
       perpage: 10,
@@ -254,39 +257,42 @@ export default {
     }
   },
   computed: {
-    ...mapState(['breadcrumb', 'tableData', 'lookup'])
+    ...mapState(['breadcrumb', 'companyToken', 'tableData', 'lookup'])
   },
   methods: {
     async createData () {
       this.$store.commit('setLoader', true)
-      await this.$axios.$post(this.api, this.form)
+      await this.$axios.$post(this.companyToken + '/' + this.api, this.form)
         .then((res) => {
-          this.createModal = false
+          this.setCreateForm(true)
           this.form = {}
           this.$store.commit('setLoader', false)
           this.$store.dispatch('getTableData', { link: this.api })
         })
         .catch((err) => {
-          this.createModal = false
+          this.setCreateForm(false)
           this.$store.commit('setLoader', false)
           this.$store.commit('setError', err.message)
         })
     },
     async getData (e) {
       this.$store.commit('setLoader', true)
-      await this.$axios.$get(e)
+      await this.$axios.$get(this.companyToken + '/' + e)
         .then((res) => {
-          this.$store.commit('setBreadcrumb', { active: res.data.name, items: { label: this.api } })
+          this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
           this.$store.commit('setLoader', false)
           this.showingData = res.data
           this.showDataModal = true
         })
         .catch((err) => {
-          this.createModal = false
+          this.setCreateForm(false)
           this.$store.commit('setLoader', false)
           this.$store.commit('setError', err.message)
           this.showDataModal = false
         })
+    },
+    close () {
+      this.createModal = false
     },
     setModel (model, event, selector) {
       if (event.value !== null) {
@@ -318,6 +324,19 @@ export default {
       }
 
       return date.getFullYear() + '-' + month + '-' + day
+    },
+    setCreateForm (e) {
+      if (e) {
+        this.create.forEach((c) => {
+          if (c.default) {
+            this.form[c.label] = c.default
+          } else {
+            this.form[c.label] = null
+          }
+        })
+      }
+      this.createForm = this.create
+      this.createModal = e
     }
   }
 }

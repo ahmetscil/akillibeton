@@ -14,11 +14,11 @@ export default {
     mssg: ''
   }),
   computed: {
-    ...mapState(['isClosed'])
+    ...mapState(['isClosed', 'companyToken'])
   },
   watch: {
-    'customerToken' () {
-      this.customer(this.customerToken)
+    'companyToken' () {
+      this.customer(this.companyToken)
     }
   },
   mounted () {

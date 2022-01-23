@@ -19,9 +19,10 @@
             </b-collapse>
           </template>
           <template v-else>
-            <nuxt-link :to="localeLocation({ name: nav.route })">
+            <nuxt-link v-if="nav.title" :to="localeLocation({ name: nav.route })">
               <i :class="nav.icon" /> {{ $t(nav.title) }}
             </nuxt-link>
+            <hr v-else>
           </template>
         </li>
       </ul>
@@ -77,6 +78,11 @@ export default {
       //   route: 'Admin-Uplink',
       //   icon: 'pi pi-folder'
       // },
+      {
+        title: null,
+        route: null,
+        icon: null
+      },
       {
         title: 'router.Users',
         route: 'Admin-Users',

@@ -1,14 +1,11 @@
 <template>
-  <div>
-    index | <nuxt-link :to="localeLocation({ name: 'Auth-Login' })">
-      login
-    </nuxt-link> | <nuxt-link :to="localeLocation({ name: 'Admin-Dashboard' })">
-      dashboard
-    </nuxt-link>
-  </div>
+  <div />
 </template>
 
 <script>
 export default {
+  mounted () {
+    this.$router.push(this.localeLocation({ name: 'Auth-SelectCompany' }))
+  }
 }
 </script>

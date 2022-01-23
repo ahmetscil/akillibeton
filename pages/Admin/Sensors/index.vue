@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -24,6 +25,7 @@ export default {
       dataFields: []
     }
   },
+  computed: mapState(['lookup']),
   mounted () {
     this.getData()
   },
@@ -35,9 +37,6 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
-      this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
-      this.$store.dispatch('getLookup', { api: 'Lookup/sensorTypes', label: 'sensorTypeList' })
-      this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
@@ -65,6 +64,12 @@ export default {
         { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
         { label: 'description', type: 'Textarea' }
       ]
+      this.$store.dispatch('getState', { api: 'Projects/1', label: 'project' })
+      this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/sensorTypes', label: 'sensorTypeList' })
+      setTimeout(() => {
+        this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.lookup.project.title] })
+      }, 1000)
     }
   }
 }

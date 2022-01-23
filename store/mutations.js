@@ -1,4 +1,24 @@
 export default {
+  setSelectSite (state, payload) {
+    if (process.browser) {
+      state.pleaseSelect = payload.data.company
+    }
+  },
+  setStore (state, payload) {
+    if (process.browser) {
+      localStorage.setItem('storeData', JSON.stringify(payload.company))
+      localStorage.setItem('companyToken', payload.company.token)
+      state.storeData = JSON.parse(localStorage.getItem('storeData'))
+      state.companyToken = JSON.parse(localStorage.getItem('companyToken'))
+    }
+  },
+  setStoreData (state) {
+    if (process.browser) {
+      state.companyToken = localStorage.getItem('companyToken')
+      state.storeData = JSON.parse(localStorage.getItem('storeData'))
+      state.userData = JSON.parse(localStorage.getItem('userData'))
+    }
+  },
   sendLogin (state, payload) {
     state.customerData = null
     state.selectSiteList = []
@@ -32,7 +52,7 @@ export default {
   setLogin (state, payload) {
     if (process.browser) {
       localStorage.setItem('userData', JSON.stringify(payload.user))
-      state.user = localStorage.getItem('userData')
+      state.user = JSON.parse(localStorage.getItem('userData'))
     }
   },
   setUser (state) {
@@ -46,7 +66,7 @@ export default {
       localStorage.clear()
     }
     state.customerData = null
-    state.customerToken = null
+    state.companyToken = null
   },
   showAlert (state, payload) {
     switch (payload.type) {

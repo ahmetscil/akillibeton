@@ -34,8 +34,8 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
-      this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,

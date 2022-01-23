@@ -11,6 +11,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -23,6 +24,7 @@ export default {
       dataFields: []
     }
   },
+  computed: mapState(['storeData']),
   mounted () {
     this.getData()
   },
@@ -35,19 +37,20 @@ export default {
         }
       }
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
-      this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
         export: true,
         edit: true,
         links: [
-          { route: 'Sensors', query: '?project=' }
+          { route: 'Sensors', query: '?project=', icon: 'pi pi-wifi' },
+          { route: 'Mix', query: '?project=', icon: 'pi pi-palette' }
         ]
       }
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.title] })
       this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'ended_at', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.formData = [
-        { label: 'company', type: 'InputText' },
+        { label: 'company', type: 'Hidden', default: this.$route.query.company },
         { label: 'code', type: 'InputText' },
         { label: 'title', type: 'InputText' },
         { label: 'description', type: 'InputText' },

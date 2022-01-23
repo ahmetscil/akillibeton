@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['customerToken']),
+    ...mapState(['companyToken']),
     token () {
       let ct = ''
       if (process.browser) {
@@ -166,7 +166,7 @@ export default {
               formData.append('pin', this.filedata.pin)
               break
             case 'uploadImage':
-              formData.append('storeToken', this.customerToken.token)
+              formData.append('storeToken', this.companyToken.token)
               formData.append('user', this.$auth.user.id)
               formData.append('tag', this.tag)
               formData.append(fieldName, fileList[x], fileList[x].name)

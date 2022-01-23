@@ -1,6 +1,18 @@
 <template>
   <div class="asc_pariette-pagecard">
-    <div class="p-fluid p-grid">
+    <div class="row p-fluid p-grid">
+      <div class="p-field p-col-12 p-md-4">
+        <h1 class="float-left mr-2">
+          {{ pageTitle }}
+        </h1>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <div class="float-right">
+          <Button icon="pi pi-plus" :label="$t('general.update')" class="p-button-sm p-button-primary" @click="update()" />
+        </div>
+      </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="formTitle" v-model="form.title" type="text" />
@@ -65,6 +77,7 @@ export default {
   data () {
     return {
       pageApi: 'Companies',
+      pageTitle: '',
       form: {
         title: null,
         email_title: null,
@@ -85,6 +98,7 @@ export default {
     async getData () {
       await this.$axios.$get(`${this.pageApi}/${this.$route.params.url}`)
         .then((res) => {
+          this.pageTitle = res.data.title
           this.form.title = res.data.title
           this.form.email_title = res.data.email_title
           this.form.email = res.data.email
@@ -94,10 +108,14 @@ export default {
           this.form.city = res.data.city
           this.form.address = res.data.address
           this.form.status = res.data.status
+          this.$store.commit('setBreadcrumb', { active: this.pageTitle, items: ['Akıllı Beton', this.$t('router.Companies')] })
         })
         .catch((err) => {
           console.log(err)
         })
+    },
+    update () {
+      this.$store.dispatch('updateData', { api: this.pageApi, id: this.$route.params.url, info: this.form })
     }
   }
 }

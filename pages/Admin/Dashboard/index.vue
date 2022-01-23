@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -65,9 +66,11 @@ export default {
       }
     }
   },
+  computed: mapState(['companyToken']),
   mounted () {
-  },
-  methods: {
+    if (!this.companyToken) {
+      this.$router.push(this.localeLocation({ name: 'Auth-SelectCompany' }))
+    }
   }
 }
 </script>

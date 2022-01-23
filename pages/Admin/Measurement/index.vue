@@ -37,7 +37,7 @@ export default {
 
       this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
       this.$store.dispatch('getState', { api: 'Sensors', label: 'sensorList' })
-      this.$store.commit('setBreadcrumb', { active: this.pageApi, items: { label: this.pageApi } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,

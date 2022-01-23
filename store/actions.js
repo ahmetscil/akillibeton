@@ -1,6 +1,7 @@
 export default {
   async getNavigation ({ state, commit }, data) {
-    const row = await this.$axios.$get(`${state.companyToken}/redis/getNav?store=${state.customerToken}`)
+    commit('setStoreData')
+    const row = await this.$axios.$get(`${state.companyToken}/redis/getNav?store=${state.companyToken}`)
     if (row.status) {
       commit('setNavigation', JSON.parse(row.data))
     } else {
@@ -8,9 +9,10 @@ export default {
     }
   },
   async getState ({ state, commit }, data) {
+    commit('setStoreData')
     commit('setState', { data: [], label: data.label })
     commit('setLoader', true)
-    await this.$axios.$get(data.api)
+    await this.$axios.$get(`${state.companyToken}/${data.api}`)
       .then((res) => {
         commit('setLoader', false)
         switch (res.code) {
@@ -34,16 +36,20 @@ export default {
         commit('setError', err.message)
       })
   },
-  async getLookup ({ commit }, data) {
-    await this.$axios.$get(data.api)
+  async getLookup ({ state, commit }, data) {
+    commit('setStoreData')
+    await this.$axios.$get(`${state.companyToken}/${data.api}`)
       .then((res) => {
-        commit('setState', { data: res.data.items, label: data.label })
+        if (res.data !== null) {
+          commit('setState', { data: res.data.items, label: data.label })
+        }
       })
       .catch((err) => {
         commit('setError', err.message)
       })
   },
   async getTableState ({ state, commit }, data) {
+    commit('setStoreData')
     commit('setState', { data: [], label: data.label })
     commit('setTableLoader', true)
     await this.$axios.$get(`${state.companyToken}/${data.api}`)
@@ -71,6 +77,7 @@ export default {
       })
   },
   async getCanvas ({ state, commit }, data) {
+    commit('setStoreData')
     const row = await this.$axios.$get(`${state.companyToken}/p/canvas/${data.query}`)
     if (row.status) {
       const pyld = {
@@ -84,6 +91,7 @@ export default {
     }
   },
   async showMe ({ state, commit }, data) {
+    commit('setStoreData')
     if (data.param) {
       const res = await this.$axios.$get(`${state.companyToken}/customer/${data.param}`)
       if (res.status) {
@@ -104,10 +112,11 @@ export default {
       }
     }
   },
-  async getTableData ({ commit }, data) {
+  async getTableData ({ state, commit }, data) {
+    commit('setStoreData')
     commit('setLoader', true)
     commit('setTableData', [])
-    await this.$axios.$get(data.link)
+    await this.$axios.$get(`${state.companyToken}/${data.link}`)
       .then((res) => {
         switch (res.code) {
           case 200:
@@ -124,9 +133,10 @@ export default {
         commit('setError', err.error)
       })
   },
-  async createData ({ commit }, data) {
+  async createData ({ state, commit }, data) {
+    commit('setStoreData')
     commit('setLoader', true)
-    await this.$axios.$post(data.api, data.query)
+    await this.$axios.$post(`${state.companyToken}/${data.api}`, data.query)
       .then((res) => {
         commit('setLoader', false)
         this.$router.push(this.localeLocation({ name: `Admin-${data.api}` }))
@@ -137,6 +147,7 @@ export default {
       })
   },
   async updateData ({ state, commit }, data) {
+    commit('setStoreData')
     commit('setLoader', true)
     await this.$axios.$put(`${state.companyToken}/${data.api}/${data.id}`, data.info)
       .then((res) => {
@@ -156,6 +167,7 @@ export default {
       })
   },
   async deleteData ({ state, commit }, data) {
+    commit('setStoreData')
     await this.$axios.$delete(`${state.companyToken}/${data.api}/${data.info}`)
       .then((res) => {
         commit('setError', res.error)

@@ -6,6 +6,11 @@
       </b-col>
     </b-row>
     <div class="p-fluid p-grid p-formgrid">
+      <div class="p-field p-col-12">
+        <h1 class="logotype">
+          {{ siteInfo.name }}
+        </h1>
+      </div>
       <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.password.$error }">
         <label for="email">
           {{ $t('auth.login') }}
@@ -57,7 +62,7 @@ export default {
     rememberMe: false,
     loginError: false
   }),
-  computed: mapState([]),
+  computed: mapState(['siteInfo']),
   watch: {
   },
   methods: {
@@ -68,9 +73,13 @@ export default {
       } else {
         this.loginError = false
         try {
-          await this.$auth.loginWith('laravelJWT', { data: this.form })
-          this.$store.commit('setLogin', this.$auth.$state)
           this.$toast.success(this.$t('auth.pleaseWait'))
+          const login = await this.$auth.loginWith('laravelJWT', { data: this.form })
+          if (parseInt(login.status) === 200) {
+            this.disableBtn = false
+            this.$store.commit('setLogin', this.$auth.$state)
+            this.$store.commit('setSelectSite', { data: login.data })
+          }
         } catch (err) {
         }
       }

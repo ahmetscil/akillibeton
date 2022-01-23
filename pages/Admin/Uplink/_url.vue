@@ -35,6 +35,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -42,6 +43,8 @@ export default {
     return {
       pageApi: 'Uplink',
       uplData: [],
+      dataLimit: 10,
+      dataset: [],
       uplink: {
         DevEUI: '',
         LrrRSSI: '',
@@ -83,15 +86,22 @@ export default {
       LrrSNR: []
     }
   },
+  computed: mapState(['companyToken']),
   mounted () {
-    this.getData()
+    this.firstData()
+    setInterval(() => {
+      this.firstData()
+    }, 30000)
   },
   methods: {
-    async getData () {
-      await this.$axios.$get(`${this.pageApi}/${this.$route.params.url}?limit=10`)
+    async firstData () {
+      await this.$axios.$get(`${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}`)
         .then((res) => {
-          this.uplData = res.data
-          const sensorData = res.data
+          this.uplData = res.data.uplinkdata
+          const sensorData = res.data.uplinkdata
+
+          this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', res.data.project.title, res.data.sensor.title] })
+
           const createdAt = []
           const temperature = []
           const maturity = []
