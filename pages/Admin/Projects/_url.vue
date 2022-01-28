@@ -1,6 +1,18 @@
 <template>
   <div class="asc_pariette-pagecard">
-    <div class="p-fluid p-grid">
+    <div class="row p-fluid p-grid">
+      <div class="p-field col-12 col-md-6 pl-4">
+        <h2>
+          {{ pageTitle }}
+        </h2>
+      </div>
+      <div class="p-field col-12 col-md-6 pr-4">
+        <div class="float-right">
+          <Button icon="pi pi-pencil" :label="$t('general.update')" class="p-button-sm p-button-warning" @click="update()" />
+        </div>
+      </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="formTitle" v-model="form.title" type="text" />
@@ -9,10 +21,12 @@
       </div>
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
-          <InputText id="company" v-model="form.company" type="text" />
-          <label for="company">company</label>
+          <InputText id="status" v-model="form.status" type="text" />
+          <label for="status">status</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="code" v-model="form.code" type="text" />
@@ -21,16 +35,12 @@
       </div>
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
-          <InputText id="title" v-model="form.title" type="text" />
-          <label for="title">title</label>
-        </span>
-      </div>
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
           <InputText id="description" v-model="form.description" type="text" />
           <label for="description">description</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="email_title" v-model="form.email_title" type="text" />
@@ -43,6 +53,8 @@
           <label for="email">email</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="telephone_title" v-model="form.telephone_title" type="text" />
@@ -55,6 +67,8 @@
           <label for="telephone">telephone</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="country" v-model="form.country" type="text" />
@@ -67,18 +81,22 @@
           <label for="city">city</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="address" v-model="form.address" type="text" />
           <label for="address">address</label>
         </span>
       </div>
-      <div class="p-field p-col-12 p-md-4">
+      <!-- <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="logo" v-model="form.logo" type="text" />
           <label for="logo">logo</label>
         </span>
-      </div>
+      </div> -->
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="started_at" v-model="form.started_at" type="text" />
@@ -91,24 +109,19 @@
           <label for="ended_at">ended_at</label>
         </span>
       </div>
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
-          <InputText id="status" v-model="form.status" type="text" />
-          <label for="status">status</label>
-        </span>
-      </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
   data () {
     return {
       pageApi: 'Projects',
+      pageTitle: '',
       form: {
-        company: null,
         code: null,
         title: null,
         description: null,
@@ -126,14 +139,30 @@ export default {
       }
     }
   },
+  computed: mapState(['returnCode', 'companyToken']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.success(this.$t('general.success'))
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.error(this.$t('general.error'))
+          break
+      }
+    }
+  },
   mounted () {
     this.getData()
   },
   methods: {
     async getData () {
-      await this.$axios.$get(`${this.pageApi}/${this.$route.params.url}`)
+      await this.$axios.$get(`${this.companyToken}/${this.pageApi}/${this.$route.params.url}`)
         .then((res) => {
-          this.form.company = res.data.company
+          this.pageTitle = res.data.title
           this.form.code = res.data.code
           this.form.title = res.data.title
           this.form.description = res.data.description
@@ -152,6 +181,9 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    update () {
+      this.$store.dispatch('updateData', { api: this.pageApi, id: this.$route.params.url, info: this.form })
     }
   }
 }

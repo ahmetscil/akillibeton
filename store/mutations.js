@@ -12,13 +12,6 @@ export default {
       state.companyToken = JSON.parse(localStorage.getItem('companyToken'))
     }
   },
-  setStoreData (state) {
-    if (process.browser) {
-      state.companyToken = localStorage.getItem('companyToken')
-      state.storeData = JSON.parse(localStorage.getItem('storeData'))
-      state.userData = JSON.parse(localStorage.getItem('userData'))
-    }
-  },
   sendLogin (state, payload) {
     state.customerData = null
     state.selectSiteList = []
@@ -44,7 +37,7 @@ export default {
     state.lookup[payload.label] = payload.data
   },
   setReturn (state, payload) {
-    return payload
+    state.returnCode = payload
   },
   setCreateModal (state, payload) {
     state.createModal = payload
@@ -52,12 +45,14 @@ export default {
   setLogin (state, payload) {
     if (process.browser) {
       localStorage.setItem('userData', JSON.stringify(payload.user))
-      state.user = JSON.parse(localStorage.getItem('userData'))
+      state.userData = JSON.parse(localStorage.getItem('userData'))
     }
   },
   setUser (state) {
     if (process.browser) {
-      state.user = JSON.parse(localStorage.getItem('userData'))
+      state.companyToken = localStorage.getItem('companyToken')
+      state.storeData = JSON.parse(localStorage.getItem('storeData'))
+      state.userData = JSON.parse(localStorage.getItem('userData'))
     }
   },
   killLogin (state) {

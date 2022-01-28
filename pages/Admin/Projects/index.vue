@@ -1,6 +1,6 @@
 <template>
   <div class="asc_pariette-pagecard">
-    <Table
+    <ParietteTable
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -24,7 +24,22 @@ export default {
       dataFields: []
     }
   },
-  computed: mapState(['storeData']),
+  computed: mapState(['storeData', 'returnCode']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.success(this.$t('general.success'))
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.error(this.$t('general.error'))
+          break
+      }
+    }
+  },
   mounted () {
     this.getData()
   },
@@ -37,6 +52,7 @@ export default {
         }
       }
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
+      this.$store.dispatch('getLookup', { api: 'Companies', label: 'companyList' })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
@@ -50,7 +66,7 @@ export default {
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.title] })
       this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'ended_at', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.formData = [
-        { label: 'company', type: 'Hidden', default: this.$route.query.company },
+        { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
         { label: 'code', type: 'InputText' },
         { label: 'title', type: 'InputText' },
         { label: 'description', type: 'InputText' },

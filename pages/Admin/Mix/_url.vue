@@ -21,30 +21,44 @@
       </div>
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
-          <InputText id="status" v-model="form.status" type="text" />
-          <label for="status">status</label>
-        </span>
-      </div>
-    </div>
-    <div class="row p-fluid p-grid">
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
-          <InputText id="sensor_no" v-model="form.sensor_no" type="text" />
-          <label for="sensor_no">sensor_no</label>
-        </span>
-      </div>
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
-          <InputText id="type" v-model="form.type" type="text" />
-          <label for="type">type</label>
-        </span>
-      </div>
-    </div>
-    <div class="row p-fluid p-grid">
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
           <InputText id="description" v-model="form.description" type="text" />
           <label for="description">description</label>
+        </span>
+      </div>
+    </div>
+    <div class="row p-fluid p-grid">
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <InputText id="activation_energy" v-model="form.activation_energy" type="text" />
+          <label for="activation_energy">activation_energy</label>
+        </span>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <InputText id="temperature" v-model="form.temperature" type="text" />
+          <label for="temperature">temperature</label>
+        </span>
+      </div>
+    </div>
+    <div class="row p-fluid p-grid">
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <InputText id="a" v-model="form.a" type="text" />
+          <label for="a">a</label>
+        </span>
+      </div>
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <InputText id="b" v-model="form.b" type="text" />
+          <label for="b">b</label>
+        </span>
+      </div>
+    </div>
+    <div class="row p-fluid p-grid">
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
+          <InputText id="status" v-model="form.status" type="text" />
+          <label for="status">status</label>
         </span>
       </div>
     </div>
@@ -57,14 +71,16 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
-      pageApi: 'Sensors',
+      pageApi: 'Mix',
       pageTitle: '',
       form: {
-        type: null,
         title: null,
         description: null,
-        status: null,
-        sensor_no: null
+        activation_energy: null,
+        temperature: null,
+        a: null,
+        b: null,
+        status: null
       }
     }
   },
@@ -92,11 +108,13 @@ export default {
       await this.$axios.$get(`${this.companyToken}/${this.pageApi}/${this.$route.params.url}`)
         .then((res) => {
           this.pageTitle = res.data.title
-          this.form.type = res.data.type
           this.form.title = res.data.title
           this.form.description = res.data.description
+          this.form.activation_energy = res.data.activation_energy
+          this.form.temperature = res.data.temperature
+          this.form.a = res.data.a
+          this.form.b = res.data.b
           this.form.status = res.data.status
-          this.form.sensor_no = res.data.sensor_no
         })
         .catch((err) => {
           console.log(err)

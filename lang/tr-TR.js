@@ -29,7 +29,9 @@ export default {
     Measurement: 'Ölçümler',
     Uplink: 'UPLINK',
     Sensors: 'Sensörler',
-    Mix: 'Mix'
+    Mix: 'Mix',
+    success: 'Başarılı',
+    error: 'HATA!'
   },
   auth: {
     loginTry: 'Lütfen Tekrar Deneyin',

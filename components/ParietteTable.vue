@@ -143,28 +143,31 @@
             :max="40"
           />
           <Textarea v-if="row.type === 'Textarea'" v-model="form[row.label]" rows="4" />
-          <Calendar
-            v-if="row.type === 'Calendar'"
-            v-model="form[row.label]"
-            :show-time="false"
-            :show-icon="true"
-            date-format="yy-mm-dd"
-          />
+          <template v-if="row.type === 'Calendar'">
+            <Calendar
+              v-model="form[row.label]"
+              :show-time="false"
+              :show-icon="true"
+              date-format="yy.mm.dd"
+              @date-select="setDate(row.label, $event)"
+            />
+          </template>
           <Password
             v-if="row.type === 'Password'"
             v-model="select[row.label]"
             :feedback="false"
             toggle-mask
           />
-          <Dropdown
-            v-if="row.type === 'Dropdown'"
-            v-model="select[row.label]"
-            :options="lookup[row.option]"
-            :option-label="row.val ? row.val : 'title'"
-            :filter="true"
-            :show-clear="true"
-            @change="setModel(row.label, $event, row.selector)"
-          />
+          <template v-if="row.type === 'Dropdown'">
+            <Dropdown
+              v-model="select[row.label]"
+              :options="lookup[row.option]"
+              :option-label="row.val ? row.val : 'title'"
+              :filter="true"
+              :show-clear="true"
+              @change="setModel(row.label, $event, row.selector)"
+            />
+          </template>
         </div>
       </div>
       <div class="row mt-5">
@@ -261,11 +264,14 @@ export default {
   },
   methods: {
     async createData () {
+      this.$store.commit('setReturn', 200)
       this.$store.commit('setLoader', true)
       await this.$axios.$post(this.companyToken + '/' + this.api, this.form)
         .then((res) => {
           this.setCreateForm(true)
           this.form = {}
+          this.createModal = false
+          this.$store.commit('setReturn', 202)
           this.$store.commit('setLoader', false)
           this.$store.dispatch('getTableData', { link: this.api })
         })
@@ -291,12 +297,18 @@ export default {
           this.showDataModal = false
         })
     },
+    setDate (model, event) {
+      this.select[model] = this.$moment(event).format('YYYY-MM-DD')
+      this.form[model] = this.$moment(event).format('YYYY-MM-DD HH:mm:ss')
+      console.log('form.' + model + ': ' + this.form[model])
+      console.log(this.select[model])
+    },
     close () {
       this.createModal = false
     },
     setModel (model, event, selector) {
       if (event.value !== null) {
-        this.select[model] = event.value.title
+        this.select[model] = event.value.value
         this.form[model] = event.value[selector]
       }
     },
@@ -326,16 +338,19 @@ export default {
       return date.getFullYear() + '-' + month + '-' + day
     },
     setCreateForm (e) {
+      const frm = this.create
       if (e) {
-        this.create.forEach((c) => {
+        frm.forEach((c) => {
           if (c.default) {
             this.form[c.label] = c.default
+            this.select[c.label] = c.default
           } else {
-            this.form[c.label] = null
+            this.form[c.label] = ''
+            this.select[c.label] = ''
           }
         })
       }
-      this.createForm = this.create
+      this.createForm = frm.filter(f => f.type !== 'Hidden')
       this.createModal = e
     }
   }

@@ -2,6 +2,7 @@ export default () => ({
   storeData: process.browser ? localStorage.getItem('storeData') : null,
   pleaseSelect: process.browser ? localStorage.getItem('userSites') : [],
   companyToken: process.browser ? localStorage.getItem('companyToken') : null,
+  returnCode: 0,
   siteInfo: {
     name: 'AKILLIBETON',
     logo: 'pariette-header-logo.svg',
@@ -15,7 +16,7 @@ export default () => ({
     css: '',
     name: ''
   },
-  user: process.browser ? localStorage.getItem('userData') : {},
+  userData: process.browser ? localStorage.getItem('userData') : {},
   breadcrumb: {
     active: '',
     items: []

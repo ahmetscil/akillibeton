@@ -1,6 +1,6 @@
 <template>
   <div class="asc_pariette-pagecard">
-    <Table
+    <ParietteTable
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"

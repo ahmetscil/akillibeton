@@ -1,6 +1,6 @@
 <template>
   <div class="asc_pariette-pagecard">
-    <Table
+    <ParietteTable
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -35,6 +35,7 @@ export default {
         }
       }
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.dispatch('getLookup', { api: 'Mix', label: 'mixList' })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
@@ -47,7 +48,7 @@ export default {
       }
       this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']
       this.formData = [
-        { label: 'mix', type: 'InputNumber' },
+        { label: 'mix', type: this.$route.query.mix ? 'Hidden' : 'Dropdown', default: this.$route.query.mix ? this.$route.query.mix : null, option: 'mixList', selector: 'id', val: 'title' },
         { label: 'days', type: 'InputNumber' },
         { label: 'strength', type: 'InputNumber' }
       ]

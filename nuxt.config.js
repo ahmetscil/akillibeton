@@ -42,6 +42,7 @@ export default {
     '@nuxtjs/google-fonts',
     '@nuxtjs/style-resources',
     '@nuxtjs/eslint-module',
+    '@nuxtjs/moment',
     ['@nuxtjs/fontawesome', {
       component: 'fa',
       suffix: true,

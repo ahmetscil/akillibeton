@@ -1,13 +1,13 @@
 <template>
   <div class="asc_pariette-pagecard">
-    <Table
+    <ParietteTable
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
       :create="formData"
       :show-modal="false"
       :data-fields="dataFields"
-      selection-label="DevEUI"
+      selection-label="id"
     />
   </div>
 </template>
@@ -37,7 +37,7 @@ export default {
       }
 
       this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
-      this.$store.dispatch('getState', { api: 'Sensors', label: 'sensorList' })
+      this.$store.dispatch('getLookup', { api: 'Sensors', label: 'sensorList' })
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
@@ -53,7 +53,7 @@ export default {
         { label: 'name', type: 'InputText' },
         { label: 'description', type: 'InputText' },
         { label: 'mix', type: 'Dropdown', option: 'mixList', selector: 'id' },
-        { label: 'sensor', type: 'Dropdown', option: 'sensorList', selector: 'id' },
+        { label: 'sensor', type: this.$route.query.sensor ? 'Hidden' : 'Dropdown', default: this.$route.query.sensor ? this.$route.query.sensor : null, option: 'sensorList', selector: 'id', val: 'title' },
         { label: 'max_temp', type: 'Temperature' },
         { label: 'min_temp', type: 'Temperature' },
         { label: 'last_temp', type: 'Temperature' },
@@ -61,9 +61,7 @@ export default {
         { label: 'readed_min', type: 'Temperature' },
         { label: 'started_at', type: 'Calendar' },
         { label: 'ended_at', type: 'Calendar' },
-        { label: 'deployed_at', type: 'Calendar' },
-        { label: 'last_data_at', type: 'Calendar' },
-        { label: 'last_mail_sended_at', type: 'Calendar' }
+        { label: 'deployed_at', type: 'Calendar' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },

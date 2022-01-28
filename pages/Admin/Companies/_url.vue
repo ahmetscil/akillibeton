@@ -1,14 +1,14 @@
 <template>
   <div class="asc_pariette-pagecard">
     <div class="row p-fluid p-grid">
-      <div class="p-field p-col-12 p-md-4">
-        <h1 class="float-left mr-2">
+      <div class="p-field col-12 col-md-6 pl-4">
+        <h2>
           {{ pageTitle }}
-        </h1>
+        </h2>
       </div>
-      <div class="p-field p-col-12 p-md-4">
+      <div class="p-field col-12 col-md-6 pr-4">
         <div class="float-right">
-          <Button icon="pi pi-plus" :label="$t('general.update')" class="p-button-sm p-button-primary" @click="update()" />
+          <Button icon="pi pi-pencil" :label="$t('general.update')" class="p-button-sm p-button-warning" @click="update()" />
         </div>
       </div>
     </div>
@@ -21,6 +21,14 @@
       </div>
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
+          <InputText id="formStatus" v-model="form.status" type="text" />
+          <label for="formStatus">status</label>
+        </span>
+      </div>
+    </div>
+    <div class="row p-fluid p-grid">
+      <div class="p-field p-col-12 p-md-4">
+        <span class="p-float-label">
           <InputText id="formEmailTitle" v-model="form.email_title" type="text" />
           <label for="formEmailTitle">email_title</label>
         </span>
@@ -31,6 +39,8 @@
           <label for="formEmail">email</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="formTelephoneTitle" v-model="form.telephone_title" type="text" />
@@ -43,6 +53,8 @@
           <label for="formTelephone">telephone</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="formCountry" v-model="form.country" type="text" />
@@ -55,22 +67,19 @@
           <label for="formCity">city</label>
         </span>
       </div>
+    </div>
+    <div class="row p-fluid p-grid">
       <div class="p-field p-col-12 p-md-4">
         <span class="p-float-label">
           <InputText id="formAddress" v-model="form.address" type="text" />
           <label for="formAddress">address</label>
         </span>
       </div>
-      <div class="p-field p-col-12 p-md-4">
-        <span class="p-float-label">
-          <InputText id="formStatus" v-model="form.status" type="text" />
-          <label for="formStatus">status</label>
-        </span>
-      </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -91,12 +100,28 @@ export default {
       }
     }
   },
+  computed: mapState(['returnCode', 'companyToken']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.success(this.$t('general.success'))
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.error(this.$t('general.error'))
+          break
+      }
+    }
+  },
   mounted () {
     this.getData()
   },
   methods: {
     async getData () {
-      await this.$axios.$get(`${this.pageApi}/${this.$route.params.url}`)
+      await this.$axios.$get(`${this.companyToken}/${this.pageApi}/${this.$route.params.url}`)
         .then((res) => {
           this.pageTitle = res.data.title
           this.form.title = res.data.title

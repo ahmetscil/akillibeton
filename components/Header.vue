@@ -15,7 +15,7 @@
         </ul>
       </b-col>
       <b-col class="asc_pariette-header-operations">
-        {{ user.name }}
+        {{ userData.name }}
         <div class="asc_pariette-header-operations-opt" @click="hamburger()">
           <i class="pi pi-bars" />
         </div>
@@ -62,7 +62,7 @@ export default {
       }
     ]
   }),
-  computed: mapState(['siteInfo', 'user', 'breadcrumb', 'template']),
+  computed: mapState(['siteInfo', 'userData', 'breadcrumb', 'template']),
   mounted () {
     this.$store.commit('setUser')
   },
