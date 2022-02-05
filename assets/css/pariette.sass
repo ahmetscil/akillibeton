@@ -6,8 +6,10 @@ $darkGradient: linear-gradient(90deg, #0e111d, #0f142400)
 $light: #ebf0e7
 $lightText: #464646
 $main: #f3f6ff
+$mainGradient: linear-gradient(45deg, #ffffff, #a1a1a1)
 $mainText: #333
 $boxShadow: 1px 5px 10px #cdcdcd
+$boxShadowHover: 1px 5px 15px #838383
 $color1: #7794ff !important
 $color1Text: #fff !important
 *
@@ -19,9 +21,11 @@ a
     color: #333
 body
   font-size: 11px
-  background: $main
+  background: $mainGradient
   color: #333
-  font-family: 'Inter', sans-serif
+  font-family: 'Poppins', sans-serif
+.pointer
+  cursor: pointer !important
 .input--alert
   & input
     border-color: red !important
@@ -32,7 +36,6 @@ body
   position: relative
   width: 100%
   min-height: 100%
-.asc_pariette-auth,
 .asc_pariette-default
   position: relative
   background: $main
@@ -40,14 +43,78 @@ body
   min-height: 100vh
   width: 100%
   transition: .3s
+.asc_pariette-auth
+  position: relative
+  background: #ebf0e7
+  color: #333
+  height: 100vh
+  overflow: hidden
+  width: 100%
+  transition: .3s
+  &:after
+    content: ""
+    height: 200%
+    left: -50%
+    opacity: .5
+    position: fixed
+    z-index: 2
+    top: -100%
+    width: 200%
+  .asc_pariette-auth-page
+    position: fixed
+    z-index: -1
+  .asc_pariette-auth-form
+    color: #333
+    position: relative
+    z-index: 9
+    height: 90vh
+    width: 35vw
+    margin: 5vh auto
+    padding: 5vh 2vw
+    overflow: auto
+    &:after
+      background: #fff
+      border-radius: 30px
+      filter: blur(1px)
+      opacity: .5
+      border: 1px #fff solid
+      box-shadow: 0 0 10px #e5ffbb
+      content: ""
+      position: absolute
+      z-index: -1
+      width: 100%
+      height: 100%
+      top: 0
+      left: 0
+    .p-inputtext
+      background: #fff
+    & h1
+      font-size: 30px
+      text-align: center
+      font-weight: 600
+  .asc_pariette-auth-card
+    background: #fff
+    box-shadow: $boxShadow
+    border-radius: 15px
+    text-align: center
+    padding: 1rem
+    margin-top: 1rem
+    margin-bottom: 1rem
+    & h1
+      font-size: 16px
+      font-weight: 400
+    & h2
+      font-size: 14px
+      font-weight: 400
+    &:hover
+      box-shadow: $boxShadowHover
+      transition: .3s
 // ***************
 // HEADER CLASS
 // ***************
 .asc_pariette-header
   height: $headerHeight
   width: calc(100% - $sidebarWidth)
-  background: $main
-  border-radius: 0 0 0 10px
   position: fixed
   top: 0
   transition: .3s
@@ -64,9 +131,19 @@ body
     text-align: right
     padding-top: 5px
     padding-right: 25px
+    .asc_pariette-header-operations-opt-nowidth
+      padding: 5px 10px 3px 5px
+      cursor: pointer
+      border-radius: 5px
+      text-align: center
+      display: inline-block
+      background: $light
+      color: $lightText
+      border: 1px lighten($light, 10) solid
     .asc_pariette-header-operations-opt
       width: 30px
       padding: 5px 0 3px 0
+      cursor: pointer
       border-radius: 5px
       text-align: center
       display: inline-block
@@ -104,7 +181,11 @@ body
   transition: .3s
   width: $sidebarWidth
   color: $darkText
-  background: $darkGradient
+  background-image: url("~@/assets/sidebar.jpg")
+  background-size: cover
+  background-position: center
+  background-repeat: no-repeat
+  background-color: #000
   & a
     color: $darkText
 .asc_pariette-sidebar-hide
@@ -117,8 +198,8 @@ body
   position: relative
   color: $mainText
   min-height: 100vh
-  width: calc(100% - $sidebarWidth - 10px)
-  margin-left: $sidebarWidth
+  width: calc(100% - $sidebarWidth - 20px)
+  margin-left: calc($sidebarWidth + 10px)
   transition: .3s
   padding-top: calc($headerHeight + 5px)
 .asc_pariette-main-full
@@ -135,7 +216,7 @@ body
   overflow: hidden
   padding: 10px
   box-shadow: $boxShadow
-  min-height: 80vh
+  min-height: 90vh
 .asc_pariette-card
   position: relative
   border-radius: 10px
@@ -159,8 +240,8 @@ body
 // ***************
 .asc_pariette-table-operations
   display: inline-block
-  float: right
-  margin-right: .5rem
+  float: left
+  margin-left: .5rem
   & span
     background: $light
     border-radius: 5px

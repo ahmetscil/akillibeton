@@ -1,7 +1,10 @@
 <template>
   <div id="app_target" class="asc_pariette">
+    <Toast position="top-right" />
     <div class="asc_pariette-auth">
-      <Nuxt />
+      <div class="asc_pariette-auth-form">
+        <Nuxt />
+      </div>
     </div>
   </div>
 </template>
@@ -26,13 +29,3 @@ export default {
   }
 }
 </script>
-<style lang="sass">
-  .asc_pariette-auth-form
-    position: fixed
-    background: #f7f7f7
-    height: 100vh
-    width: 35vw
-    right: 0
-    top: 0
-    padding: 5vh 2vw
-</style>

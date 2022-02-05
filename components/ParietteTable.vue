@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Loader />
     <DataTable
       v-if="tableData"
       ref="dataTable"
@@ -19,20 +18,10 @@
     >
       <template #header>
         <b-row class="mb-1">
-          <b-col cols="12" lg="3">
+          <b-col cols="12" lg="6">
             <h1 class="float-left mr-2">
               {{ breadcrumb.active }}
             </h1>
-            <span class="p-input-icon-left">
-              <i class="pi pi-search" />
-              <InputText v-model="filters['global']" :placeholder="$t('general.searchTable')" class="p-inputtext-sm" />
-            </span>
-          </b-col>
-          <b-col cols="12" lg="9" align-self="end">
-            <div class="float-right">
-              <Button v-if="operation.create" icon="pi pi-plus" :label="$t('general.newRecord')" class="p-button-sm p-button-primary" @click="setCreateForm(true)" />
-              <Button v-if="operation.export" icon="pi pi-file-excel" :v-tooltip="$t('general.exportTable')" class="p-button-sm p-button-secondary" @click="$refs.dataTable.exportCSV()" />
-            </div>
             <div v-if="selectedRow" class="asc_pariette-table-operations">
               <template v-if="operation.links">
                 <span v-for="(link, l) in operation.links" :key="'link' + l" class="mr-1">
@@ -45,16 +34,11 @@
                 </span>
                 |
               </template>
-              <template v-if="showModal">
-                <span v-if="operation.edit" v-tooltip="$t('general.edit')">
-                  <i class="pi pi-pencil" @click="getData(`${api}/${selectedRow[selectionLabel]}`)" />
+              <span v-if="operation.update" v-tooltip="$t('general.edit')">
+                <span v-if="operation.update" v-tooltip="$t('general.edit')">
+                  <i class="pi pi-pencil" @click="setUpdateForm(`${api}/${selectedRow[selectionLabel]}`)" />
                 </span>
-              </template>
-              <template v-else>
-                <span v-if="operation.edit" v-tooltip="$t('general.edit')">
-                  <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`"><i class="pi pi-pencil" /></nuxt-link>
-                </span>
-              </template>
+              </span>
               <span v-if="operation.preview" v-tooltip="$t('general.preview')">
                 <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`"><i class="pi pi-link" /></nuxt-link>
               </span>
@@ -72,10 +56,22 @@
               </span>
             </div>
           </b-col>
+          <b-col cols="12" lg="6" align-self="end">
+            <div class="float-right">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText v-model="filters['global']" :placeholder="$t('general.searchTable')" class="p-inputtext-sm" />
+              </span>
+              <Button v-if="operation.create" icon="pi pi-plus" :v-tooltip="$t('general.newRecord')" class="p-button-sm p-button-primary" @click="setCreateForm(true)" />
+              <Button v-if="operation.export" icon="pi pi-file-excel" :v-tooltip="$t('general.exportTable')" class="p-button-sm p-button-secondary" @click="$refs.dataTable.exportCSV()" />
+            </div>
+          </b-col>
         </b-row>
       </template>
       <template #empty>
-        no data
+        <Message severity="warn" :closable="false">
+          {{ $t('general.notFound') }}
+        </Message>
       </template>
       <Column v-if="selectionMode === 'multiple'" selection-mode="single" header-style="width: 3em" />
       <Column
@@ -181,6 +177,73 @@
       </div>
     </Dialog>
 
+    <Dialog :visible.sync="updateModal" :modal="true" :maximizable="true">
+      <template #header>
+        <h3>{{ $t('form.updateRecord') }}</h3>
+      </template>
+      <div v-if="updateForm" class="row p-fluid" :style="{maxWidth: '1000px', width: '50vw'}">
+        <div v-for="(row, c) in updateForm" :key="'input' + c" :class="create.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
+          <label>{{ $t('action.' + row.label) }}</label>
+          <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
+          <InputText v-if="row.type === 'InputText'" v-model="form[row.label]" type="text" />
+          <InputNumber v-if="row.type === 'InputNumber'" v-model="form[row.label]" />
+          <InputNumber
+            v-if="row.type === 'Temperature'"
+            v-model="form[row.label]"
+            prefix="↑ "
+            suffix="℃"
+            :min="0"
+            :max="40"
+          />
+          <Textarea v-if="row.type === 'Textarea'" v-model="form[row.label]" rows="4" />
+
+          <template v-if="row.type === 'Calendar'">
+            <Calendar
+              v-model="form[row.label]"
+              :show-time="false"
+              :show-icon="true"
+              date-format="yy.mm.dd"
+              @date-select="setDate(row.label, $event)"
+            />
+          </template>
+
+          <Password
+            v-if="row.type === 'Password'"
+            v-model="select[row.label]"
+            :feedback="false"
+            toggle-mask
+          />
+
+          <template v-if="row.type === 'Dropdown'">
+            <Dropdown
+              v-model="select[row.label]"
+              :options="lookup[row.option]"
+              :option-label="row.val ? row.val : 'title'"
+              :filter="true"
+              :show-clear="true"
+              @change="setModel(row.label, $event, row.selector)"
+            />
+          </template>
+
+          <template v-if="row.type === 'Switch'">
+            <InputSwitch
+              v-model="select[row.label]"
+              @change="setModel(row.label, $event, row.selector)"
+            />
+          </template>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-12 col-md-3">
+          <Button :label="$t('form.cancel')" icon="pi pi-times" class="p-button-text" @click="close()" />
+        </div>
+        <div class="col-12 col-md-6" />
+        <div class="col-12 col-md-3">
+          <Button :label="$t('form.update')" class="float-right" icon="pi pi-check" autofocus @click="updateData()" />
+        </div>
+      </div>
+    </Dialog>
+
     <Dialog :visible.sync="showDataModal" :modal="true">
       <template #header>
         <h3>{{ $t('form.detail') }}</h3>
@@ -232,7 +295,7 @@ export default {
           actions: false,
           status: false,
           preview: false,
-          edit: false
+          update: false
         }
       }
     },
@@ -241,11 +304,19 @@ export default {
       default () {
         return []
       }
+    },
+    update: {
+      type: [Array],
+      default () {
+        return []
+      }
     }
   },
   data () {
     return {
+      updateForm: {},
       createForm: {},
+      updateApi: '',
       selectionMode: 'single',
       search: '',
       perpage: 10,
@@ -254,6 +325,7 @@ export default {
       filters: {},
       form: {},
       select: {},
+      updateModal: false,
       createModal: false,
       showingData: [],
       showDataModal: false
@@ -281,27 +353,61 @@ export default {
           this.$store.commit('setError', err.message)
         })
     },
-    async getData (e) {
+    async updateData () {
+      this.$store.commit('setReturn', 200)
       this.$store.commit('setLoader', true)
-      await this.$axios.$get(this.companyToken + '/' + e)
+      await this.$axios.$put(this.updateApi, this.form)
+        .then((res) => {
+          if (res.status) {
+            this.updateModal = true
+            this.form = {}
+            this.updateModal = false
+            this.$store.commit('setReturn', 203)
+            this.$store.commit('setLoader', false)
+          } else {
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
+          }
+        })
+        .catch((err) => {
+          this.updateModal = true
+          this.$store.commit('setLoader', false)
+          const msgType = typeof err.message
+          if (msgType === 'string') {
+            this.$toast.add({ severity: 'warn', summary: err.message, life: 3000 })
+          } else if (msgType === 'object') {
+            for (const property in err.message) {
+              this.$toast.add({ severity: 'warn', summary: err.message[property], life: 3000 })
+            }
+          }
+        })
+    },
+    async setUpdateForm (e) {
+      this.$store.commit('setLoader', true)
+      this.updateApi = this.companyToken + '/' + e
+      await this.$axios.$get(this.updateApi)
         .then((res) => {
           this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
           this.$store.commit('setLoader', false)
           this.showingData = res.data
-          this.showDataModal = true
+          this.updateModal = true
+          const frm = this.update
+          frm.forEach((c) => {
+            this.form[c.label] = this.showingData[c.label]
+            this.select[c.label] = this.showingData[c.label]
+          })
+
+          this.updateForm = frm.filter(f => f.type !== 'Hidden')
         })
         .catch((err) => {
           this.setCreateForm(false)
           this.$store.commit('setLoader', false)
           this.$store.commit('setError', err.message)
-          this.showDataModal = false
+          this.updateModal = false
         })
     },
     setDate (model, event) {
       this.select[model] = this.$moment(event).format('YYYY-MM-DD')
       this.form[model] = this.$moment(event).format('YYYY-MM-DD HH:mm:ss')
-      console.log('form.' + model + ': ' + this.form[model])
-      console.log(this.select[model])
     },
     close () {
       this.createModal = false

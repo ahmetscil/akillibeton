@@ -1,20 +1,22 @@
 export default {
   router: {
-    Authority: 'Yetkilendirme',
+    undefined: 'Tanımsız',
+    Auth: 'Yetkilendirme',
     Companies: 'Firmalar',
     Downlink: 'Downlink',
     Galleries: 'Galeriler',
     Log: 'İşlem Kayıtları',
     Measurement: 'Ölçüm',
-    MixCalibration: 'Mix Kalibrasyon',
+    Mix_calibration: 'Mix Kalibrasyon',
     Mix: 'Mix',
     Projects: 'Projeler',
     Sensors: 'Sensörler',
     Uplink: 'Uplink',
-    Users: 'Kullanıcılar'
+    Users: 'Kullanıcılar',
+    Dashboard: 'Dashboard'
   },
   general: {
-    selectCompany: 'Lütfen işlem yapacağınız şirketi seçin',
+    selectCompany: 'Lütfen işlem yapacağınız projeyi seçin',
     searchTable: 'ara',
     searchBy: '{x} ara',
     exportTable: 'Dışa Aktar',
@@ -31,26 +33,30 @@ export default {
     Sensors: 'Sensörler',
     Mix: 'Mix',
     success: 'Başarılı',
-    error: 'HATA!'
+    updated: 'Güncellendi',
+    error: 'HATA!',
+    notFound: 'Kayıt Bulunamadı'
   },
   auth: {
     loginTry: 'Lütfen Tekrar Deneyin',
     login: 'Oturum Aç',
     password: 'Şifre',
     rememberMe: 'Beni Hatırla',
+    email: 'E-Posta',
     forgotPass: 'Şifremi Unuttum',
     fillError: 'Lütfen tüm boş alanları doldurun',
     pleaseWait: 'Lütfen Bekleyin'
   },
   header: {
-    Dashboard: 'Dashboard',
     Action: 'İşlemler',
     Company: 'Firmalar'
   },
   form: {
     newRecord: 'Yeni Kayıt',
+    updateRecord: 'Düzenle',
     cancel: 'Vazgeç',
     confirm: 'Oluştur',
+    update: 'Güncelle',
     title: 'Başlık',
     description: 'İçerik'
   },

@@ -4,8 +4,8 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
-      :create="formData"
-      :show-modal="false"
+      :create="createForm"
+      :update="updateForm"
       :data-fields="dataFields"
     />
   </div>
@@ -20,7 +20,8 @@ export default {
       pageApi: 'Projects',
       tableHead: [],
       tableOperation: {},
-      formData: [],
+      createForm: [],
+      updateForm: [],
       dataFields: []
     }
   },
@@ -29,13 +30,19 @@ export default {
     'returnCode' (e) {
       switch (e) {
         case 202:
-          this.$toast.success(this.$t('general.success'))
+          this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 203:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
           setTimeout(() => {
             this.getData()
           }, 200)
           break
         case 402:
-          this.$toast.error(this.$t('general.error'))
+          this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
           break
       }
     }
@@ -56,16 +63,16 @@ export default {
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
+        update: true,
         export: true,
-        edit: true,
         links: [
           { route: 'Sensors', query: '?project=', icon: 'pi pi-wifi' },
           { route: 'Mix', query: '?project=', icon: 'pi pi-palette' }
         ]
       }
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.title] })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.companyTitle] })
       this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'ended_at', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
-      this.formData = [
+      this.createForm = [
         { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
         { label: 'code', type: 'InputText' },
         { label: 'title', type: 'InputText' },
@@ -79,6 +86,22 @@ export default {
         { label: 'address', type: 'InputText' },
         { label: 'started_at', type: 'Calendar' },
         { label: 'ended_at', type: 'Calendar' }
+      ]
+      this.updateForm = [
+        { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
+        { label: 'code', type: 'InputText' },
+        { label: 'title', type: 'InputText' },
+        { label: 'description', type: 'InputText' },
+        { label: 'email_title', type: 'InputText' },
+        { label: 'email', type: 'InputText' },
+        { label: 'telephone_title', type: 'InputText' },
+        { label: 'telephone', type: 'InputText' },
+        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
+        { label: 'city', type: 'InputText' },
+        { label: 'address', type: 'InputText' },
+        { label: 'started_at', type: 'Calendar' },
+        { label: 'ended_at', type: 'Calendar' },
+        { label: 'status', type: 'Switch' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },

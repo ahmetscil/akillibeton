@@ -10,17 +10,17 @@
         <li v-for="(nav, navigationkey) in navigation" :key="'sidebar' + navigationkey">
           <template v-if="nav.sub">
             <span v-b-toggle="'sidenav' + navigationkey">
-              <i :class="nav.icon" /> {{ $t(nav.title) }}
+              <i :class="nav.icon" /> {{ $t('router.' + nav.code) }}
             </span>
             <b-collapse :id="'sidenav' + navigationkey">
               <nuxt-link v-for="(sub, s) in nav.sub" :key="'sidesub' + s" :to="localeLocation({ name: sub.route })">
-                <i :class="sub.icon" /> {{ $t(sub.title) }}
+                <i :class="sub.icon" /> {{ $t('router.' + sub.code) }}
               </nuxt-link>
             </b-collapse>
           </template>
           <template v-else>
-            <nuxt-link v-if="nav.title" :to="localeLocation({ name: nav.route })">
-              <i :class="nav.icon" /> {{ $t(nav.title) }}
+            <nuxt-link v-if="nav.code" :to="localeLocation({ name: nav.route })">
+              <i :class="nav.icon" /> {{ $t('router.' + nav.code) }}
             </nuxt-link>
             <hr v-else>
           </template>
@@ -36,75 +36,17 @@
 import { mapState } from 'vuex'
 export default {
   data: () => ({
-    defaultIcon: 'far fa-circle',
-    navigation: [
-      {
-        title: 'header.Dashboard',
-        route: 'Admin-Dashboard',
-        icon: 'pi pi-folder'
-      },
-      {
-        title: 'router.Companies',
-        route: 'Admin-Companies',
-        icon: 'pi pi-building'
-      },
-      {
-        title: 'router.Projects',
-        route: 'Admin-Projects',
-        icon: 'pi pi-map'
-      },
-      {
-        title: 'router.Mix',
-        route: 'Admin-Mix',
-        icon: 'pi pi-palette'
-      },
-      {
-        title: 'router.Sensors',
-        route: 'Admin-Sensors',
-        icon: 'pi pi-wifi'
-      },
-      {
-        title: 'router.Measurement',
-        route: 'Admin-Measurement',
-        icon: 'pi pi-briefcase'
-      },
-      // {
-      //   title: 'router.Downlink',
-      //   route: 'Admin-Downlink',
-      //   icon: 'pi pi-folder'
-      // },
-      // {
-      //   title: 'router.Uplink',
-      //   route: 'Admin-Uplink',
-      //   icon: 'pi pi-folder'
-      // },
-      {
-        title: null,
-        route: null,
-        icon: null
-      },
-      {
-        title: 'router.Users',
-        route: 'Admin-Users',
-        icon: 'pi pi-users'
-      },
-      {
-        title: 'router.Log',
-        route: 'Admin-Log',
-        icon: 'pi pi-server'
-      }
-    ]
   }),
   computed: {
-    ...mapState(['siteInfo'])
+    ...mapState(['siteInfo', 'navigation'])
   },
   mounted () {
+    this.$store.dispatch('getNavigation')
   }
 }
 </script>
 <style lang="sass">
   .asc_pariette-sidebar-menu
-    background: linear-gradient(45deg, #10172a, #090a0e)
     width: 95%
     margin-top: .5vh
     border-radius: 0 20px 20px 0
@@ -122,7 +64,7 @@ export default {
       color: lighten(#2d3344, 50)
       height: 60px
     .nuxt-link-active
-      background: lighten(#2d3344, 10) !important
+      background: #3e3e3e8a !important
     .asc_pariette-sidebar-menu-list
       height: calc(99vh - 100px)
       overflow: scroll
@@ -148,7 +90,7 @@ export default {
             color: #fff
             display: block
             &:hover
-              background: lighten(#2d3344, 10)
+              background: #3e3e3e8a !important
           & a
             border-radius: 10px
             background: transparent
@@ -158,7 +100,7 @@ export default {
             text-decoration: none
             color: #fff
             &:hover
-              background: lighten(#2d3344, 10)
+              background: #3e3e3e8a !important
           &:hover
             & i
               width: 35px

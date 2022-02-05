@@ -1,8 +1,8 @@
 export default {
-  async getNavigation ({ state, commit }, data) {
-    const row = await this.$axios.$get(`${state.companyToken}/redis/getNav?store=${state.companyToken}`)
+  async getNavigation ({ state, commit }) {
+    const row = await this.$axios.$get(`${state.companyToken}/Navigation`)
     if (row.status) {
-      commit('setNavigation', JSON.parse(row.data))
+      commit('setNavigation', row.data)
     } else {
       commit('setError', row)
     }
@@ -18,13 +18,13 @@ export default {
             commit('sendLogin')
             break
           case 404:
-            this.$toast.error(res.error)
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
             break
           case 200:
             commit('setState', { data: res.data, label: data.label })
             break
           default:
-            this.$toast.error(res.error)
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
             commit('setState', { data: [], label: data.label })
             break
         }
@@ -37,8 +37,12 @@ export default {
   async getLookup ({ state, commit }, data) {
     await this.$axios.$get(`${state.companyToken}/${data.api}`)
       .then((res) => {
-        if (res.data !== null) {
-          commit('setState', { data: res.data.items ? res.data.items : res.data, label: data.label })
+        if (res.code === 200) {
+          if (res.data !== null) {
+            commit('setState', { data: res.data.items ? res.data.items : res.data, label: data.label })
+          }
+        } else {
+          console.log(res.error, res.code)
         }
       })
       .catch((err) => {
@@ -56,13 +60,13 @@ export default {
             commit('sendLogin')
             break
           case 404:
-            this.$toast.error(res.error)
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
             break
           case 200:
             commit('setState', { data: res.data, label: data.label })
             break
           default:
-            this.$toast.error(res.error)
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
             commit('setState', { data: [], label: data.label })
             break
         }
@@ -102,7 +106,7 @@ export default {
             break
         }
       } else {
-        this.$toast.error(res.error)
+        this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
       }
     }
   },
@@ -116,8 +120,12 @@ export default {
           case 200:
             commit('setTableData', res.data)
             break
+          case 403:
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
+            this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
+            break
           default:
-            commit('setTableData', res.error)
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
             break
         }
         commit('setLoader', false)

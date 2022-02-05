@@ -1,51 +1,35 @@
 <template>
-  <div class="asc_pariette-auth-form">
-    <b-row v-if="loginError">
-      <b-col cols="12" class="pb-3 text-danger">
+  <div class="p-fluid p-grid p-formgrid">
+    <div v-if="loginError" class="p-field p-col-12">
+      <Message severity="error">
         {{ $t('auth.loginTry') }}
-      </b-col>
-    </b-row>
-    <div class="p-fluid p-grid p-formgrid">
-      <div class="p-field p-col-12">
-        <h1 class="logotype">
-          {{ siteInfo.name }}
-        </h1>
-      </div>
-      <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.password.$error }">
-        <label for="email">
-          {{ $t('auth.login') }}
-        </label>
-        <InputText v-model="form.email" @keypress.enter="loginForm()" />
-      </div>
-      <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.password.$error }">
-        <label for="basic">
-          {{ $t('auth.password') }}
-        </label>
-        <Password v-model="form.password" :feedback="false" toggle-mask @keypress.enter="loginForm()" />
-      </div>
-      <div class="p-field-checkbox p-col-6 p-md-4">
-        <Checkbox id="rememberMe" v-model="rememberMe" :binary="true" />
-        <label for="binary">
-          {{ $t('auth.rememberMe') }}
-        </label>
-      </div>
-      <div class="p-field-checkbox p-col-6 p-md-4">
-        <nuxt-link :to="localeLocation({ name: 'Auth-ForgotPassword' })">
-          {{ $t('auth.forgotPass') }}
-        </nuxt-link>
-      </div>
-      <div class="p-field-checkbox p-col-2 p-md-4">
-        <Button
-          id="authButton"
-          label="Primary"
-          icon="pi pi-check"
-          type="button"
-          class="p-button-raised p-button-rounded"
-          @click="loginForm()"
-        >
-          {{ $t('auth.login') }}
-        </Button>
-      </div>
+      </Message>
+    </div>
+    <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.password.$error }">
+      <label for="email">
+        {{ $t('auth.email') }}
+      </label>
+      <InputText v-model="form.email" @keyup.enter="loginForm()" />
+    </div>
+    <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.password.$error }">
+      <label for="basic">
+        {{ $t('auth.password') }}
+      </label>
+      <Password v-model="form.password" :feedback="false" toggle-mask @keyup.enter="loginForm()" />
+    </div>
+    <div class="p-field-checkbox p-col-6 p-md-4">
+      <Checkbox id="rememberMe" v-model="rememberMe" :binary="true" />
+      <label for="binary">
+        {{ $t('auth.rememberMe') }}
+      </label>
+    </div>
+    <div class="p-field-checkbox p-col-6 p-md-4">
+      <nuxt-link :to="localeLocation({ name: 'Auth-ForgotPassword' })">
+        {{ $t('auth.forgotPass') }}
+      </nuxt-link>
+    </div>
+    <div class="p-field-checkbox p-col-2 p-md-4">
+      <Button icon="pi pi-check" :label="$t('auth.login')" class="p-button-warning p-button-rounded" :disabled="disableBtn" @click="loginForm()" />
     </div>
   </div>
 </template>
@@ -59,28 +43,33 @@ export default {
       email: '',
       password: ''
     },
+    disableBtn: false,
     rememberMe: false,
     loginError: false
   }),
   computed: mapState(['siteInfo']),
-  watch: {
-  },
   methods: {
     async loginForm () {
       this.$v.$touch()
       if (this.$v.$invalid) {
-        this.$toast.error(this.$t('auth.fillError'))
+        this.$toast.add({ severity: 'warn', summary: this.$t('auth.fillError'), life: 3000 })
       } else {
+        this.disableBtn = true
         this.loginError = false
         try {
-          this.$toast.success(this.$t('auth.pleaseWait'))
+          this.$toast.add({ severity: 'success', summary: this.$t('auth.pleaseWait'), life: 3000 })
           const login = await this.$auth.loginWith('laravelJWT', { data: this.form })
           if (parseInt(login.status) === 200) {
             this.disableBtn = false
             this.$store.commit('setLogin', this.$auth.$state)
             this.$store.commit('setSelectSite', { data: login.data })
+          } else {
+            this.disableBtn = false
+            this.$toast.add({ severity: 'success', summary: login.data.error, life: 3000 })
           }
         } catch (err) {
+          this.disableBtn = false
+          this.$toast.add({ severity: 'warn', summary: err.response.message, life: 3000 })
         }
       }
     },
@@ -104,6 +93,3 @@ export default {
   }
 }
 </script>
-<style lang="sass">
-
-</style>

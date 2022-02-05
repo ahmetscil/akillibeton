@@ -2,6 +2,7 @@ export default () => ({
   storeData: process.browser ? localStorage.getItem('storeData') : null,
   pleaseSelect: process.browser ? localStorage.getItem('userSites') : [],
   companyToken: process.browser ? localStorage.getItem('companyToken') : null,
+  showSidebar: false,
   returnCode: 0,
   siteInfo: {
     name: 'AKILLIBETON',

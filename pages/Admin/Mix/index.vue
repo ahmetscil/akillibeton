@@ -4,13 +4,15 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
-      :create="formData"
+      :create="createForm"
+      :update="updateForm"
       :show-modal="false"
       :data-fields="dataFields"
     />
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -19,8 +21,31 @@ export default {
       pageApi: 'Mix',
       tableHead: [],
       tableOperation: {},
-      formData: [],
+      createForm: [],
+      updateForm: [],
       dataFields: []
+    }
+  },
+  computed: mapState(['storeData', 'returnCode']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 203:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
+          break
+      }
     }
   },
   mounted () {
@@ -40,13 +65,13 @@ export default {
       this.tableOperation = {
         create: true,
         export: true,
-        edit: true,
+        update: true,
         links: [
           { route: 'MixCalibration', query: '?mix=' }
         ]
       }
       this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']
-      this.formData = [
+      this.createForm = [
         { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
         { label: 'title', type: 'InputText' },
         { label: 'description', type: 'Textarea' },
@@ -54,6 +79,15 @@ export default {
         { label: 'temperature', type: 'Temperature' },
         { label: 'a', type: 'InputText' },
         { label: 'b', type: 'InputText' }
+      ]
+      this.updateForm = [
+        { label: 'title', type: 'InputText' },
+        { label: 'description', type: 'Textarea' },
+        { label: 'activation_energy', type: 'Temperature' },
+        { label: 'temperature', type: 'Temperature' },
+        { label: 'a', type: 'InputText' },
+        { label: 'b', type: 'InputText' },
+        { label: 'status', type: 'Switch' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },

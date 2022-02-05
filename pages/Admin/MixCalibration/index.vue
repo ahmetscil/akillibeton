@@ -4,13 +4,15 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
-      :create="formData"
+      :create="createForm"
+      :update="updateForm"
       :show-modal="true"
       :data-fields="dataFields"
     />
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -19,8 +21,31 @@ export default {
       pageApi: 'MixCalibration',
       tableHead: [],
       tableOperation: {},
-      formData: [],
+      createForm: [],
+      updateForm: [],
       dataFields: []
+    }
+  },
+  computed: mapState(['storeData', 'returnCode']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 203:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
+          break
+      }
     }
   },
   mounted () {
@@ -44,13 +69,19 @@ export default {
         actions: false,
         status: true,
         preview: true,
-        edit: true
+        update: true
       }
       this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']
-      this.formData = [
+      this.createForm = [
         { label: 'mix', type: this.$route.query.mix ? 'Hidden' : 'Dropdown', default: this.$route.query.mix ? this.$route.query.mix : null, option: 'mixList', selector: 'id', val: 'title' },
         { label: 'days', type: 'InputNumber' },
         { label: 'strength', type: 'InputNumber' }
+      ]
+      this.updateForm = [
+        { label: 'mix', type: this.$route.query.mix ? 'Hidden' : 'Dropdown', default: this.$route.query.mix ? this.$route.query.mix : null, option: 'mixList', selector: 'id', val: 'title' },
+        { label: 'days', type: 'InputNumber' },
+        { label: 'strength', type: 'InputNumber' },
+        { label: 'status', type: 'Switch' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },

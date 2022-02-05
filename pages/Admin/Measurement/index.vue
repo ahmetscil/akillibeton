@@ -4,7 +4,8 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
-      :create="formData"
+      :create="createForm"
+      :update="updateForm"
       :show-modal="false"
       :data-fields="dataFields"
       selection-label="id"
@@ -12,6 +13,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -20,8 +22,31 @@ export default {
       pageApi: 'Measurement',
       tableHead: [],
       tableOperation: {},
-      formData: [],
+      createForm: [],
+      updateForm: [],
       dataFields: []
+    }
+  },
+  computed: mapState(['storeData', 'returnCode']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 203:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
+          break
+      }
     }
   },
   mounted () {
@@ -43,13 +68,13 @@ export default {
       this.tableOperation = {
         create: true,
         export: true,
-        edit: true,
+        update: true,
         links: [
           { route: 'Uplink', query: '/', after: '?measurement=', afterLabel: 'id' }
         ]
       }
       this.dataFields = ['name', 'description', 'mix', 'sensor', 'max_temp', 'min_temp', 'last_temp', 'readed_max', 'readed_min', 'started_at', 'ended_at', 'deployed_at', 'last_data_at', 'created_at', 'updated_at']
-      this.formData = [
+      this.createForm = [
         { label: 'name', type: 'InputText' },
         { label: 'description', type: 'InputText' },
         { label: 'mix', type: 'Dropdown', option: 'mixList', selector: 'id' },
@@ -62,6 +87,19 @@ export default {
         { label: 'started_at', type: 'Calendar' },
         { label: 'ended_at', type: 'Calendar' },
         { label: 'deployed_at', type: 'Calendar' }
+      ]
+      this.updateForm = [
+        { label: 'name', type: 'InputText' },
+        { label: 'description', type: 'InputText' },
+        { label: 'max_temp', type: 'Temperature' },
+        { label: 'min_temp', type: 'Temperature' },
+        { label: 'last_temp', type: 'Temperature' },
+        { label: 'readed_max', type: 'Temperature' },
+        { label: 'readed_min', type: 'Temperature' },
+        { label: 'started_at', type: 'Calendar' },
+        { label: 'ended_at', type: 'Calendar' },
+        { label: 'deployed_at', type: 'Calendar' },
+        { label: 'status', type: 'Switch' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },

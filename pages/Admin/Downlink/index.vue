@@ -10,6 +10,7 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -27,6 +28,28 @@ export default {
         edit: true
       },
       dataFields: []
+    }
+  },
+  computed: mapState(['storeData', 'returnCode']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 203:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
+          break
+      }
     }
   },
   mounted () {

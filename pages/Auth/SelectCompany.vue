@@ -1,40 +1,48 @@
 <template>
-  <b-container fluid>
-    <b-row>
-      <b-col cols="12">
+  <b-row>
+    <b-col cols="12">
+      <h1>
+        {{ $t('general.selectCompany') }}
+      </h1>
+    </b-col>
+    <b-col
+      v-for="(companies, c) in pleaseSelect"
+      :key="'cmp' + c"
+      cols="12"
+      @click="selectSite(companies)"
+    >
+      <div class="asc_pariette-auth-card pointer">
+        <h2>
+          {{ companies.companyTitle }}
+        </h2>
         <h1>
-          {{ $t('general.selectCompany') }}
+          {{ companies.projectTitle }}
         </h1>
-      </b-col>
-      <b-col
-        v-for="(site, s) in pleaseSelect"
-        :key="'sites' + s"
-        cols="12"
-        md="4"
-      >
-        <div class="asc_pariette-card" @click="selectSite(site)">
-          <h1>
-            {{ site.title }}
-          </h1>
-        </div>
-      </b-col>
-    </b-row>
-  </b-container>
+      </div>
+    </b-col>
+    <b-col cols="12">
+      <div @click="logoutUser">
+        logout
+      </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 export default {
-  layout: 'admin',
+  layout: 'auth',
   middleware: 'authenticated',
-  data () {
-    return {
-    }
-  },
   computed: mapState(['pleaseSelect']),
-  mounted () {
-  },
   methods: {
+    async logoutUser () {
+      this.$store.commit('killLogin')
+      if (process.browser) {
+        await this.$auth.logout(
+          localStorage.clear()
+        )
+      }
+    },
     selectSite (e) {
       this.$store.commit('setStore', { company: e })
       this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))

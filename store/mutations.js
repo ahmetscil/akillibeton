@@ -1,15 +1,21 @@
 export default {
+  setNavigation (state, payload) {
+    state.navigation = payload.sort((a, b) => (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0))
+  },
   setSelectSite (state, payload) {
     if (process.browser) {
-      state.pleaseSelect = payload.data.company
+      state.pleaseSelect = payload.data.authority
     }
+  },
+  setSidebar (state, payload) {
+    state.showSidebar = payload
   },
   setStore (state, payload) {
     if (process.browser) {
       localStorage.setItem('storeData', JSON.stringify(payload.company))
-      localStorage.setItem('companyToken', payload.company.token)
+      localStorage.setItem('companyToken', payload.company.companyToken + '-' + payload.company.projectId)
       state.storeData = JSON.parse(localStorage.getItem('storeData'))
-      state.companyToken = JSON.parse(localStorage.getItem('companyToken'))
+      // state.companyToken = JSON.parse(localStorage.getItem('companyToken'))
     }
   },
   sendLogin (state, payload) {
@@ -23,10 +29,18 @@ export default {
   setError (state, payload) {
     const msgType = typeof payload
     if (msgType === 'string') {
-      this.$toast.error(payload)
+      this._vm.$bvToast.toast(payload, {
+        variant: 'danger',
+        noCloseButton: false,
+        toaster: 'b-toaster-bottom-right'
+      })
     } else if (msgType === 'object') {
       for (const property in payload) {
-        this.$toast.error(payload[property])
+        this._vm.$bvToast.toast(payload[property], {
+          variant: 'danger',
+          noCloseButton: false,
+          toaster: 'b-toaster-bottom-right'
+        })
       }
     }
   },

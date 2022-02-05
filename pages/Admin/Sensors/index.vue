@@ -4,7 +4,8 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
-      :create="formData"
+      :create="createForm"
+      :update="updateForm"
       :show-modal="false"
       :data-fields="dataFields"
       selection-label="id"
@@ -21,11 +22,33 @@ export default {
       pageApi: 'Sensors',
       tableHead: [],
       tableOperation: {},
-      formData: [],
+      createForm: [],
+      updateForm: [],
       dataFields: []
     }
   },
-  computed: mapState(['lookup']),
+  computed: mapState(['lookup', 'storeData', 'returnCode']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 203:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
+          break
+      }
+    }
+  },
   mounted () {
     this.getData()
   },
@@ -50,19 +73,28 @@ export default {
       this.tableOperation = {
         create: true,
         export: true,
-        edit: true,
+        update: true,
         links: [
           { route: 'Measurement', query: '?sensor=', after: null, afterLabel: null }
         ]
       }
       this.dataFields = ['DevEUI', 'created_at', 'description', 'id', 'project', 'status', 'title', 'type', 'updated_at']
-      this.formData = [
+      this.createForm = [
         { label: 'sensor_no', type: 'InputText' },
         { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
         { label: 'DevEUI', type: 'InputText' },
         { label: 'title', type: 'InputText' },
         { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
         { label: 'description', type: 'Textarea' }
+      ]
+      this.updateForm = [
+        { label: 'sensor_no', type: 'InputText' },
+        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
+        { label: 'DevEUI', type: 'InputText' },
+        { label: 'title', type: 'InputText' },
+        { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
+        { label: 'description', type: 'Textarea' },
+        { label: 'status', type: 'Switch' }
       ]
       this.$store.dispatch('getState', { api: 'Projects/1', label: 'project' })
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })

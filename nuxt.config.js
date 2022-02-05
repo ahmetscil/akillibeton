@@ -51,7 +51,8 @@ export default {
   ],
   googleFonts: {
     families: {
-      Inter: [100, 400, 600, 900]
+      Inter: [100, 400, 600, 900],
+      Poppins: [100, 300, 400, 700]
     }
   },
   modules: [
@@ -65,7 +66,10 @@ export default {
         'ProgressSpinner',
         'Badge',
         'DataTable',
+        'InputSwitch',
+        'Message',
         'Card',
+        'Toast',
         'Column',
         'Button',
         'Calendar',
@@ -79,6 +83,7 @@ export default {
         'Tooltip',
         'Textarea',
         'Menu',
+        'Sidebar',
         'InputNumber'
       ],
       directives: ['Tooltip', 'Badge']
@@ -117,7 +122,7 @@ export default {
       login: '/Auth/Login',
       logout: '/',
       callback: '/Auth/Login',
-      home: '/Admin/Dashboard'
+      home: '/'
     },
     strategies: {
       laravelJWT: {

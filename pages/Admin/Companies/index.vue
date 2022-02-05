@@ -4,13 +4,15 @@
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
-      :create="formData"
+      :create="createForm"
+      :update="updateForm"
       :show-modal="false"
       :data-fields="dataFields"
     />
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -19,8 +21,31 @@ export default {
       pageApi: 'Companies',
       tableHead: [],
       tableOperation: {},
-      formData: [],
+      createForm: [],
+      updateForm: [],
       dataFields: []
+    }
+  },
+  computed: mapState(['storeData', 'returnCode']),
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 202:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 203:
+          this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
+          setTimeout(() => {
+            this.getData()
+          }, 200)
+          break
+        case 402:
+          this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
+          break
+      }
     }
   },
   mounted () {
@@ -40,13 +65,13 @@ export default {
       this.tableOperation = {
         create: true,
         export: true,
-        edit: true,
+        update: true,
         links: [
           { route: 'Projects', query: '?company=' }
         ]
       }
       this.dataFields = ['address', 'city', 'country', 'created_at', 'email', 'email_title', 'id', 'logo', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
-      this.formData = [
+      this.createForm = [
         { label: 'title', type: 'InputText' },
         { label: 'email_title', type: 'InputText' },
         { label: 'email', type: 'InputText' },
@@ -56,13 +81,24 @@ export default {
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' }
       ]
+      this.updateForm = [
+        { label: 'title', type: 'InputText' },
+        { label: 'email_title', type: 'InputText' },
+        { label: 'email', type: 'InputText' },
+        { label: 'telephone_title', type: 'InputText' },
+        { label: 'telephone', type: 'InputText' },
+        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
+        { label: 'city', type: 'InputText' },
+        { label: 'address', type: 'InputText' },
+        { label: 'status', type: 'Switch' }
+      ]
       this.tableHead = [
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'telephone', label: this.$t('action.telephone'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'country', label: this.$t('action.country'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'city', label: this.$t('action.city'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'city', label: this.$t('action.city'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
       ]
     }
   }
