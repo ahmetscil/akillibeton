@@ -3,7 +3,7 @@
     <b-row>
       <b-col>
         <span v-if="template.showHides" class="asc_pariette-sitename-mobile">
-          {{ siteInfo.name }}
+          <img src="@/assets/akillibeton-dark.png" :alt="siteInfo.name">
         </span>
         <ul v-if="breadcrumb.items" class="asc_pariette-breadcrumb">
           <li v-for="(item, i) in breadcrumb.items" :key="'breadcrumb' + i" class="asc_pariette-breadcrumb-links">

@@ -1,5 +1,8 @@
 <template>
   <div class="p-fluid p-grid p-formgrid">
+    <div class="p-field p-col-12 login_img">
+      <img src="@/assets/akillibeton-dark.png">
+    </div>
     <div v-if="loginError" class="p-field p-col-12">
       <Message severity="error">
         {{ $t('auth.loginTry') }}
@@ -93,3 +96,12 @@ export default {
   }
 }
 </script>
+<style>
+  .login_img {
+    text-align: center;
+  }
+  .login_img img {
+    width: 300px;
+    margin: auto;
+  }
+</style>

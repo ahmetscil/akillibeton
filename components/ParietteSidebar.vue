@@ -1,9 +1,7 @@
 <template>
   <div class="asc_pariette-sidebar-menu">
     <div class="asc_pariette-sidebar-menu-head">
-      <h1>
-        {{ siteInfo.name }}
-      </h1>
+      <img src="@/assets/akillibeton-light.png" :alt="siteInfo.name">
     </div>
     <div class="asc_pariette-sidebar-menu-list">
       <ul>
@@ -52,6 +50,9 @@ export default {
     border-radius: 0 20px 20px 0
     .asc_pariette-sidebar-menu-head
       height: 40px
+      & img
+        margin: 15px 0 0 15px
+        width: 80%
       & h1
         font-weight: bold
         letter-spacing: -0.1rem
