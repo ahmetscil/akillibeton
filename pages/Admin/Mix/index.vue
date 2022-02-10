@@ -6,7 +6,7 @@
       :api="pageApi"
       :create="createForm"
       :update="updateForm"
-      :show-modal="false"
+      :show-modal="true"
       :data-fields="dataFields"
     />
   </div>

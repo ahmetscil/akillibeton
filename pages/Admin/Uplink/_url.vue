@@ -66,6 +66,7 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
+      polling: null,
       pageApi: 'Uplink',
       uplData: [],
       projectInfo: {},
@@ -117,9 +118,12 @@ export default {
   computed: mapState(['companyToken']),
   mounted () {
     this.getData()
-    setInterval(() => {
-      this.getData()
-    }, 30000)
+    setTimeout(() => {
+      this.pollData()
+    }, 3000)
+  },
+  destroyed () {
+    clearInterval(this.polling)
   },
   methods: {
     async getData () {
@@ -129,52 +133,61 @@ export default {
       }
       await this.$axios.$get(apiquery)
         .then((res) => {
-          this.projectInfo = res.data.project
-          this.sensorInfo = res.data.sensor
-          this.uplData = res.data.uplinkdata
-          const sensorData = res.data.uplinkdata
+          if (res.code === 200) {
+            this.projectInfo = res.data.project
+            this.sensorInfo = res.data.sensor
+            this.uplData = res.data.uplinkdata
+            const sensorData = res.data.uplinkdata
 
-          this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', res.data.project.title, res.data.sensor.title] })
+            this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', res.data.project.title, res.data.sensor.title] })
 
-          const createdAt = []
-          const temperature = []
-          const maturity = []
-          const LrrRSSI = []
-          const LrrSNR = []
-          for (let s = 0; s < sensorData.length; s++) {
-            const sensor = sensorData[s]
-            createdAt.push(sensor.created_at)
-            temperature.push(sensor.temperature)
-            maturity.push(sensor.maturity)
-            LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })
-            LrrSNR.push({ created_at: sensor.created_at, data: sensor.LrrSNR })
+            const createdAt = []
+            const temperature = []
+            const maturity = []
+            const LrrRSSI = []
+            const LrrSNR = []
+            for (let s = 0; s < sensorData.length; s++) {
+              const sensor = sensorData[s]
+              createdAt.push(sensor.created_at)
+              temperature.push(sensor.temperature)
+              maturity.push(sensor.maturity)
+              LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })
+              LrrSNR.push({ created_at: sensor.created_at, data: sensor.LrrSNR })
+            }
+            this.temperatureChart.labels = createdAt
+            this.temperatureChart.datasets = [
+              {
+                label: 'temperature',
+                data: temperature,
+                fill: false,
+                tension: 0.4,
+                borderColor: '#42A5F5'
+              }
+            ]
+            this.maturityChart.labels = createdAt
+            this.maturityChart.datasets = [
+              {
+                label: 'maturity',
+                data: maturity,
+                fill: false,
+                tension: 0.4,
+                borderColor: '#42A5F5'
+              }
+            ]
+            this.LrrRSSI = LrrRSSI
+            this.LrrSNR = LrrSNR
+          } else {
+            this.$toast.add({ severity: 'warn', summary: this.$t('err.' + res.error), life: 3000 })
           }
-          this.temperatureChart.labels = createdAt
-          this.temperatureChart.datasets = [
-            {
-              label: 'temperature',
-              data: temperature,
-              fill: false,
-              tension: 0.4,
-              borderColor: '#42A5F5'
-            }
-          ]
-          this.maturityChart.labels = createdAt
-          this.maturityChart.datasets = [
-            {
-              label: 'maturity',
-              data: maturity,
-              fill: false,
-              tension: 0.4,
-              borderColor: '#42A5F5'
-            }
-          ]
-          this.LrrRSSI = LrrRSSI
-          this.LrrSNR = LrrSNR
         })
         .catch((err) => {
           console.log(err)
         })
+    },
+    pollData () {
+      this.polling = setInterval(() => {
+        this.getData()
+      }, 3000)
     },
     setLimit (e) {
       this.dataLimit = e.value

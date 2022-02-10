@@ -1024,6 +1024,7 @@ export default {
     ReportDaily: 'Tagesumsatze',
     admin: 'System Admin',
     Authorization: 'Authorization',
+    Authority: 'Authorization',
     Balance: 'Balance',
     Bank: 'Bank',
     Brand: 'Brand',

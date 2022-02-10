@@ -1,6 +1,6 @@
 export default () => ({
   storeData: process.browser ? localStorage.getItem('storeData') : null,
-  pleaseSelect: process.browser ? localStorage.getItem('userSites') : [],
+  pleaseSelect: process.browser ? JSON.parse(localStorage.getItem('authorizedCompanies')) : [],
   companyToken: process.browser ? localStorage.getItem('companyToken') : null,
   showSidebar: false,
   returnCode: 0,

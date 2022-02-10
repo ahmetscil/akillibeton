@@ -4,7 +4,13 @@ export default {
   },
   setSelectSite (state, payload) {
     if (process.browser) {
-      state.pleaseSelect = payload.data.authority
+      localStorage.setItem('authorizedCompanies', JSON.stringify(payload.data.authority))
+      state.pleaseSelect = JSON.parse(localStorage.getItem('authorizedCompanies'))
+    }
+  },
+  getSelectSite (state, payload) {
+    if (process.browser) {
+      state.pleaseSelect = JSON.parse(localStorage.getItem('authorizedCompanies'))
     }
   },
   setSidebar (state, payload) {

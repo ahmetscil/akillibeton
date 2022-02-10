@@ -1,5 +1,5 @@
 {
-  "name": "starter",
+  "name": "akillibeton",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -30,7 +30,8 @@
     "primeicons": "^5.0.0",
     "primevue": "^2.7.0",
     "vue-quill-editor": "^3.0.6",
-    "vuelidate": "^0.7.6",
+    "vue-select": "^3.16.0",
+    "vuelidate": "^0.7.7",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

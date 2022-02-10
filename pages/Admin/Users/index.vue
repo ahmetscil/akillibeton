@@ -70,7 +70,7 @@ export default {
         preview: true,
         update: true
       }
-      this.dataFields = ['created_at', 'email', 'id', 'ip', 'name', 'phone', 'photo', 'status', 'updated_at']
+      this.dataFields = ['created_at', 'userName', 'id']
       this.createForm = [
         { label: 'name', type: 'InputText' },
         { label: 'phone', type: 'InputText' },

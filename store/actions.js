@@ -111,21 +111,15 @@ export default {
     }
   },
   async getTableData ({ state, commit }, data) {
-    commit('setReturn', 200)
+    commit('setReturn', 0)
     commit('setLoader', true)
     commit('setTableData', [])
     await this.$axios.$get(`${state.companyToken}/${data.link}`)
       .then((res) => {
+        commit('setReturn', res.code)
         switch (res.code) {
           case 200:
             commit('setTableData', res.data)
-            break
-          case 403:
-            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
-            this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
-            break
-          default:
-            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
             break
         }
         commit('setLoader', false)

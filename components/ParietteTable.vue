@@ -35,8 +35,13 @@
                 |
               </template>
               <span v-if="operation.update" v-tooltip="$t('general.edit')">
-                <span v-if="operation.update" v-tooltip="$t('general.edit')">
+                <span v-if="showModal">
                   <i class="pi pi-pencil" @click="setUpdateForm(`${api}/${selectedRow[selectionLabel]}`)" />
+                </span>
+                <span v-else>
+                  <nuxt-link :to="`${api}/${selectedRow[selectionLabel]}`">
+                    <i class="pi pi-pencil" />
+                  </nuxt-link>
                 </span>
               </span>
               <span v-if="operation.preview" v-tooltip="$t('general.preview')">
@@ -103,15 +108,25 @@
             <Calendar v-model="filters[column.col]" date-format="yyyy-mm-dd" class="p-column-filter" :placeholder="$t('general.searchBy', { x: column.label})" />
           </template>
           <template v-if="column.type === 'Dropdown'">
-            <Dropdown v-model="filters[column.col]" :options="column.options" :placeholder="$t('general.searchBy', { x: column.label})" class="p-column-filter" :show-clear="true">
-              <template #option="slot">
-                <span :class="'customer-badge status-' + slot.option">{{ slot.option }}</span>
-              </template>
-            </Dropdown>
+            <v-select
+              v-model="filters[column.col]"
+              :label="row.val ? row.val : 'title'"
+              :options="column.options"
+              :placeholder="$t('general.searchBy', { x: column.label})"
+              @input="setModel(row.label, $event, row.selector)"
+            />
           </template>
         </template>
         <template #body="slot">
-          <span v-if="column.col === 'status'">
+          <span v-if="column.col === 'admin'">
+            <i v-if="slot.data[column.col] === 1" class="pi pi-check" />
+            <i v-else class="pi pi-times" />
+          </span>
+          <span v-else-if="column.col === 'boss'">
+            <i v-if="slot.data[column.col] === 1" class="pi pi-check" />
+            <i v-else class="pi pi-times" />
+          </span>
+          <span v-else-if="column.col === 'status'">
             <i v-if="slot.data[column.col] === 1" class="pi pi-check" />
             <i v-else class="pi pi-times" />
           </span>
@@ -125,45 +140,72 @@
         <h3>{{ $t('form.newRecord') }}</h3>
       </template>
       <div v-if="createForm" class="row p-fluid" :style="{maxWidth: '1000px', width: '50vw'}">
-        <div v-for="(row, c) in createForm" :key="'input' + c" :class="create.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
-          <label>{{ $t('action.' + row.label) }}</label>
-          <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
-          <InputText v-if="row.type === 'InputText'" v-model="form[row.label]" type="text" />
-          <InputNumber v-if="row.type === 'InputNumber'" v-model="form[row.label]" />
-          <InputNumber
-            v-if="row.type === 'Temperature'"
-            v-model="form[row.label]"
-            prefix="↑ "
-            suffix="℃"
-            :min="0"
-            :max="40"
-          />
-          <Textarea v-if="row.type === 'Textarea'" v-model="form[row.label]" rows="4" />
-          <template v-if="row.type === 'Calendar'">
+        <div
+          v-for="(row, c) in createForm"
+          :key="'input' + c"
+          :class="create.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'"
+        >
+          <div>
+            <label>{{ $t('action.' + row.label) }}</label>
+            <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
+
+            <InputText
+              v-if="row.type === 'InputText'"
+              v-model="form[row.label]"
+              :required="row.required"
+              type="text"
+            />
+
+            <InputNumber
+              v-if="row.type === 'InputNumber'"
+              v-model="form[row.label]"
+              :required="row.required"
+            />
+
+            <InputNumber
+              v-if="row.type === 'Temperature'"
+              v-model="form[row.label]"
+              :required="row.required"
+              prefix="↑ "
+              suffix="℃"
+              :min="0"
+              :max="40"
+            />
+
+            <Textarea
+              v-if="row.type === 'Textarea'"
+              v-model="form[row.label]"
+              :required="row.required"
+              rows="4"
+            />
+
             <Calendar
+              v-if="row.type === 'Calendar'"
               v-model="form[row.label]"
               :show-time="false"
               :show-icon="true"
+              :required="row.required"
               date-format="yy.mm.dd"
               @date-select="setDate(row.label, $event)"
             />
-          </template>
-          <Password
-            v-if="row.type === 'Password'"
-            v-model="select[row.label]"
-            :feedback="false"
-            toggle-mask
-          />
-          <template v-if="row.type === 'Dropdown'">
-            <Dropdown
+
+            <Password
+              v-if="row.type === 'Password'"
               v-model="select[row.label]"
-              :options="lookup[row.option]"
-              :option-label="row.val ? row.val : 'title'"
-              :filter="true"
-              :show-clear="true"
-              @change="setModel(row.label, $event, row.selector)"
+              :required="row.required"
+              :feedback="false"
+              toggle-mask
             />
-          </template>
+
+            <v-select
+              v-if="row.type === 'Dropdown'"
+              v-model="select[row.label]"
+              :label="row.val ? row.val : 'title'"
+              :options="lookup[row.option]"
+              :required="row.required"
+              @input="setModel(row.label, $event, row.selector)"
+            />
+          </div>
         </div>
       </div>
       <div class="row mt-5">
@@ -215,20 +257,18 @@
           />
 
           <template v-if="row.type === 'Dropdown'">
-            <Dropdown
+            <v-select
               v-model="select[row.label]"
+              :label="row.val ? row.val : 'title'"
               :options="lookup[row.option]"
-              :option-label="row.val ? row.val : 'title'"
-              :filter="true"
-              :show-clear="true"
-              @change="setModel(row.label, $event, row.selector)"
+              @input="setModel(row.label, $event, row.selector)"
             />
           </template>
 
           <template v-if="row.type === 'Switch'">
             <InputSwitch
               v-model="select[row.label]"
-              @change="setModel(row.label, $event, row.selector)"
+              @change="setSwitch(row.label, $event, row.selector)"
             />
           </template>
         </div>
@@ -324,7 +364,9 @@ export default {
       selectedRow: null,
       filters: {},
       form: {},
-      select: {},
+      select: {
+        country: ''
+      },
       updateModal: false,
       createModal: false,
       showingData: [],
@@ -332,7 +374,17 @@ export default {
     }
   },
   computed: {
-    ...mapState(['breadcrumb', 'companyToken', 'tableData', 'lookup'])
+    ...mapState(['breadcrumb', 'companyToken', 'tableData', 'lookup', 'returnCode'])
+  },
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 403:
+          this.$toast.add({ severity: 'warn', summary: 'authorization Error', life: 3000 })
+          this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
+          break
+      }
+    }
   },
   methods: {
     async createData () {
@@ -359,7 +411,6 @@ export default {
       await this.$axios.$put(this.updateApi, this.form)
         .then((res) => {
           if (res.status) {
-            this.updateModal = true
             this.form = {}
             this.updateModal = false
             this.$store.commit('setReturn', 203)
@@ -413,9 +464,13 @@ export default {
       this.createModal = false
     },
     setModel (model, event, selector) {
+      this.select[model] = event.key
+      this.form[model] = event[selector]
+    },
+    setSwitch (model, event, selector) {
       if (event.value !== null) {
         this.select[model] = event.value.value
-        this.form[model] = event.value[selector]
+        this.form[model] = event[selector]
       }
     },
     filterDate (value, filter) {

@@ -6,7 +6,7 @@
       :api="pageApi"
       :create="createForm"
       :update="updateForm"
-      :show-modal="false"
+      :show-modal="true"
       :data-fields="dataFields"
     />
   </div>
@@ -72,14 +72,14 @@ export default {
       }
       this.dataFields = ['address', 'city', 'country', 'created_at', 'email', 'email_title', 'id', 'logo', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.createForm = [
-        { label: 'title', type: 'InputText' },
-        { label: 'email_title', type: 'InputText' },
-        { label: 'email', type: 'InputText' },
-        { label: 'telephone_title', type: 'InputText' },
-        { label: 'telephone', type: 'InputText' },
-        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
-        { label: 'city', type: 'InputText' },
-        { label: 'address', type: 'InputText' }
+        { label: 'title', type: 'InputText', required: true },
+        { label: 'email_title', type: 'InputText', required: false },
+        { label: 'email', type: 'InputText', required: true },
+        { label: 'telephone_title', type: 'InputText', required: false },
+        { label: 'telephone', type: 'InputText', required: false },
+        { label: 'country', type: 'Dropdown', required: false, option: 'countryList', selector: 'id', val: 'key' },
+        { label: 'city', type: 'InputText', required: false },
+        { label: 'address', type: 'InputText', required: false }
       ]
       this.updateForm = [
         { label: 'title', type: 'InputText' },

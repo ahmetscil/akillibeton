@@ -5,13 +5,13 @@
         {{ $t('general.selectCompany') }}
       </h1>
     </b-col>
-    <b-col
-      v-for="(companies, c) in pleaseSelect"
-      :key="'cmp' + c"
-      cols="12"
-      @click="selectSite(companies)"
-    >
-      <div class="asc_pariette-auth-card pointer">
+    <b-col cols="12" style="height: 65vh; overflow:auto">
+      <div
+        v-for="(companies, c) in pleaseSelect"
+        :key="'cmp' + c"
+        class="asc_pariette-auth-card pointer"
+        @click="selectSite(companies)"
+      >
         <h2>
           {{ companies.companyTitle }}
         </h2>
@@ -21,9 +21,7 @@
       </div>
     </b-col>
     <b-col cols="12">
-      <div @click="logoutUser">
-        logout
-      </div>
+      <Button :label="$t('general.logout')" icon="pi pi-sign-out" class="p-button-warning p-button-sm" @click="logoutUser" />
     </b-col>
   </b-row>
 </template>
@@ -34,6 +32,9 @@ export default {
   layout: 'auth',
   middleware: 'authenticated',
   computed: mapState(['pleaseSelect']),
+  mounted () {
+    this.$store.commit('getSelectSite')
+  },
   methods: {
     async logoutUser () {
       this.$store.commit('killLogin')

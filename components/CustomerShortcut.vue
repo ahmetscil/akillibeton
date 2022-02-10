@@ -29,7 +29,7 @@
     </nuxt-link>
     <nuxt-link
       v-b-tooltip.bottom.hover
-      :to="localePath({ name: 'Authorization-update', params: {update: token } })"
+      :to="localePath({ name: 'Authority-update', params: {update: token } })"
       :title="$t('list.users')"
       exact
       active-class="asc_pariette-header-panel-active"

@@ -32,6 +32,7 @@ export default {
 
   plugins: [
     '~/plugins/vuelidate.js',
+    '~/plugins/select.js',
     { src: '~/plugins/editor.js', ssr: false },
     { src: '~/plugins/datagrid.js', ssr: false }
   ],
@@ -73,6 +74,7 @@ export default {
         'Column',
         'Button',
         'Calendar',
+        'ToggleButton',
         'Dropdown',
         'MultiSelect',
         'InputText',

@@ -1,7 +1,14 @@
 export default {
+  err: {
+    lng_0001: 'not found',
+    lng_0002: 'authorization error',
+    lng_0003: 'create error',
+    lng_0004: 'update error'
+  },
   router: {
     undefined: 'Tanımsız',
     Auth: 'Yetkilendirme',
+    Authority: 'Yetkilendirme',
     Companies: 'Firmalar',
     Downlink: 'Downlink',
     Galleries: 'Galeriler',
@@ -35,7 +42,8 @@ export default {
     success: 'Başarılı',
     updated: 'Güncellendi',
     error: 'HATA!',
-    notFound: 'Kayıt Bulunamadı'
+    notFound: 'Kayıt Bulunamadı',
+    logout: 'Oturumu Kapat'
   },
   auth: {
     loginTry: 'Lütfen Tekrar Deneyin',
@@ -113,6 +121,20 @@ export default {
     last_mail_sended_at: 'Son Gönderilen E-Mail',
     password: 'Şifre',
     ip: 'IP',
-    photo: 'Fotoğraf'
+    photo: 'Fotoğraf',
+    admin: 'admin',
+    boss: 'boss',
+    auth: 'auth',
+    companies: 'companies',
+    downlink: 'downlink',
+    galleries: 'galleries',
+    log: 'log',
+    lookup: 'lookup',
+    lookup_item: 'lookup_item',
+    mix_calibration: 'mix_calibration',
+    projects: 'projects',
+    sensors: 'sensors',
+    uplink: 'uplink',
+    users: 'users'
   }
 }
