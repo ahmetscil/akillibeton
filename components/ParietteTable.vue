@@ -227,8 +227,11 @@
         <div v-for="(row, c) in updateForm" :key="'input' + c" :class="create.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
           <label>{{ $t('action.' + row.label) }}</label>
           <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
+
           <InputText v-if="row.type === 'InputText'" v-model="form[row.label]" type="text" />
+
           <InputNumber v-if="row.type === 'InputNumber'" v-model="form[row.label]" />
+
           <InputNumber
             v-if="row.type === 'Temperature'"
             v-model="form[row.label]"
@@ -266,10 +269,7 @@
           </template>
 
           <template v-if="row.type === 'Switch'">
-            <InputSwitch
-              v-model="select[row.label]"
-              @change="setSwitch(row.label, $event, row.selector)"
-            />
+            <ToggleButton v-model="form[row.label]" on-icon="pi pi-check" off-icon="pi pi-times" @change="setSwitch(row.label)" />
           </template>
         </div>
       </div>
@@ -365,6 +365,7 @@ export default {
       filters: {},
       form: {},
       select: {
+        company: '',
         country: ''
       },
       updateModal: false,
@@ -444,7 +445,15 @@ export default {
           const frm = this.update
           frm.forEach((c) => {
             this.form[c.label] = this.showingData[c.label]
-            this.select[c.label] = this.showingData[c.label]
+            const nm = c.label + 'Name'
+            if (this.showingData[nm]) {
+              this.select[c.label] = this.showingData[nm]
+            } else {
+              this.select[c.label] = this.showingData[c.label]
+            }
+            if (c.label === 'status') {
+              this.select[c.label] = this.showingData[c.label] === '1' ? 'Aktif' : 'Pasif'
+            }
           })
 
           this.updateForm = frm.filter(f => f.type !== 'Hidden')
@@ -467,11 +476,13 @@ export default {
       this.select[model] = event.key
       this.form[model] = event[selector]
     },
-    setSwitch (model, event, selector) {
-      if (event.value !== null) {
-        this.select[model] = event.value.value
-        this.form[model] = event[selector]
-      }
+    setSwitch (e) {
+      console.log(e + ': ' + this.form[e])
+      // this.form[model] = event
+      // if (event.value !== null) {
+      //   this.select[model] = event.value.value
+      //   this.form[model] = event[selector]
+      // }
     },
     filterDate (value, filter) {
       if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {

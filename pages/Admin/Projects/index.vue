@@ -60,6 +60,7 @@ export default {
         }
       }
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Companies', label: 'companyList' })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
@@ -97,12 +98,12 @@ export default {
         { label: 'email', type: 'InputText' },
         { label: 'telephone_title', type: 'InputText' },
         { label: 'telephone', type: 'InputText' },
-        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
+        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'key', val: 'key' },
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' },
         { label: 'started_at', type: 'Calendar' },
         { label: 'ended_at', type: 'Calendar' },
-        { label: 'status', type: 'Switch' }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },

@@ -60,6 +60,7 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
@@ -94,7 +95,7 @@ export default {
         { label: 'title', type: 'InputText' },
         { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
         { label: 'description', type: 'Textarea' },
-        { label: 'status', type: 'Switch' }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.$store.dispatch('getState', { api: 'Projects/1', label: 'project' })
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })

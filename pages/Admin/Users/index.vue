@@ -59,6 +59,7 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
@@ -66,9 +67,12 @@ export default {
         export: true,
         stop: false,
         actions: false,
-        status: true,
-        preview: true,
-        update: true
+        status: false,
+        preview: false,
+        update: true,
+        links: [
+          { route: 'Authority', query: '/' }
+        ]
       }
       this.dataFields = ['created_at', 'userName', 'id']
       this.createForm = [
@@ -81,11 +85,11 @@ export default {
         { label: 'name', type: 'InputText' },
         { label: 'phone', type: 'InputText' },
         { label: 'email', type: 'InputText' },
-        { label: 'status', type: 'Switch' }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'userName', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'phone', label: this.$t('action.phone'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]

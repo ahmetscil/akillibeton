@@ -61,6 +61,7 @@ export default {
       }
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
@@ -90,7 +91,7 @@ export default {
         { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' },
-        { label: 'status', type: 'Switch' }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },

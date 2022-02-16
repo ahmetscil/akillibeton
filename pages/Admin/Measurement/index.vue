@@ -62,6 +62,7 @@ export default {
       }
 
       this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Sensors', label: 'sensorList' })
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getTableData', { link: apilink })
@@ -99,7 +100,7 @@ export default {
         { label: 'started_at', type: 'Calendar' },
         { label: 'ended_at', type: 'Calendar' },
         { label: 'deployed_at', type: 'Calendar' },
-        { label: 'status', type: 'Switch' }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },

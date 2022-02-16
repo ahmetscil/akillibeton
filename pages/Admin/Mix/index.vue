@@ -60,6 +60,7 @@ export default {
         }
       }
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
@@ -87,7 +88,7 @@ export default {
         { label: 'temperature', type: 'Temperature' },
         { label: 'a', type: 'InputText' },
         { label: 'b', type: 'InputText' },
-        { label: 'status', type: 'Switch' }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
