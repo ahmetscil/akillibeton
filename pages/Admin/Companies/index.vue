@@ -88,7 +88,7 @@ export default {
         { label: 'email', type: 'InputText' },
         { label: 'telephone_title', type: 'InputText' },
         { label: 'telephone', type: 'InputText' },
-        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
+        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key', display: 'countryName' },
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
@@ -97,7 +97,7 @@ export default {
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'telephone', label: this.$t('action.telephone'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'country', label: this.$t('action.country'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'countryName', label: this.$t('action.country'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'city', label: this.$t('action.city'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
       ]

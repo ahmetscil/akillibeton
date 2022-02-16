@@ -53,7 +53,13 @@ export default {
   setLoader (state, payload) {
     state.loader = payload
   },
+  setSingle (state, payload) {
+    state[payload.label] = payload.data
+  },
   setState (state, payload) {
+    state.lookup[payload.label] = payload.data
+  },
+  setLookup (state, payload) {
     state.lookup[payload.label] = payload.data
   },
   setReturn (state, payload) {

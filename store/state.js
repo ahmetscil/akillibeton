@@ -47,5 +47,9 @@ export default () => ({
   registeredUser: '',
   lookup: {},
   canvas: {},
-  navigation: []
+  navigation: [],
+  project: {},
+  mixList: [],
+  projectList: [],
+  
 })

@@ -27,7 +27,7 @@ export default {
       dataFields: []
     }
   },
-  computed: mapState(['lookup', 'storeData', 'returnCode']),
+  computed: mapState(['lookup', 'storeData', 'returnCode', 'project']),
   watch: {
     'returnCode' (e) {
       switch (e) {
@@ -54,13 +54,21 @@ export default {
   },
   methods: {
     getData () {
+      if (this.$route.query.project) {
+        this.$store.dispatch('getSingle', { api: `Projects/${this.$route.query.project}`, label: 'project' })
+      }
+
       let apilink = this.pageApi
       if (process.browser) {
         if (window.location.search) {
           apilink = this.pageApi + window.location.search
         }
       }
+
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/sensorTypes', label: 'sensorTypeList' })
+      this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
+
       this.$store.dispatch('getTableData', { link: apilink })
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
@@ -80,29 +88,35 @@ export default {
         ]
       }
       this.dataFields = ['DevEUI', 'created_at', 'description', 'id', 'project', 'status', 'title', 'type', 'updated_at']
+      const snsrList = [
+        { id: 1, key: 'sensor 1', value: '1' },
+        { id: 2, key: 'sensor 2', value: '2' },
+        { id: 3, key: 'sensor 3', value: '3' },
+        { id: 4, key: 'sensor 4', value: '4' }
+      ]
       this.createForm = [
-        { label: 'sensor_no', type: 'InputText' },
-        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
-        { label: 'DevEUI', type: 'InputText' },
         { label: 'title', type: 'InputText' },
-        { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value' },
+        { label: 'project', type: this.$route.query.project ? 'Hidden' : 'Dropdown', default: this.$route.query.project ? this.$route.query.project : null, option: 'projectList', selector: 'id', val: 'title' },
+        { label: 'DevEUI', type: 'InputText' },
+        // { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
+        { label: 'type', type: 'Hidden', default: 1 },
         { label: 'description', type: 'Textarea' }
       ]
       this.updateForm = [
-        { label: 'sensor_no', type: 'InputText' },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value' },
         { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
         { label: 'DevEUI', type: 'InputText' },
         { label: 'title', type: 'InputText' },
-        { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
+        // { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
+        { label: 'type', type: 'Hidden', default: 1 },
         { label: 'description', type: 'Textarea' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
-      this.$store.dispatch('getState', { api: 'Projects/1', label: 'project' })
-      this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
-      this.$store.dispatch('getLookup', { api: 'Lookup/sensorTypes', label: 'sensorTypeList' })
+
       setTimeout(() => {
-        this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.lookup.project.title] })
-      }, 1000)
+        this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.companyTitle, this.project.title] })
+      }, 2000)
     }
   }
 }

@@ -20,7 +20,8 @@ export default {
     Sensors: 'Sensörler',
     Uplink: 'Uplink',
     Users: 'Kullanıcılar',
-    Dashboard: 'Dashboard'
+    Dashboard: 'Dashboard',
+    MixCalibration: 'MixCalibration'
   },
   general: {
     selectCompany: 'Lütfen işlem yapacağınız projeyi seçin',

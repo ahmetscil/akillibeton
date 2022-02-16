@@ -34,12 +34,39 @@ export default {
         commit('setError', err.message)
       })
   },
+  async getSingle ({ state, commit }, data) {
+    commit('setState', { data: [], label: data.label })
+    commit('setLoader', true)
+    await this.$axios.$get(`${state.companyToken}/${data.api}`)
+      .then((res) => {
+        commit('setLoader', false)
+        switch (res.code) {
+          case 401:
+            commit('sendLogin')
+            break
+          case 404:
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
+            break
+          case 200:
+            commit('setSingle', { data: res.data, label: data.label })
+            break
+          default:
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
+            commit('setSingle', { data: [], label: data.label })
+            break
+        }
+      })
+      .catch((err) => {
+        commit('setLoader', false)
+        commit('setError', err.message)
+      })
+  },
   async getLookup ({ state, commit }, data) {
     await this.$axios.$get(`${state.companyToken}/${data.api}`)
       .then((res) => {
         if (res.code === 200) {
           if (res.data !== null) {
-            commit('setState', { data: res.data.items ? res.data.items : res.data, label: data.label })
+            commit('setLookup', { data: res.data.items ? res.data.items : res.data, label: data.label })
           }
         } else {
           console.log(res.error, res.code)

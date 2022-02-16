@@ -438,7 +438,7 @@ export default {
       this.updateApi = this.companyToken + '/' + e
       await this.$axios.$get(this.updateApi)
         .then((res) => {
-          this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+          // this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
           this.$store.commit('setLoader', false)
           this.showingData = res.data
           this.updateModal = true

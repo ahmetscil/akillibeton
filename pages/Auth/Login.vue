@@ -72,7 +72,7 @@ export default {
           }
         } catch (err) {
           this.disableBtn = false
-          this.$toast.add({ severity: 'warn', summary: err.response.message, life: 3000 })
+          this.$toast.add({ severity: 'error', summary: err.response.data.error, life: 3000 })
         }
       }
     },

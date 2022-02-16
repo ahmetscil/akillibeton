@@ -69,6 +69,7 @@ export default {
         export: true,
         links: [
           { route: 'Sensors', query: '?project=', icon: 'pi pi-wifi' },
+          { route: 'Measurement', query: '?project=', icon: 'pi pi-chart-bar' },
           { route: 'Mix', query: '?project=', icon: 'pi pi-palette' }
         ]
       }
