@@ -138,6 +138,7 @@ export default {
     }
   },
   async getTableData ({ state, commit }, data) {
+    commit('setParietteTable', false)
     commit('setReturn', 0)
     commit('setLoader', true)
     commit('setTableData', [])
@@ -147,6 +148,7 @@ export default {
         switch (res.code) {
           case 200:
             commit('setTableData', res.data)
+            commit('setParietteTable', true)
             break
         }
         commit('setLoader', false)

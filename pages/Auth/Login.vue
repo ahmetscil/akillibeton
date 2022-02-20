@@ -20,17 +20,17 @@
       </label>
       <Password v-model="form.password" :feedback="false" toggle-mask @keyup.enter="loginForm()" />
     </div>
-    <div class="p-field-checkbox p-col-6 p-md-4">
-      <Checkbox id="rememberMe" v-model="rememberMe" :binary="true" />
+    <!-- <div class="p-field-checkbox p-col-6 p-md-4">
+      <Checkbox id="rememberMe" v-model="form.rememberMe" :binary="true" />
       <label for="binary">
         {{ $t('auth.rememberMe') }}
       </label>
-    </div>
-    <div class="p-field-checkbox p-col-6 p-md-4">
+    </div> -->
+    <!-- <div class="p-field-checkbox p-col-6 p-md-4">
       <nuxt-link :to="localeLocation({ name: 'Auth-ForgotPassword' })">
         {{ $t('auth.forgotPass') }}
       </nuxt-link>
-    </div>
+    </div> -->
     <div class="p-field-checkbox p-col-2 p-md-4">
       <Button icon="pi pi-check" :label="$t('auth.login')" class="p-button-warning p-button-rounded" :disabled="disableBtn" @click="loginForm()" />
     </div>
@@ -44,10 +44,10 @@ export default {
   data: () => ({
     form: {
       email: '',
-      password: ''
+      password: '',
+      rememberMe: false
     },
     disableBtn: false,
-    rememberMe: false,
     loginError: false
   }),
   computed: mapState(['siteInfo']),

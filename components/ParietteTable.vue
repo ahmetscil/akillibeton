@@ -1,7 +1,7 @@
 <template>
   <div>
     <DataTable
-      v-if="tableData"
+      v-if="showParietteTable"
       ref="dataTable"
       class="p-datatable-sm"
       :value="tableData"
@@ -63,6 +63,15 @@
           </b-col>
           <b-col cols="12" lg="6" align-self="end">
             <div class="float-right">
+              <div style="width: 120px; float:left; margin: 8px 1rem 0 0">
+                <v-select
+                  v-model="apiFilter.statusText"
+                  label="key"
+                  :options="lookup.statusList"
+                  :placeholder="$t('general.status')"
+                  @input="getFilteredData"
+                />
+              </div>
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText v-model="filters['global']" :placeholder="$t('general.searchTable')" class="p-inputtext-sm" />
@@ -110,11 +119,17 @@
           <template v-if="column.type === 'Dropdown'">
             <v-select
               v-model="filters[column.col]"
-              :label="row.val ? row.val : 'title'"
-              :options="column.options"
+              :label="column.val ? column.val : 'title'"
+              :options="lookup[column.options]"
               :placeholder="$t('general.searchBy', { x: column.label})"
-              @input="setModel(row.label, $event, row.selector)"
+              @input="setModel(column.col, $event, column.selector)"
             />
+          </template>
+          <template v-if="column.type === 'Boolean'">
+            <span class="p-buttonset">
+              <Button label="Aktif" icon="pi pi-check" />
+              <Button label="Pasif" icon="pi pi-times" />
+            </span>
           </template>
         </template>
         <template #body="slot">
@@ -128,13 +143,14 @@
           </span>
           <span v-else-if="column.col === 'status'">
             <i v-if="slot.data[column.col] === 1" class="pi pi-check" />
+            <i v-else-if="slot.data[column.col] === 9" class="pi pi-ban" />
             <i v-else class="pi pi-times" />
           </span>
           <span v-else>{{ slot.data[column.col] }}</span>
         </template>
       </Column>
     </DataTable>
-
+    <ParietteLoader v-else />
     <Dialog :visible.sync="createModal" :modal="true" :maximizable="true">
       <template #header>
         <h3>{{ $t('form.newRecord') }}</h3>
@@ -201,7 +217,7 @@
               v-if="row.type === 'Dropdown'"
               v-model="select[row.label]"
               :label="row.val ? row.val : 'title'"
-              :options="lookup[row.option]"
+              :options="row.static ? row.option : lookup[row.option]"
               :required="row.required"
               @input="setModel(row.label, $event, row.selector)"
             />
@@ -269,7 +285,7 @@
           </template>
 
           <template v-if="row.type === 'Switch'">
-            <ToggleButton v-model="form[row.label]" on-icon="pi pi-check" off-icon="pi pi-times" @change="setSwitch(row.label)" />
+            <ToggleButton v-model="form[row.label]" on-icon="pi pi-check" off-icon="pi pi-times" @change="setSwitch(row.label, $event, row.selector)" />
           </template>
         </div>
       </div>
@@ -356,6 +372,10 @@ export default {
     return {
       updateForm: {},
       createForm: {},
+      apiFilter: {
+        statusText: 'Aktif',
+        status: 1
+      },
       updateApi: '',
       selectionMode: 'single',
       search: '',
@@ -366,7 +386,14 @@ export default {
       form: {},
       select: {
         company: '',
-        country: ''
+        country: '',
+        sensor_no: '',
+        project: '',
+        started_at: '',
+        ended_at: '',
+        deployed_at: '',
+        last_data_at: '',
+        last_mail_sended_at: ''
       },
       updateModal: false,
       createModal: false,
@@ -375,7 +402,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['breadcrumb', 'companyToken', 'tableData', 'lookup', 'returnCode'])
+    ...mapState(['breadcrumb', 'companyToken', 'tableData', 'lookup', 'returnCode', 'projectList', 'showParietteTable'])
   },
   watch: {
     'returnCode' (e) {
@@ -387,12 +414,22 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$store.dispatch('getTableData', { link: this.api })
+    this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
+  },
   methods: {
     async createData () {
       this.$store.commit('setReturn', 200)
       this.$store.commit('setLoader', true)
       await this.$axios.$post(this.companyToken + '/' + this.api, this.form)
         .then((res) => {
+          console.log(res)
+          if (res.data.authority) {
+            const bb = { data: { authority: res.data.authority } }
+            this.$store.commit('setSelectSite', bb)
+            this.$store.commit('setSidebar', true)
+          }
           this.setCreateForm(true)
           this.form = {}
           this.createModal = false
@@ -438,7 +475,6 @@ export default {
       this.updateApi = this.companyToken + '/' + e
       await this.$axios.$get(this.updateApi)
         .then((res) => {
-          // this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
           this.$store.commit('setLoader', false)
           this.showingData = res.data
           this.updateModal = true
@@ -452,7 +488,7 @@ export default {
               this.select[c.label] = this.showingData[c.label]
             }
             if (c.label === 'status') {
-              this.select[c.label] = this.showingData[c.label] === '1' ? 'Aktif' : 'Pasif'
+              this.select[c.label] = parseInt(this.showingData[c.label]) === 1 ? 'Aktif' : 'Pasif'
             }
           })
 
@@ -465,6 +501,11 @@ export default {
           this.updateModal = false
         })
     },
+    getFilteredData (e) {
+      this.apiFilter.statusText = e.key
+      this.apiFilter.status = e.value
+      this.$store.dispatch('getTableData', { link: `${this.api}?status=${this.apiFilter.status}` })
+    },
     setDate (model, event) {
       this.select[model] = this.$moment(event).format('YYYY-MM-DD')
       this.form[model] = this.$moment(event).format('YYYY-MM-DD HH:mm:ss')
@@ -473,16 +514,15 @@ export default {
       this.createModal = false
     },
     setModel (model, event, selector) {
-      this.select[model] = event.key
+      this.select[model] = event.title ? event.title : event.key
       this.form[model] = event[selector]
     },
-    setSwitch (e) {
-      console.log(e + ': ' + this.form[e])
-      // this.form[model] = event
-      // if (event.value !== null) {
-      //   this.select[model] = event.value.value
-      //   this.form[model] = event[selector]
-      // }
+    setSwitch (model, event, selector) {
+      this.form[model] = event
+      if (event.value !== null) {
+        this.select[model] = event.value.value
+        this.form[model] = event[selector]
+      }
     },
     filterDate (value, filter) {
       if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {

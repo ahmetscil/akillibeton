@@ -47,6 +47,9 @@ export default {
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
           break
       }
+    },
+    '$route' () {
+      this.getData()
     }
   },
   mounted () {
@@ -64,18 +67,17 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
-
+      this.pageApi = apilink
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/sensorTypes', label: 'sensorTypeList' })
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
 
-      this.$store.dispatch('getTableData', { link: apilink })
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'sensor_no', label: this.$t('action.sensor_no'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'project', label: this.$t('action.project'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'projectName', label: this.$t('action.project'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'type', label: this.$t('action.type'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
@@ -96,7 +98,7 @@ export default {
       ]
       this.createForm = [
         { label: 'title', type: 'InputText' },
-        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value' },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true, val: 'value' },
         { label: 'project', type: this.$route.query.project ? 'Hidden' : 'Dropdown', default: this.$route.query.project ? this.$route.query.project : null, option: 'projectList', selector: 'id', val: 'title' },
         { label: 'DevEUI', type: 'InputText' },
         // { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
@@ -104,8 +106,8 @@ export default {
         { label: 'description', type: 'Textarea' }
       ]
       this.updateForm = [
-        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value' },
-        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true },
+        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id', val: 'title' },
         { label: 'DevEUI', type: 'InputText' },
         { label: 'title', type: 'InputText' },
         // { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },

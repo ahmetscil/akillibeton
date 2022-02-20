@@ -88,6 +88,9 @@ export default {
           this.$toast.add({ severity: 'warn', summary: this.$t('general.error'), life: 3000 })
           break
       }
+    },
+    '$route' () {
+      this.getData()
     }
   },
   mounted () {

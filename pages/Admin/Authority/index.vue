@@ -41,8 +41,8 @@ export default {
           apilink = 'Users' + window.location.search
         }
       }
+      this.pageApi = apilink
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
-      this.$store.dispatch('getTableData', { link: apilink })
       this.$store.dispatch('getLookup', { api: 'Lookup/crudList', label: 'crudList' })
       this.tableHead = [
         { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },

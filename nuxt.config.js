@@ -78,6 +78,7 @@ export default {
         'Dropdown',
         'MultiSelect',
         'InputText',
+        'SplitButton',
         'Password',
         'Dialog',
         'Checkbox',

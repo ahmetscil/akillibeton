@@ -2,7 +2,7 @@
   <b-row>
     <b-col cols="12" lg="12" class="mb-3">
       <div class="asc_pariette-card asc_pariette-minheightInherit py-3">
-        <h5 class="float-left">
+        <h5 v-if="projectInfo" class="float-left">
           {{ projectInfo.title }} / {{ sensorInfo.title }}
         </h5>
         <div class="float-right">

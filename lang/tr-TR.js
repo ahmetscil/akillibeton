@@ -3,7 +3,8 @@ export default {
     lng_0001: 'not found',
     lng_0002: 'authorization error',
     lng_0003: 'create error',
-    lng_0004: 'update error'
+    lng_0004: 'update error',
+    undefined: 'Tanımsız Hata'
   },
   router: {
     undefined: 'Tanımsız',
@@ -105,6 +106,9 @@ export default {
     userName: 'Kullanıcı Adı',
     days: 'Günler',
     strength: 'Güç',
+    companyName: 'Firma',
+    info: 'Bilgi',
+    operation: 'Operasyon',
     address: 'Adres',
     city: 'Şehir',
     country: 'Ülke',

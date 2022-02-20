@@ -46,6 +46,9 @@ export default {
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
           break
       }
+    },
+    '$route' () {
+      this.getData()
     }
   },
   mounted () {
@@ -59,10 +62,10 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
+      this.pageApi = apilink
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Companies', label: 'companyList' })
-      this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
         update: true,
@@ -74,7 +77,7 @@ export default {
         ]
       }
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.companyTitle] })
-      this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'ended_at', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
+      this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.createForm = [
         { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
         { label: 'code', type: 'InputText' },
@@ -87,8 +90,7 @@ export default {
         { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' },
-        { label: 'started_at', type: 'Calendar' },
-        { label: 'ended_at', type: 'Calendar' }
+        { label: 'started_at', type: 'Calendar' }
       ]
       this.updateForm = [
         { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
@@ -103,7 +105,6 @@ export default {
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' },
         { label: 'started_at', type: 'Calendar' },
-        { label: 'ended_at', type: 'Calendar' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [

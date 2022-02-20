@@ -40,18 +40,17 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
+      this.pageApi = apilink
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
-      this.$store.dispatch('getTableData', { link: apilink })
       this.dataFields = ['name', 'email', 'ip', 'phone', 'photo', 'status', 'created_at', 'updated_at']
       this.tableHead = [
-        { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'ip', label: this.$t('action.ip'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'phone', label: this.$t('action.phone'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'photo', label: this.$t('action.photo'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'InputText', filter: true, sortable: true, options: [] },
+
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'updated_at', label: this.$t('action.updated_at'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'companyName', label: this.$t('action.companyName'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'info', label: this.$t('action.info'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'operation', label: this.$t('action.operation'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'projectName', label: this.$t('action.projectName'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
     }
   }

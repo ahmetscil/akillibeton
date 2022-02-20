@@ -148,6 +148,9 @@ export default {
   setMe (state, payload) {
     state.getMe = payload
   },
+  setParietteTable (state, payload) {
+    state.showParietteTable = payload
+  },
   setTableData (state, payload) {
     state.loader = true
     state.tableData = payload

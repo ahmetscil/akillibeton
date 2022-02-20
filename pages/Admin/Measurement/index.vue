@@ -47,6 +47,9 @@ export default {
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
           break
       }
+    },
+    '$route' () {
+      this.getData()
     }
   },
   mounted () {
@@ -60,12 +63,11 @@ export default {
           apilink = this.pageApi + window.location.search
         }
       }
-
+      this.pageApi = apilink
       this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Sensors', label: 'sensorList' })
       this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
-      this.$store.dispatch('getTableData', { link: apilink })
       this.tableOperation = {
         create: true,
         export: true,

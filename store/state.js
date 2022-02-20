@@ -4,6 +4,7 @@ export default () => ({
   companyToken: process.browser ? localStorage.getItem('companyToken') : null,
   showSidebar: false,
   returnCode: 0,
+  showParietteTable: false,
   siteInfo: {
     name: 'AKILLIBETON',
     logo: 'pariette-header-logo.svg',
@@ -50,6 +51,5 @@ export default () => ({
   navigation: [],
   project: {},
   mixList: [],
-  projectList: [],
-  
+  projectList: []
 })
