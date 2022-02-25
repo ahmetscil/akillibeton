@@ -65,13 +65,13 @@ export default {
       this.pageApi = apilink
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Mix'), items: { label: 'Akıllı Beton' } })
       this.tableOperation = {
         create: true,
         export: true,
         update: true,
         links: [
-          { route: 'MixCalibration', query: '?mix=' }
+          { name: 'MixCalibration', route: '../Admin/MixCalibration', query: '?mix=' }
         ]
       }
       this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']

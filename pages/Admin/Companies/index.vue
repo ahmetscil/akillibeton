@@ -26,7 +26,7 @@ export default {
       dataFields: []
     }
   },
-  computed: mapState(['storeData', 'returnCode']),
+  computed: mapState(['storeData', 'returnCode', 'projectUrl']),
   watch: {
     'returnCode' (e) {
       switch (e) {
@@ -63,16 +63,18 @@ export default {
         }
       }
       this.pageApi = apilink
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Companies'), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.tableOperation = {
-        create: true,
-        export: true,
-        update: true,
-        links: [
-          { route: 'Projects', query: '?company=' }
-        ]
+      if (process.browser) {
+        this.tableOperation = {
+          create: true,
+          export: true,
+          update: true,
+          links: [
+            { name: 'Projects', route: '../Admin/Projects', query: '?company=' }
+          ]
+        }
       }
       this.dataFields = ['address', 'city', 'country', 'created_at', 'email', 'email_title', 'id', 'logo', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.createForm = [

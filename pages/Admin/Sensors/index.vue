@@ -117,7 +117,7 @@ export default {
       ]
 
       setTimeout(() => {
-        this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.companyTitle, this.project.title] })
+        this.$store.commit('setBreadcrumb', { active: this.$t('router.Sensors'), items: ['Akıllı Beton', this.storeData.companyTitle, this.project.title] })
       }, 2000)
     }
   }

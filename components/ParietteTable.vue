@@ -26,7 +26,7 @@
               <template v-if="operation.links">
                 <span v-for="(link, l) in operation.links" :key="'link' + l" class="mr-1">
                   <nuxt-link
-                    v-tooltip="$t('general.' + link.route)"
+                    v-tooltip="$t('general.' + link.name)"
                     :to="`${link.route}${link.query}${selectedRow[selectionLabel]}${link.after ? link.after : ''}${link.afterLabel ? selectedRow[link.afterLabel] : ''}`"
                   >
                     <i :class="link.icon ? link.icon : 'pi pi-link'" />

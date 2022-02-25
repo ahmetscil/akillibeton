@@ -64,7 +64,7 @@ export default {
       }
       this.pageApi = apilink
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Users'), items: { label: 'Akıllı Beton' } })
       this.tableOperation = {
         create: true,
         export: true,
@@ -74,7 +74,7 @@ export default {
         preview: false,
         update: true,
         links: [
-          { route: 'Authority', query: '/' }
+          { name: 'Authority', route: '../Admin/Authority', query: '/' }
         ]
       }
       this.dataFields = ['created_at', 'userName', 'id']

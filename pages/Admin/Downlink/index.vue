@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Downlink'), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.dataFields = ['DevEUI', 'created_at', 'id', 'measurement', 'payload_hex', 'updated_at']
       this.tableHead = [

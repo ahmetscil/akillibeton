@@ -139,7 +139,7 @@ export default {
             this.uplData = res.data.uplinkdata
             const sensorData = res.data.uplinkdata
 
-            this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', res.data.project.title, res.data.sensor.title] })
+            this.$store.commit('setBreadcrumb', { active: this.$t('router.Uplink'), items: ['Akıllı Beton', res.data.project.title, res.data.sensor.title] })
 
             const createdAt = []
             const temperature = []

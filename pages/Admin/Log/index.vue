@@ -41,7 +41,7 @@ export default {
         }
       }
       this.pageApi = apilink
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Log'), items: { label: 'Akıllı Beton' } })
       this.dataFields = ['name', 'email', 'ip', 'phone', 'photo', 'status', 'created_at', 'updated_at']
       this.tableHead = [
 

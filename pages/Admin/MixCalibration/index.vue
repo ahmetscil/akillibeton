@@ -63,7 +63,7 @@ export default {
         }
       }
       this.pageApi = apilink
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.MixCalibration'), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getLookup', { api: 'Mix', label: 'mixList' })
       this.tableOperation = {
         create: true,

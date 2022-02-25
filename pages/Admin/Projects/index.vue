@@ -71,12 +71,12 @@ export default {
         update: true,
         export: true,
         links: [
-          { route: 'Sensors', query: '?project=', icon: 'pi pi-wifi' },
-          { route: 'Measurement', query: '?project=', icon: 'pi pi-chart-bar' },
-          { route: 'Mix', query: '?project=', icon: 'pi pi-palette' }
+          { name: 'Sensors', route: '../Admin/Sensors', query: '?project=', icon: 'pi pi-wifi' },
+          { name: 'Measurement', route: '../Admin/Measurement', query: '?project=', icon: 'pi pi-chart-bar' },
+          { name: 'Mix', route: '../Admin/Mix', query: '?project=', icon: 'pi pi-palette' }
         ]
       }
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: ['Akıllı Beton', this.storeData.companyTitle] })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Projects'), items: ['Akıllı Beton', this.storeData.companyTitle] })
       this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.createForm = [
         { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },

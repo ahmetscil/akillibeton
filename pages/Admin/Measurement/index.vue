@@ -67,13 +67,13 @@ export default {
       this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Sensors', label: 'sensorList' })
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.' + this.pageApi), items: { label: 'Akıllı Beton' } })
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Measurement'), items: { label: 'Akıllı Beton' } })
       this.tableOperation = {
         create: true,
         export: true,
         update: true,
         links: [
-          { route: 'Uplink', query: '/', after: '?measurement=', afterLabel: 'id' }
+          { name: 'Uplink', route: '../Admin/Uplink', query: '/', after: '?measurement=', afterLabel: 'id' }
         ]
       }
       this.dataFields = ['name', 'description', 'mix', 'sensor', 'max_temp', 'min_temp', 'last_temp', 'readed_max', 'readed_min', 'started_at', 'ended_at', 'deployed_at', 'last_data_at', 'created_at', 'updated_at']
