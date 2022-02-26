@@ -1,15 +1,70 @@
 <template>
   <b-row>
-    <b-col cols="12" lg="12" class="mb-3">
-      <div class="asc_pariette-card asc_pariette-minheightInherit py-3">
-        <h5 v-if="projectInfo" class="float-left">
-          {{ projectInfo.title }} / {{ sensorInfo.title }}
-        </h5>
+    <b-col cols="12" lg="7">
+      <div class="asc_pariette-card asc_pariette-minheight50 py-3">
+        <div class="float-left">
+          <h5 v-if="projectInfo">
+            {{ projectInfo.title }} / {{ sensorInfo.title }} / {{ measurementInfo.name }}
+          </h5>
+          <p>{{ measurementInfo.description }}</p>
+        </div>
         <div class="float-right">
           <Dropdown v-model="dataLimit" :options="dataLimits" @change="setLimit" />
         </div>
         <div class="clearfix" />
       </div>
+    </b-col>
+    <b-col>
+      <div class="asc_pariette-card asc_pariette-minheight50 bg-danger text-light text-center py-3">
+        <h6>{{ $t('general.readed_max') }}</h6>
+        <h5>{{ measurementInfo.readed_max }}</h5>
+      </div>
+    </b-col>
+    <b-col>
+      <div class="asc_pariette-card asc_pariette-minheight50 bg-warning text-center py-3">
+        <h6>{{ $t('general.readed_min') }}</h6>
+        <h5>{{ measurementInfo.readed_min }}</h5>
+      </div>
+    </b-col>
+    <b-col cols="12" class="my-3">
+      <b-row>
+        <b-col>
+          <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3">
+            <h6>{{ $t('general.deployed_at') }}</h6>
+            <h5>{{ measurementInfo.deployed_at }}</h5>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3">
+            <h6>{{ $t('general.started_at') }}</h6>
+            <h5>{{ measurementInfo.started_at }}</h5>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3">
+            <h6>{{ $t('general.ended_at') }}</h6>
+            <h5>{{ measurementInfo.ended_at }}</h5>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="asc_pariette-card asc_pariette-minheight50 bg-info text-light text-center py-3">
+            <h6>{{ $t('general.last_temp') }}</h6>
+            <h5>{{ measurementInfo.last_temp }}</h5>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="asc_pariette-card asc_pariette-minheight50 bg-primary text-light text-center py-3">
+            <h6>{{ $t('general.max_temp') }}</h6>
+            <h5>{{ measurementInfo.max_temp }}</h5>
+          </div>
+        </b-col>
+        <b-col>
+          <div class="asc_pariette-card asc_pariette-minheight50 bg-secondary text-light text-center py-3">
+            <h6>{{ $t('general.min_temp') }}</h6>
+            <h5>{{ measurementInfo.min_temp }}</h5>
+          </div>
+        </b-col>
+      </b-row>
     </b-col>
     <b-col cols="12" :lg="dataLimit === 10 ? 6 : 12" class="mb-3">
       <div class="asc_pariette-card">
@@ -71,6 +126,7 @@ export default {
       uplData: [],
       projectInfo: {},
       sensorInfo: {},
+      measurementInfo: {},
       dataLimit: 10,
       dataLimits: [10, 50, 100, 250, 500],
       dataset: [],
@@ -136,6 +192,7 @@ export default {
           if (res.code === 200) {
             this.projectInfo = res.data.project
             this.sensorInfo = res.data.sensor
+            this.measurementInfo = res.data.measurement
             this.uplData = res.data.uplinkdata
             const sensorData = res.data.uplinkdata
 
@@ -187,7 +244,7 @@ export default {
     pollData () {
       this.polling = setInterval(() => {
         this.getData()
-      }, 3000)
+      }, 30000)
     },
     setLimit (e) {
       this.dataLimit = e.value

@@ -34,13 +34,6 @@ export default {
   },
   methods: {
     getData () {
-      let apilink = this.pageApi
-      if (process.browser) {
-        if (window.location.search) {
-          apilink = this.pageApi + window.location.search
-        }
-      }
-      this.pageApi = apilink
       this.$store.commit('setBreadcrumb', { active: this.$t('router.Log'), items: { label: 'Akıllı Beton' } })
       this.dataFields = ['name', 'email', 'ip', 'phone', 'photo', 'status', 'created_at', 'updated_at']
       this.tableHead = [

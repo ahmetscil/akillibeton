@@ -33,15 +33,9 @@ export default {
       switch (e) {
         case 202:
           this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 203:
           this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 402:
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
@@ -61,13 +55,6 @@ export default {
         this.$store.dispatch('getSingle', { api: `Projects/${this.$route.query.project}`, label: 'project' })
       }
 
-      let apilink = this.pageApi
-      if (process.browser) {
-        if (window.location.search) {
-          apilink = this.pageApi + window.location.search
-        }
-      }
-      this.pageApi = apilink
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/sensorTypes', label: 'sensorTypeList' })
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
@@ -79,14 +66,14 @@ export default {
         { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'projectName', label: this.$t('action.project'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'type', label: this.$t('action.type'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
       this.tableOperation = {
         create: true,
         export: true,
         update: true,
         links: [
-          { route: 'Measurement', query: '?sensor=', after: null, afterLabel: null }
+          { name: 'Measurement', route: '../Admin/Measurement', query: '?sensor=', after: null, afterLabel: null }
         ]
       }
       this.dataFields = ['DevEUI', 'created_at', 'description', 'id', 'project', 'status', 'title', 'type', 'updated_at']
@@ -116,9 +103,7 @@ export default {
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
 
-      setTimeout(() => {
-        this.$store.commit('setBreadcrumb', { active: this.$t('router.Sensors'), items: ['Akıllı Beton', this.storeData.companyTitle, this.project.title] })
-      }, 2000)
+      this.$store.commit('setBreadcrumb', { active: this.$t('router.Sensors'), items: ['Akıllı Beton', this.storeData.companyTitle, this.project.title] })
     }
   }
 }

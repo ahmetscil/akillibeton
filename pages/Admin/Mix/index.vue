@@ -32,15 +32,9 @@ export default {
       switch (e) {
         case 202:
           this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 203:
           this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 402:
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
@@ -56,13 +50,6 @@ export default {
   },
   methods: {
     getData () {
-      let apilink = this.pageApi
-      if (process.browser) {
-        if (window.location.search) {
-          apilink = this.pageApi + window.location.search
-        }
-      }
-      this.pageApi = apilink
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.commit('setBreadcrumb', { active: this.$t('router.Mix'), items: { label: 'Akıllı Beton' } })
@@ -76,7 +63,7 @@ export default {
       }
       this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']
       this.createForm = [
-        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id' },
+        { label: 'project', type: this.$route.query.project ? 'Hidden' : 'Dropdown', default: this.$route.query.project ? this.$route.query.project : null, option: 'projectList', selector: 'id', val: 'title' },
         { label: 'title', type: 'InputText' },
         { label: 'description', type: 'Textarea' },
         { label: 'activation_energy', type: 'Temperature' },
@@ -102,7 +89,7 @@ export default {
         { col: 'b', label: this.$t('action.b'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
     }
   }

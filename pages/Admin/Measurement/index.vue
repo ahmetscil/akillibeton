@@ -33,15 +33,9 @@ export default {
       switch (e) {
         case 202:
           this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 203:
           this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 402:
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
@@ -57,13 +51,6 @@ export default {
   },
   methods: {
     getData () {
-      let apilink = this.pageApi
-      if (process.browser) {
-        if (window.location.search) {
-          apilink = this.pageApi + window.location.search
-        }
-      }
-      this.pageApi = apilink
       this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Sensors', label: 'sensorList' })
@@ -84,21 +71,12 @@ export default {
         { label: 'sensor', type: this.$route.query.sensor ? 'Hidden' : 'Dropdown', default: this.$route.query.sensor ? this.$route.query.sensor : null, option: 'sensorList', selector: 'id', val: 'title' },
         { label: 'max_temp', type: 'Temperature' },
         { label: 'min_temp', type: 'Temperature' },
-        { label: 'last_temp', type: 'Temperature' },
-        { label: 'readed_max', type: 'Temperature' },
-        { label: 'readed_min', type: 'Temperature' },
         { label: 'started_at', type: 'Calendar' },
-        { label: 'ended_at', type: 'Calendar' },
         { label: 'deployed_at', type: 'Calendar' }
       ]
       this.updateForm = [
         { label: 'name', type: 'InputText' },
         { label: 'description', type: 'InputText' },
-        // { label: 'max_temp', type: 'Temperature' },
-        // { label: 'min_temp', type: 'Temperature' },
-        // { label: 'last_temp', type: 'Temperature' },
-        // { label: 'readed_max', type: 'Temperature' },
-        // { label: 'readed_min', type: 'Temperature' },
         { label: 'started_at', type: 'Calendar' },
         { label: 'ended_at', type: 'Calendar' },
         { label: 'deployed_at', type: 'Calendar' },
@@ -118,7 +96,7 @@ export default {
         { col: 'deployed_at', label: this.$t('action.deployed_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'ended_at', label: this.$t('action.ended_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'last_mail_sended_at', label: this.$t('action.last_mail_sended_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
+        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
     }
   }

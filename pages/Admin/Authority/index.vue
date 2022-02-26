@@ -48,8 +48,8 @@ export default {
         { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'admin', label: this.$t('action.admin'), type: 'Switch', filter: true, sortable: true, options: [] },
         { col: 'boss', label: this.$t('action.boss'), type: 'Switch', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
     }
   }

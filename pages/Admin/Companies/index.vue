@@ -32,15 +32,9 @@ export default {
       switch (e) {
         case 202:
           this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 203:
           this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 402:
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
@@ -56,13 +50,6 @@ export default {
   },
   methods: {
     getData () {
-      let apilink = this.pageApi
-      if (process.browser) {
-        if (window.location.search) {
-          apilink = this.pageApi + window.location.search
-        }
-      }
-      this.pageApi = apilink
       this.$store.commit('setBreadcrumb', { active: this.$t('router.Companies'), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })

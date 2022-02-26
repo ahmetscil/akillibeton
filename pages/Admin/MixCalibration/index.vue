@@ -32,15 +32,9 @@ export default {
       switch (e) {
         case 202:
           this.$toast.add({ severity: 'success', summary: this.$t('general.success'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 203:
           this.$toast.add({ severity: 'success', summary: this.$t('general.updated'), life: 3000 })
-          setTimeout(() => {
-            this.getData()
-          }, 200)
           break
         case 402:
           this.$toast.add({ severity: 'error', summary: this.$t('general.error'), life: 3000 })
@@ -56,22 +50,12 @@ export default {
   },
   methods: {
     getData () {
-      let apilink = this.pageApi
-      if (process.browser) {
-        if (window.location.search) {
-          apilink = this.pageApi + window.location.search
-        }
-      }
-      this.pageApi = apilink
       this.$store.commit('setBreadcrumb', { active: this.$t('router.MixCalibration'), items: { label: 'Akıllı Beton' } })
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Mix', label: 'mixList' })
       this.tableOperation = {
         create: true,
         export: true,
-        stop: false,
-        actions: false,
-        status: true,
-        preview: true,
         update: true
       }
       this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']
@@ -84,13 +68,13 @@ export default {
         { label: 'mix', type: this.$route.query.mix ? 'Hidden' : 'Dropdown', default: this.$route.query.mix ? this.$route.query.mix : null, option: 'mixList', selector: 'id', val: 'title' },
         { label: 'days', type: 'InputNumber' },
         { label: 'strength', type: 'InputNumber' },
-        { label: 'status', type: 'Switch' }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'days', label: this.$t('action.days'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'strength', label: this.$t('action.strength'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
     }
   }

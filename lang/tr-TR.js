@@ -38,6 +38,7 @@ export default {
     update: 'Güncelle',
     Projects: 'Projeler',
     Measurement: 'Ölçümler',
+    MixCalibration: 'Kalibasyon',
     Uplink: 'UPLINK',
     Sensors: 'Sensörler',
     Mix: 'Mix',
@@ -45,7 +46,16 @@ export default {
     updated: 'Güncellendi',
     error: 'HATA!',
     notFound: 'Kayıt Bulunamadı',
-    logout: 'Oturumu Kapat'
+    logout: 'Oturumu Kapat',
+    readed_max: 'En Yüksek Okuma',
+    readed_min: 'En Düşük Okuma',
+    last_data_at: 'Son Kayıt',
+    deployed_at: 'Yayın Tarihi',
+    started_at: 'Başlangıç Tarihi',
+    ended_at: 'Bitiş Tarihi',
+    last_temp: 'Son Sıcaklık',
+    max_temp: 'En Yüksek',
+    min_temp: 'En Düşük'
   },
   auth: {
     loginTry: 'Lütfen Tekrar Deneyin',

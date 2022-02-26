@@ -126,31 +126,27 @@
             />
           </template>
           <template v-if="column.type === 'Boolean'">
-            <span class="p-buttonset">
-              <Button label="Aktif" icon="pi pi-check" />
-              <Button label="Pasif" icon="pi pi-times" />
-            </span>
           </template>
         </template>
         <template #body="slot">
           <span v-if="column.col === 'admin'">
-            <i v-if="slot.data[column.col] === 1" class="pi pi-check" />
+            <i v-if="slot.data[column.col] === '1'" class="pi pi-check" />
             <i v-else class="pi pi-times" />
           </span>
           <span v-else-if="column.col === 'boss'">
-            <i v-if="slot.data[column.col] === 1" class="pi pi-check" />
+            <i v-if="slot.data[column.col] === '1'" class="pi pi-check" />
             <i v-else class="pi pi-times" />
           </span>
           <span v-else-if="column.col === 'status'">
-            <i v-if="slot.data[column.col] === 1" class="pi pi-check" />
-            <i v-else-if="slot.data[column.col] === 9" class="pi pi-ban" />
+            <i v-if="slot.data[column.col] === '1'" class="pi pi-check" />
+            <i v-else-if="slot.data[column.col] === '9'" class="pi pi-ban" />
             <i v-else class="pi pi-times" />
           </span>
           <span v-else>{{ slot.data[column.col] }}</span>
         </template>
       </Column>
     </DataTable>
-    <ParietteLoader v-else />
+    <ParietteLoader v-if="!showParietteTable" />
     <Dialog :visible.sync="createModal" :modal="true" :maximizable="true">
       <template #header>
         <h3>{{ $t('form.newRecord') }}</h3>
@@ -197,7 +193,7 @@
 
             <Calendar
               v-if="row.type === 'Calendar'"
-              v-model="form[row.label]"
+              v-model="select[row.label]"
               :show-time="false"
               :show-icon="true"
               :required="row.required"
@@ -393,7 +389,10 @@ export default {
         ended_at: '',
         deployed_at: '',
         last_data_at: '',
-        last_mail_sended_at: ''
+        last_mail_sended_at: '',
+        mix: '',
+        sensor: '',
+        status: ''
       },
       updateModal: false,
       createModal: false,
@@ -415,7 +414,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getTableData', { link: this.api })
+    this.getData()
     this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
   },
   methods: {
@@ -424,7 +423,6 @@ export default {
       this.$store.commit('setLoader', true)
       await this.$axios.$post(this.companyToken + '/' + this.api, this.form)
         .then((res) => {
-          console.log(res)
           if (res.data.authority) {
             const bb = { data: { authority: res.data.authority } }
             this.$store.commit('setSelectSite', bb)
@@ -451,9 +449,12 @@ export default {
           if (res.status) {
             this.form = {}
             this.updateModal = false
+            this.getData()
             this.$store.commit('setReturn', 203)
             this.$store.commit('setLoader', false)
           } else {
+            this.getData()
+            this.$store.commit('setReturn', 200)
             this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
           }
         })
@@ -461,6 +462,7 @@ export default {
           this.updateModal = true
           this.$store.commit('setLoader', false)
           const msgType = typeof err.message
+          this.getData()
           if (msgType === 'string') {
             this.$toast.add({ severity: 'warn', summary: err.message, life: 3000 })
           } else if (msgType === 'object') {
@@ -501,10 +503,28 @@ export default {
           this.updateModal = false
         })
     },
+    getData () {
+      let apilink = this.api
+      if (process.browser) {
+        if (window.location.search) {
+          console.log(window.location.search)
+          apilink = this.api + window.location.search
+        }
+      }
+      this.$store.dispatch('getTableData', { link: apilink })
+    },
     getFilteredData (e) {
-      this.apiFilter.statusText = e.key
+      // this.apiFilter.statusText = e.key
       this.apiFilter.status = e.value
-      this.$store.dispatch('getTableData', { link: `${this.api}?status=${this.apiFilter.status}` })
+      let apilink = this.api
+      if (process.browser) {
+        if (window.location.search) {
+          apilink = `${this.api + window.location.search}&status=${this.apiFilter.status}`
+        } else {
+          apilink = `${this.api}?status=${this.apiFilter.status}`
+        }
+      }
+      this.$store.dispatch('getTableData', { link: apilink })
     },
     setDate (model, event) {
       this.select[model] = this.$moment(event).format('YYYY-MM-DD')
