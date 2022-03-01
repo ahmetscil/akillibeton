@@ -20,7 +20,7 @@
         <b-row class="mb-1">
           <b-col cols="12" lg="6">
             <h1 class="float-left mr-2">
-              {{ breadcrumb.active }}
+              {{ $t('router.' + breadcrumb.active ) }}
             </h1>
             <div v-if="selectedRow" class="asc_pariette-table-operations">
               <template v-if="operation.links">
@@ -126,6 +126,7 @@
             />
           </template>
           <template v-if="column.type === 'Boolean'">
+            {{ filters[column.col] }}
           </template>
         </template>
         <template #body="slot">
@@ -180,8 +181,6 @@
               :required="row.required"
               prefix="↑ "
               suffix="℃"
-              :min="0"
-              :max="40"
             />
 
             <Textarea
@@ -241,7 +240,6 @@
           <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
 
           <InputText v-if="row.type === 'InputText'" v-model="form[row.label]" type="text" />
-
           <InputNumber v-if="row.type === 'InputNumber'" v-model="form[row.label]" />
 
           <InputNumber
@@ -249,8 +247,6 @@
             v-model="form[row.label]"
             prefix="↑ "
             suffix="℃"
-            :min="0"
-            :max="40"
           />
           <Textarea v-if="row.type === 'Textarea'" v-model="form[row.label]" rows="4" />
 
@@ -379,7 +375,12 @@ export default {
       customers: null,
       selectedRow: null,
       filters: {},
-      form: {},
+      form: {
+        activation_energy: 0,
+        temperature: 0,
+        max_temp: 0,
+        min_temp: 0
+      },
       select: {
         company: '',
         country: '',
@@ -507,7 +508,6 @@ export default {
       let apilink = this.api
       if (process.browser) {
         if (window.location.search) {
-          console.log(window.location.search)
           apilink = this.api + window.location.search
         }
       }
@@ -532,6 +532,7 @@ export default {
     },
     close () {
       this.createModal = false
+      this.updateModal = false
     },
     setModel (model, event, selector) {
       this.select[model] = event.title ? event.title : event.key

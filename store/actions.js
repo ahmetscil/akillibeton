@@ -7,6 +7,14 @@ export default {
       commit('setError', row)
     }
   },
+  async getBreadcrumb ({ state, commit }, data) {
+    const row = await this.$axios.$get(`${state.companyToken}/Breadcrumb?${data.query}`)
+    if (row.status) {
+      commit('setBreadcrumb', row.data)
+    } else {
+      commit('setError', row)
+    }
+  },
   async getState ({ state, commit }, data) {
     commit('setState', { data: [], label: data.label })
     commit('setLoader', true)

@@ -90,6 +90,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -98,6 +99,7 @@ export default {
   },
   methods: {
     async getData () {
+      this.$store.dispatch('getBreadcrumb', { query: this.$route.params.url })
       await this.$axios.$get(`${this.companyToken}/${this.pageApi}/${this.$route.params.url}`)
         .then((res) => {
           this.pageTitle = res.data.title
@@ -110,6 +112,9 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     },
     update () {
       this.$store.dispatch('updateData', { api: this.pageApi, id: this.$route.params.url, info: this.form })

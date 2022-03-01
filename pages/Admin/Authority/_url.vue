@@ -30,7 +30,7 @@
             <label for="admin">boss</label>
           </b-col>
           <b-col>
-            <ToggleButton v-model="select.boss" on-icon="pi pi-check" off-icon="pi pi-times" />
+            <ToggleButton v-model="select.boss" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.boss = select.boss" />
           </b-col>
         </b-row>
         <b-row>
@@ -239,13 +239,13 @@ export default {
           this.form.boss = res.data.boss
           this.form.status = res.data.status
 
-          if (res.data.admin === 1) {
+          if (parseInt(res.data.admin) === 1) {
             this.select.admin = true
           }
-          if (res.data.boss === 1) {
+          if (parseInt(res.data.boss) === 1) {
             this.select.boss = true
           }
-          if (res.data.status === 1) {
+          if (parseInt(res.data.status) === 1) {
             this.select.status = true
           }
 
@@ -550,7 +550,6 @@ export default {
       this.form.users = selectusers
 
       this.$store.dispatch('updateData', { api: this.pageApi, id: this.$route.params.url, info: this.form })
-      console.log(this.form)
     }
   }
 }

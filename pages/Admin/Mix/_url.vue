@@ -106,6 +106,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -128,6 +129,9 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     },
     update () {
       this.$store.dispatch('updateData', { api: this.pageApi, id: this.$route.params.url, info: this.form })

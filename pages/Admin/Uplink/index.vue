@@ -1,6 +1,7 @@
 <template>
   <div class="asc_pariette-pagecard">
     <ParietteTable
+      v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -18,6 +19,7 @@ export default {
   data () {
     return {
       pageApi: 'Uplink',
+      isShowTable: true,
       tableHead: [],
       tableOperation: {
         create: true,
@@ -53,6 +55,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -61,7 +64,8 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.Uplink'), items: { label: 'Akıllı Beton' } })
+      this.$store.dispatch('getBreadcrumb', { query: 'uplink=true' })
+
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.dataFields = ['DevEUI', 'LrrRSSI', 'LrrSNR', 'created_at', 'id', 'maturity', 'measurement', 'payload_hex', 'strength', 'temperature', 'updated_at']
       this.tableHead = [
@@ -72,6 +76,9 @@ export default {
         { col: 'maturity', label: this.$t('action.maturity'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     }
   }
 }

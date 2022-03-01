@@ -1,6 +1,7 @@
 <template>
   <div class="asc_pariette-pagecard">
     <ParietteTable
+      v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -19,6 +20,7 @@ export default {
   data () {
     return {
       pageApi: 'Projects',
+      isShowTable: true,
       tableHead: [],
       tableOperation: {},
       createForm: [],
@@ -42,6 +44,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -63,7 +66,8 @@ export default {
           { name: 'Mix', route: '../Admin/Mix', query: '?project=', icon: 'pi pi-palette' }
         ]
       }
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.Projects'), items: ['Akıllı Beton', this.storeData.companyTitle] })
+      this.$store.dispatch('getBreadcrumb', { query: `projects=true${this.$route.query.company ? `&company=${this.$route.query.company}` : ''}` })
+
       this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.createForm = [
         { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
@@ -106,6 +110,9 @@ export default {
         { col: 'ended_at', label: this.$t('action.ended_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="asc_pariette-pagecard">
     <ParietteTable
+      v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -19,6 +20,7 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
+      isShowTable: true,
       pageApi: 'Sensors',
       tableHead: [],
       tableOperation: {},
@@ -43,6 +45,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -102,8 +105,10 @@ export default {
         { label: 'description', type: 'Textarea' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
-
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.Sensors'), items: ['Akıllı Beton', this.storeData.companyTitle, this.project.title] })
+      this.$store.dispatch('getBreadcrumb', { query: `sensors=true${this.$route.query.project ? `&project=${this.$route.query.project}` : ''}` })
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     }
   }
 }

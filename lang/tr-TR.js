@@ -16,15 +16,17 @@ export default {
     Log: 'İşlem Kayıtları',
     Measurement: 'Ölçüm',
     Mix_calibration: 'Mix Kalibrasyon',
+    MixCalibration: 'Mix Kalibrasyon',
     Mix: 'Mix',
     Projects: 'Projeler',
     Sensors: 'Sensörler',
     Uplink: 'Uplink',
     Users: 'Kullanıcılar',
     Dashboard: 'Dashboard',
-    MixCalibration: 'MixCalibration'
+    AkilliBeton: 'Akıllı Beton'
   },
   general: {
+    Authority: 'Yetkiler',
     selectCompany: 'Lütfen işlem yapacağınız projeyi seçin',
     searchTable: 'ara',
     searchBy: '{x} ara',

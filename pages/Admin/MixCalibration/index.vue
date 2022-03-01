@@ -1,6 +1,7 @@
 <template>
   <div class="asc_pariette-pagecard">
     <ParietteTable
+      v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -19,6 +20,7 @@ export default {
   data () {
     return {
       pageApi: 'MixCalibration',
+      isShowTable: true,
       tableHead: [],
       tableOperation: {},
       createForm: [],
@@ -42,6 +44,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -50,7 +53,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.MixCalibration'), items: { label: 'Akıllı Beton' } })
+      this.$store.dispatch('getBreadcrumb', { query: 'mixCalibration=true' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Mix', label: 'mixList' })
       this.tableOperation = {
@@ -76,6 +79,9 @@ export default {
         { col: 'strength', label: this.$t('action.strength'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     }
   }
 }

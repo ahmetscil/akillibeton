@@ -1,8 +1,10 @@
 <template>
   <div class="asc_pariette-pagecard">
     <ParietteTable
+      v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
+      selection-label="user"
       :api="pageApi"
       :create="createForm"
       :update="updateForm"
@@ -19,6 +21,7 @@ export default {
   data () {
     return {
       pageApi: 'Users',
+      isShowTable: true,
       tableHead: [],
       tableOperation: {},
       createForm: [],
@@ -42,6 +45,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -51,7 +55,7 @@ export default {
   methods: {
     getData () {
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.Users'), items: { label: 'Akıllı Beton' } })
+      this.$store.dispatch('getBreadcrumb', { query: 'users=true' })
       this.tableOperation = {
         create: true,
         export: true,
@@ -83,6 +87,9 @@ export default {
         { col: 'phone', label: this.$t('action.phone'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     }
   }
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="asc_pariette-pagecard">
     <ParietteTable
+      v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -17,6 +18,7 @@ export default {
   data () {
     return {
       pageApi: 'Authority',
+      isShowTable: true,
       tableHead: [],
       tableOperation: {
         create: false,
@@ -42,7 +44,6 @@ export default {
         }
       }
       this.pageApi = apilink
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.Authority'), items: { label: 'Akıllı Beton' } })
       this.$store.dispatch('getLookup', { api: 'Lookup/crudList', label: 'crudList' })
       this.tableHead = [
         { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },
@@ -51,6 +52,10 @@ export default {
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
+      this.$store.dispatch('getBreadcrumb', { query: 'authority=true' })
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     }
   }
 }

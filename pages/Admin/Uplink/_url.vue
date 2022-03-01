@@ -187,6 +187,9 @@ export default {
       if (this.$route.query.measurement) {
         apiquery = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}&measurement=${this.$route.query.measurement}`
       }
+
+      this.$store.dispatch('getBreadcrumb', { query: 'uplink=true' })
+
       await this.$axios.$get(apiquery)
         .then((res) => {
           if (res.code === 200) {
@@ -195,8 +198,6 @@ export default {
             this.measurementInfo = res.data.measurement
             this.uplData = res.data.uplinkdata
             const sensorData = res.data.uplinkdata
-
-            this.$store.commit('setBreadcrumb', { active: this.$t('router.Uplink'), items: ['Akıllı Beton', res.data.project.title, res.data.sensor.title] })
 
             const createdAt = []
             const temperature = []
@@ -234,7 +235,7 @@ export default {
             this.LrrRSSI = LrrRSSI
             this.LrrSNR = LrrSNR
           } else {
-            this.$toast.add({ severity: 'warn', summary: this.$t('err.' + res.error), life: 3000 })
+            // this.$toast.add({ severity: 'warn', summary: this.$t('err.' + res.error), life: 3000 })
           }
         })
         .catch((err) => {

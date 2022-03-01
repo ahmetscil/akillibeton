@@ -1,6 +1,7 @@
 <template>
   <div class="asc_pariette-pagecard">
     <ParietteTable
+      v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
       :api="pageApi"
@@ -20,6 +21,7 @@ export default {
   data () {
     return {
       pageApi: 'Measurement',
+      isShowTable: true,
       tableHead: [],
       tableOperation: {},
       createForm: [],
@@ -43,6 +45,7 @@ export default {
       }
     },
     '$route' () {
+      this.isShowTable = false
       this.getData()
     }
   },
@@ -54,7 +57,17 @@ export default {
       this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Sensors', label: 'sensorList' })
-      this.$store.commit('setBreadcrumb', { active: this.$t('router.Measurement'), items: { label: 'Akıllı Beton' } })
+
+      let q = ''
+      if (this.$route.query.sensor) {
+        q = `&sensor=${this.$route.query.sensor}`
+      } else if (this.$route.query.project) {
+        q = `&project=${this.$route.query.project}`
+      } else {
+        q = ''
+      }
+
+      this.$store.dispatch('getBreadcrumb', { query: `measurement=true${q}` })
       this.tableOperation = {
         create: true,
         export: true,
@@ -98,6 +111,9 @@ export default {
         { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
+      setTimeout(() => {
+        this.isShowTable = true
+      }, 100)
     }
   }
 }

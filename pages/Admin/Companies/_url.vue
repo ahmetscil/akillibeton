@@ -139,7 +139,6 @@ export default {
           this.form.city = res.data.city
           this.form.address = res.data.address
           this.form.status = res.data.status
-          this.$store.commit('setBreadcrumb', { active: this.pageTitle, items: ['Akıllı Beton', this.$t('router.Companies')] })
         })
         .catch((err) => {
           console.log(err)

@@ -7,10 +7,17 @@
         </span>
         <ul v-if="breadcrumb.items" class="asc_pariette-breadcrumb">
           <li v-for="(item, i) in breadcrumb.items" :key="'breadcrumb' + i" class="asc_pariette-breadcrumb-links">
-            {{ item }}
+            <router-link :to="item.route">
+              <span v-if="item.locale">
+                {{ item.title }}
+              </span>
+              <span v-else>
+                {{ $t('router.' + item.title) }}
+              </span>
+            </router-link>
           </li>
           <li class="asc_pariette-breadcrumb-active">
-            {{ breadcrumb.active }}
+            {{ $t('router.' + breadcrumb.active ) }}
           </li>
         </ul>
       </b-col>
