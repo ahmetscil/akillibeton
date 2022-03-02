@@ -22,7 +22,7 @@
             <label for="admin">admin</label>
           </b-col>
           <b-col>
-            <ToggleButton v-model="select.admin" on-icon="pi pi-check" off-icon="pi pi-times" />
+            <ToggleButton v-model="select.admin" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.admin = select.admin" />
           </b-col>
         </b-row>
         <b-row>
@@ -38,7 +38,7 @@
             <label for="admin">status</label>
           </b-col>
           <b-col>
-            <ToggleButton v-model="select.status" on-icon="pi pi-check" off-icon="pi pi-times" />
+            <ToggleButton v-model="select.status" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.status = select.status" />
           </b-col>
         </b-row>
         <b-row class="mt-5 asc_pariette-bb1">

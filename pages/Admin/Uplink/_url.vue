@@ -116,6 +116,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import moment from 'moment'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -150,7 +151,6 @@ export default {
             label: 'temperature',
             data: [],
             fill: false,
-            tension: 0.4,
             borderColor: '#42A5F5'
           }
         ]
@@ -206,7 +206,9 @@ export default {
             const LrrSNR = []
             for (let s = 0; s < sensorData.length; s++) {
               const sensor = sensorData[s]
-              createdAt.push(sensor.created_at)
+              const d = moment(sensor.created_at).format('h:mm:ss')
+
+              createdAt.push(d)
               temperature.push(sensor.temperature)
               maturity.push(sensor.maturity)
               LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })

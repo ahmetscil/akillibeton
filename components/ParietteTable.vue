@@ -139,9 +139,16 @@
             <i v-else class="pi pi-times" />
           </span>
           <span v-else-if="column.col === 'status'">
-            <i v-if="slot.data[column.col] === '1'" class="pi pi-check" />
-            <i v-else-if="slot.data[column.col] === '9'" class="pi pi-ban" />
-            <i v-else class="pi pi-times" />
+            <span v-if="slot.data[column.col] === '0'">
+              {{ $t('action.passive') }}
+            </span>
+            <span v-else-if="slot.data[column.col] === '1'">
+              {{ $t('action.active') }}
+            </span>
+            <span v-else>
+              {{ $t('action.waiting') }}
+            </span>
+
           </span>
           <span v-else>{{ slot.data[column.col] }}</span>
         </template>
@@ -434,7 +441,7 @@ export default {
           this.createModal = false
           this.$store.commit('setReturn', 202)
           this.$store.commit('setLoader', false)
-          this.$store.dispatch('getTableData', { link: this.api })
+          this.getData()
         })
         .catch((err) => {
           this.setCreateForm(false)
@@ -453,6 +460,7 @@ export default {
             this.getData()
             this.$store.commit('setReturn', 203)
             this.$store.commit('setLoader', false)
+            this.getData()
           } else {
             this.getData()
             this.$store.commit('setReturn', 200)
@@ -589,5 +597,3 @@ export default {
   }
 }
 </script>
-<style>
-</style>

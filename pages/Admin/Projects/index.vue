@@ -100,6 +100,7 @@ export default {
       ]
       this.tableHead = [
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
+        { col: 'companName', label: this.$t('action.companName'), type: 'InputText', filter: false, sortable: true, options: [] },
         { col: 'code', label: this.$t('action.code'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] },
