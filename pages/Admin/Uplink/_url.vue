@@ -188,7 +188,7 @@ export default {
         apiquery = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}&measurement=${this.$route.query.measurement}`
       }
 
-      this.$store.dispatch('getBreadcrumb', { query: 'uplink=true' })
+      this.$store.dispatch('getBreadcrumb', { query: `where=uplink&uplink=${this.$route.params.url}` })
 
       await this.$axios.$get(apiquery)
         .then((res) => {

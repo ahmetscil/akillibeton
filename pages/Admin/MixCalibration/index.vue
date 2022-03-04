@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.dispatch('getBreadcrumb', { query: 'mixCalibration=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=mixCalibration' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
       this.$store.dispatch('getLookup', { api: 'Mix', label: 'mixList' })
       this.tableOperation = {

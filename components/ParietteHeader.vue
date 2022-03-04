@@ -7,7 +7,7 @@
         </span>
         <ul v-if="breadcrumb.items" class="asc_pariette-breadcrumb">
           <li v-for="(item, i) in breadcrumb.items" :key="'breadcrumb' + i" class="asc_pariette-breadcrumb-links">
-            <router-link :to="item.route">
+            <router-link :to="$route.params.url ? '../' + item.route : '../Admin/' + item.route">
               <span v-if="item.locale">
                 {{ item.title }}
               </span>
@@ -35,16 +35,17 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  data: () => ({
-    cities: [
-      { name: 'New York', code: 'NY' },
-      { name: 'Rome', code: 'RM' },
-      { name: 'London', code: 'LDN' },
-      { name: 'Istanbul', code: 'IST' },
-      { name: 'Paris', code: 'PRS' }
-    ]
-  }),
-  computed: mapState(['siteInfo', 'userData', 'breadcrumb', 'template']),
+  data: () => ({}),
+  computed: {
+    localUrl () {
+      let link = '/'
+      if (process.browser) {
+        link = window.location.host + '/Admin/'
+      }
+      return link
+    },
+    ...mapState(['siteInfo', 'userData', 'breadcrumb', 'template'])
+  },
   mounted () {
     this.$store.commit('setUser')
   },

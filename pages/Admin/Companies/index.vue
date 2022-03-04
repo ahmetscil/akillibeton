@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.dispatch('getBreadcrumb', { query: 'companies=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=companies' })
 
       this.$store.dispatch('getLookup', { api: 'Lookup/countryList', label: 'countryList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })

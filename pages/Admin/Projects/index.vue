@@ -66,7 +66,7 @@ export default {
           { name: 'Mix', route: '../Admin/Mix', query: '?project=', icon: 'pi pi-palette' }
         ]
       }
-      this.$store.dispatch('getBreadcrumb', { query: `projects=true${this.$route.query.company ? `&company=${this.$route.query.company}` : ''}` })
+      this.$store.dispatch('getBreadcrumb', { query: `where=projects${this.$route.query.company ? `&company=${this.$route.query.company}` : ''}` })
 
       this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
       this.createForm = [

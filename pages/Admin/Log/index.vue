@@ -20,13 +20,13 @@ export default {
       isShowTable: true,
       tableHead: [],
       tableOperation: {
-        create: true,
-        export: true,
+        create: false,
+        export: false,
         stop: false,
         actions: false,
-        status: true,
-        preview: true,
-        update: true
+        status: false,
+        preview: false,
+        update: false
       },
       dataFields: []
     }
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.dispatch('getBreadcrumb', { query: 'log=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=log' })
       this.dataFields = ['name', 'email', 'ip', 'phone', 'photo', 'status', 'created_at', 'updated_at']
       this.tableHead = [
 

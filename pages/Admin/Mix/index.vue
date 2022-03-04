@@ -59,7 +59,7 @@ export default {
     getData () {
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.$store.dispatch('getBreadcrumb', { query: 'mix=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=mix' })
       this.tableOperation = {
         create: true,
         export: true,

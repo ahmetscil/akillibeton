@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.dispatch('getBreadcrumb', { query: 'uplink=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=uplink' })
 
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.dataFields = ['DevEUI', 'LrrRSSI', 'LrrSNR', 'created_at', 'id', 'maturity', 'measurement', 'payload_hex', 'strength', 'temperature', 'updated_at']

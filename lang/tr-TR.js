@@ -23,7 +23,8 @@ export default {
     Uplink: 'Uplink',
     Users: 'Kullanıcılar',
     Dashboard: 'Dashboard',
-    AkilliBeton: 'Akıllı Beton'
+    AkilliBeton: 'Akıllı Beton',
+    Logs: 'İşlem Kayıtları'
   },
   general: {
     Authority: 'Yetkiler',

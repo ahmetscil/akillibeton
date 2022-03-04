@@ -67,7 +67,7 @@ export default {
         q = ''
       }
 
-      this.$store.dispatch('getBreadcrumb', { query: `measurement=true${q}` })
+      this.$store.dispatch('getBreadcrumb', { query: `where=measurement${q}` })
       this.tableOperation = {
         create: true,
         export: true,

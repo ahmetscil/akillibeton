@@ -20,15 +20,7 @@ export default {
       pageApi: 'Authority',
       isShowTable: true,
       tableHead: [],
-      tableOperation: {
-        create: false,
-        export: true,
-        stop: false,
-        actions: false,
-        status: false,
-        preview: false,
-        update: true
-      },
+      tableOperation: {},
       dataFields: []
     }
   },
@@ -45,6 +37,14 @@ export default {
       }
       this.pageApi = apilink
       this.$store.dispatch('getLookup', { api: 'Lookup/crudList', label: 'crudList' })
+      this.tableOperation = {
+        create: false,
+        update: false,
+        export: false,
+        links: [
+          { name: 'Authority', route: '../Admin/Authority', query: '/' }
+        ]
+      }
       this.tableHead = [
         { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'admin', label: this.$t('action.admin'), type: 'Switch', filter: true, sortable: true, options: [] },
@@ -52,7 +52,7 @@ export default {
         { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
-      this.$store.dispatch('getBreadcrumb', { query: 'authority=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=authority' })
       setTimeout(() => {
         this.isShowTable = true
       }, 100)

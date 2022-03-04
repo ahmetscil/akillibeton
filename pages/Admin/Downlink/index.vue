@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.dispatch('getBreadcrumb', { query: 'downlink=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=downlink' })
 
       this.$store.dispatch('getTableData', { link: this.pageApi })
       this.dataFields = ['DevEUI', 'created_at', 'id', 'measurement', 'payload_hex', 'updated_at']

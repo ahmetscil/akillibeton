@@ -55,7 +55,7 @@ export default {
   methods: {
     getData () {
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.$store.dispatch('getBreadcrumb', { query: 'users=true' })
+      this.$store.dispatch('getBreadcrumb', { query: 'where=users' })
       this.tableOperation = {
         create: true,
         export: true,

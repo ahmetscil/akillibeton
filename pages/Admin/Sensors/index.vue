@@ -68,7 +68,6 @@ export default {
         { col: 'sensor_no', label: this.$t('action.sensor_no'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'projectName', label: this.$t('action.project'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'type', label: this.$t('action.type'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
       ]
@@ -106,7 +105,7 @@ export default {
         { label: 'description', type: 'Textarea' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
-      this.$store.dispatch('getBreadcrumb', { query: `sensors=true${this.$route.query.project ? `&project=${this.$route.query.project}` : ''}` })
+      this.$store.dispatch('getBreadcrumb', { query: `where=sensors${this.$route.query.project ? `&project=${this.$route.query.project}` : ''}` })
       setTimeout(() => {
         this.isShowTable = true
       }, 100)
