@@ -84,6 +84,8 @@ export default {
     description: 'İçerik'
   },
   action: {
+    measurementStatus: 'Ölçüm Durumu',
+    sensorStatus: 'Sensör Durumu',
     telephone_title: 'Telefon İsmi',
     email_title: 'Email Başlığı',
     title: 'Başlık',
