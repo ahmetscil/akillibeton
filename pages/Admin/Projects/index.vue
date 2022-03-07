@@ -106,10 +106,7 @@ export default {
         { col: 'email', label: this.$t('action.email'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'telephone', label: this.$t('action.telephone'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'country', label: this.$t('action.country'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'city', label: this.$t('action.city'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'started_at', label: this.$t('action.started_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'ended_at', label: this.$t('action.ended_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
+        { col: 'city', label: this.$t('action.city'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
       setTimeout(() => {
         this.isShowTable = true

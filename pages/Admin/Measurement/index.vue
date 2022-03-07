@@ -90,26 +90,23 @@ export default {
       this.updateForm = [
         { label: 'name', type: 'InputText' },
         { label: 'description', type: 'InputText' },
-        { label: 'started_at', type: 'Calendar' },
-        { label: 'ended_at', type: 'Calendar' },
-        { label: 'deployed_at', type: 'Calendar' },
+        { label: 'max_temp', type: 'Temperature' },
+        { label: 'min_temp', type: 'Temperature' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'projectName', label: this.$t('action.projectName'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'sensorsTitle', label: this.$t('action.sensorsTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'mixTitle', label: this.$t('action.mixTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'last_temp', label: this.$t('action.last_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'max_temp', label: this.$t('action.max_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'min_temp', label: this.$t('action.min_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'readed_max', label: this.$t('action.readed_max'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'readed_min', label: this.$t('action.readed_min'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'started_at', label: this.$t('action.started_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'deployed_at', label: this.$t('action.deployed_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'ended_at', label: this.$t('action.ended_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
       ]
       setTimeout(() => {
         this.isShowTable = true

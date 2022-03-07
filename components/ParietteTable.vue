@@ -386,7 +386,9 @@ export default {
         activation_energy: 0,
         temperature: 0,
         max_temp: 0,
-        min_temp: 0
+        min_temp: 0,
+        days: 0,
+        strength: 0
       },
       select: {
         company: '',
@@ -400,7 +402,9 @@ export default {
         last_mail_sended_at: '',
         mix: '',
         sensor: '',
-        status: ''
+        status: '',
+        days: 0,
+        strength: 0
       },
       updateModal: false,
       createModal: false,

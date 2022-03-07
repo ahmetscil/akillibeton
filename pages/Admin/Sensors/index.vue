@@ -63,13 +63,12 @@ export default {
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
 
       this.tableHead = [
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'projectName', label: this.$t('action.projectName'), type: 'InputText', filter: false, sortable: true, options: [] },
-        { col: 'sensor_no', label: this.$t('action.sensor_no'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'sensor_no', label: this.$t('action.sensor_no'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'type', label: this.$t('action.type'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
       this.tableOperation = {
         create: true,
@@ -87,20 +86,19 @@ export default {
         { id: 4, key: 'sensor 4', value: '4' }
       ]
       this.createForm = [
-        { label: 'title', type: 'InputText' },
-        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true, val: 'value' },
         { label: 'project', type: this.$route.query.project ? 'Hidden' : 'Dropdown', default: this.$route.query.project ? this.$route.query.project : null, option: 'projectList', selector: 'id', val: 'title' },
+        { label: 'title', type: 'InputText' },
         { label: 'DevEUI', type: 'InputText' },
-        // { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true, val: 'value' },
+        { label: 'type', type: 'Dropdown', option: this.lookup.sensorTypeList, selector: 'id', val: 'key' },
         { label: 'type', type: 'Hidden', default: 1 },
         { label: 'description', type: 'Textarea' }
       ]
       this.updateForm = [
-        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true },
         { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id', val: 'title' },
-        { label: 'DevEUI', type: 'InputText' },
         { label: 'title', type: 'InputText' },
-        // { label: 'type', type: 'Dropdown', option: 'sensorTypeList', selector: 'id', val: 'key' },
+        { label: 'DevEUI', type: 'InputText' },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true },
         { label: 'type', type: 'Hidden', default: 1 },
         { label: 'description', type: 'Textarea' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
