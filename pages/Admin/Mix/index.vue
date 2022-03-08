@@ -59,7 +59,8 @@ export default {
     getData () {
       this.$store.dispatch('getState', { api: 'Projects', label: 'projectList' })
       this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.$store.dispatch('getBreadcrumb', { query: 'where=mix' })
+      this.$store.dispatch('getBreadcrumb', { query: `where=mix${this.$route.query.project ? `&project=${this.$route.query.project}` : ''}` })
+
       this.tableOperation = {
         create: true,
         export: true,
