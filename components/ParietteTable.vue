@@ -154,7 +154,9 @@
         </template>
       </Column>
     </DataTable>
+
     <ParietteLoader v-if="!showParietteTable" />
+
     <Dialog :visible.sync="createModal" :modal="true" :maximizable="true">
       <template #header>
         <h3>{{ $t('form.newRecord') }}</h3>
@@ -176,13 +178,13 @@
               type="text"
             />
 
-            <InputNumber
+            <InputText
               v-if="row.type === 'InputNumber'"
               v-model="form[row.label]"
               :required="row.required"
             />
 
-            <InputNumber
+            <InputText
               v-if="row.type === 'Temperature'"
               v-model="form[row.label]"
               :required="row.required"
@@ -247,14 +249,17 @@
           <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
 
           <InputText v-if="row.type === 'InputText'" v-model="form[row.label]" type="text" />
-          <InputNumber v-if="row.type === 'InputNumber'" v-model="form[row.label]" />
 
-          <InputNumber
+          <InputText v-if="row.type === 'InputNumber'" v-model="form[row.label]" type="number" />
+
+          <InputText
             v-if="row.type === 'Temperature'"
             v-model="form[row.label]"
             prefix="↑ "
             suffix="℃"
+            type="number"
           />
+
           <Textarea v-if="row.type === 'Textarea'" v-model="form[row.label]" rows="4" />
 
           <template v-if="row.type === 'Calendar'">
@@ -391,20 +396,20 @@ export default {
         strength: 0
       },
       select: {
-        company: '',
-        country: '',
-        sensor_no: '',
-        project: '',
-        started_at: '',
-        ended_at: '',
-        deployed_at: '',
-        last_data_at: '',
-        last_mail_sended_at: '',
-        mix: '',
-        sensor: '',
-        status: '',
-        days: 0,
-        strength: 0
+        company: null,
+        country: null,
+        sensor_no: null,
+        project: null,
+        started_at: null,
+        ended_at: null,
+        deployed_at: null,
+        last_data_at: null,
+        last_mail_sended_at: null,
+        mix: null,
+        sensor: null,
+        status: null,
+        days: null,
+        strength: null
       },
       updateModal: false,
       createModal: false,
@@ -488,6 +493,7 @@ export default {
     async setUpdateForm (e) {
       this.$store.commit('setLoader', true)
       this.updateApi = this.companyToken + '/' + e
+      this.clearSelect()
       await this.$axios.$get(this.updateApi)
         .then((res) => {
           this.$store.commit('setLoader', false)
@@ -495,7 +501,12 @@ export default {
           this.updateModal = true
           const frm = this.update
           frm.forEach((c) => {
-            this.form[c.label] = this.showingData[c.label]
+            const a = this.showingData[c.label]
+            if (isNaN(a)) {
+              this.form[c.label] = a
+            } else {
+              this.form[c.label] = parseInt(a)
+            }
             const nm = c.label + 'Name'
             if (this.showingData[nm]) {
               this.select[c.label] = this.showingData[nm]
@@ -506,7 +517,6 @@ export default {
               this.select[c.label] = parseInt(this.showingData[c.label]) === 1 ? 'Aktif' : 'Pasif'
             }
           })
-
           this.updateForm = frm.filter(f => f.type !== 'Hidden')
         })
         .catch((err) => {
@@ -597,6 +607,28 @@ export default {
       }
       this.createForm = frm.filter(f => f.type !== 'Hidden')
       this.createModal = e
+    },
+    clearSelect () {
+      this.select.company = null
+      this.select.country = null
+      this.select.sensor_no = null
+      this.select.project = null
+      this.select.started_at = null
+      this.select.ended_at = null
+      this.select.deployed_at = null
+      this.select.last_data_at = null
+      this.select.last_mail_sended_at = null
+      this.select.mix = null
+      this.select.sensor = null
+      this.select.status = null
+      this.select.days = null
+      this.select.strength = null
+      this.form.activation_energy = 0
+      this.form.temperature = 0
+      this.form.max_temp = 0
+      this.form.min_temp = 0
+      this.form.days = 0
+      this.form.strength = 0
     }
   }
 }

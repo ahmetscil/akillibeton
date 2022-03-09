@@ -79,6 +79,7 @@ export default {
         'MultiSelect',
         'InputText',
         'SplitButton',
+        'ConfirmDialog',
         'Password',
         'Dialog',
         'Checkbox',

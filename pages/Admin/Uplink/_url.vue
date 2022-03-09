@@ -9,22 +9,24 @@
         </div>
       </b-col>
       <b-col cols="6" lg="2">
-        <div class="asc_pariette-card asc_pariette-minheight50 pointer bg-primary text-light text-center py-3" @click="measurementStatus = true">
+        <div class="asc_pariette-card asc_pariette-minheight50 pointer bg-primary text-light text-center py-3" @click="measurementStatus(measurementInfo.status)">
           <h5>
+             <i class="pi pi-clock" />
             {{ $t('action.measurementStatus') }}
           </h5>
           <h6>
-             <i class="pi pi-clock" />
+            {{ measurementInfo.status == 1 ? $t('action.active') : $t('action.passive') }}
           </h6>
         </div>
       </b-col>
       <b-col cols="6" lg="2">
         <div class="asc_pariette-card asc_pariette-minheight50 pointer bg-secondary text-light text-center py-3" @click="sensorStatus = true">
           <h5>
+            <i class="pi pi-cog" />
             {{ $t('action.sensorStatus') }}
           </h5>
           <h6>
-            <i class="pi pi-cog" />
+            {{ sensorInfo.status == 1 ? $t('action.active') : $t('action.passive') }}
           </h6>
         </div>
       </b-col>
@@ -138,9 +140,6 @@
     <Dialog :header="measurementInfo.name" :visible.sync="infoModal" :containerStyle="{width: '50vw'}" :modal="true">
       <p>{{ measurementInfo.description }}</p>
     </Dialog>
-    <Dialog :header="$t('action.measurementStatus')" :visible.sync="measurementStatus" :containerStyle="{width: '50vw'}" :modal="true">
-      measurementStatus
-    </Dialog>
     <Dialog :header="$t('action.sensorStatus')" :visible.sync="sensorStatus" :containerStyle="{width: '50vw'}" :modal="true">
       sensorStatus
     </Dialog>
@@ -155,7 +154,6 @@ export default {
   data () {
     return {
       infoModal: false,
-      measurementStatus: false,
       sensorStatus: false,
       polling: null,
       pageApi: 'Uplink',
@@ -207,13 +205,22 @@ export default {
     }
   },
   computed: {
-    ...mapState(['companyToken']),
+    ...mapState(['companyToken', 'returnCode']),
     apiquery () {
       let q = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}`
       if (this.$route.query.measurement) {
         q = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}&measurement=${this.$route.query.measurement}`
       }
       return q
+    }
+  },
+  watch: {
+    'returnCode' (e) {
+      switch (e) {
+        case 203:
+          this.getData()
+          break
+      }
     }
   },
   mounted () {
@@ -281,6 +288,53 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    async updateMeasurement (e) {
+      await this.$axios.$put(`${this.companyToken}/Measurement/${this.$route.query.measurement}`, e)
+        .then((res) => {
+          this.$store.commit('setReturn', 203)
+        })
+        .catch((err) => {
+          this.updateModal = true
+          this.$store.commit('setLoader', false)
+          const msgType = typeof err.message
+          this.getData()
+          if (msgType === 'string') {
+            this.$toast.add({ severity: 'warn', summary: err.message, life: 3000 })
+          } else if (msgType === 'object') {
+            for (const property in err.message) {
+              this.$toast.add({ severity: 'warn', summary: err.message[property], life: 3000 })
+            }
+          }
+        })
+    },
+    measurementStatus (e) {
+      this.$store.commit('setReturn', 200)
+      let ps = 'action.stopAlert'
+      let pm = 'action.stopMessage'
+      const frm = {
+        status: 0
+      }
+      if (parseInt(e) === 1) {
+        ps = 'action.stopAlert'
+        pm = 'action.stopMessage'
+        frm.status = 0
+      } else {
+        ps = 'action.startAlert'
+        pm = 'action.startMessage'
+        frm.status = 1
+      }
+      this.$confirm.require({
+        message: this.$t(pm),
+        header: this.$t(ps),
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.updateMeasurement(frm)
+        },
+        reject: () => {
+          // asd
+        }
+      })
     },
     pollData () {
       this.polling = setInterval(() => {

@@ -1,5 +1,6 @@
 <template>
   <div id="app_target" class="asc_pariette">
+    <ConfirmDialog />
     <Toast position="top-right" />
     <ParietteHeader />
     <div :class="template.sidebar">
