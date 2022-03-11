@@ -102,7 +102,7 @@
             <Dropdown v-model="dataLimit" :options="dataLimits" @change="setLimit" />
           </div>
           <div class="clearfix" />
-          <Chart type="line" :data="temperatureChart" />
+          <Chart type="line" :data="temperatureChart" :options="chartOpt" />
         </div>
       </b-col>
       <b-col cols="12" :lg="dataLimit === 10 ? 6 : 12" class="mb-3">
@@ -114,7 +114,7 @@
             <Dropdown v-model="dataLimit" :options="dataLimits" @change="setLimit" />
           </div>
           <div class="clearfix" />
-          <Chart type="line" :data="maturityChart" />
+          <Chart type="line" :data="maturityChart" :options="chartOpt" />
         </div>
       </b-col>
       <b-col cols="12" lg="6" class="mb-3">
@@ -158,7 +158,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import moment from 'moment'
+import 'chartjs-adapter-moment'
 export default {
   layout: 'admin',
   middleware: 'authenticated',
@@ -189,12 +189,11 @@ export default {
         temperature: '',
         updated_at: ''
       },
+      chartOpt: {},
       temperatureChart: {
-        labels: [],
         datasets: []
       },
       maturityChart: {
-        labels: [],
         datasets: []
       },
       LrrRSSI: [],
@@ -263,32 +262,47 @@ export default {
             }
             this.uplData = res.data.uplinkdata
             const sensorData = res.data.uplinkdata
-            const createdAt = []
             const temperature = []
             const maturity = []
             const LrrRSSI = []
             const LrrSNR = []
             for (let s = 0; s < sensorData.length; s++) {
               const sensor = sensorData[s]
-              const d = moment(sensor.created_at).format('h:mm:ss')
-
-              createdAt.push(d)
-              temperature.push(sensor.temperature)
-              maturity.push(sensor.maturity)
+              const t = new Date(sensor.created_at)
+              temperature.push({ x: t, y: sensor.temperature })
+              maturity.push({ x: t, y: sensor.maturity })
               LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })
               LrrSNR.push({ created_at: sensor.created_at, data: sensor.LrrSNR })
             }
-            this.temperatureChart.labels = createdAt
+
+            this.chartOpt = {
+              type: 'line',
+              interaction: {
+                mode: 'index',
+                intersect: false
+              },
+              stacked: false,
+              responsive: true,
+              animation: {
+                duration: 0
+              },
+              scales: {
+                x: {
+                  type: 'timeseries'
+                }
+              }
+            }
+
             this.temperatureChart.datasets = [
               {
                 label: 'temperature',
                 data: temperature,
                 fill: false,
-                tension: 0.4,
+                tension: 0,
                 borderColor: '#42A5F5'
               }
             ]
-            this.maturityChart.labels = createdAt
+
             this.maturityChart.datasets = [
               {
                 label: 'maturity',
