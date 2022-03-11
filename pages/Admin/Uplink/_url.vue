@@ -272,7 +272,7 @@ export default {
               const sensor = sensorData[s]
               const d = moment(sensor.created_at).format('h:mm:ss')
 
-              createdAt.push(new Date(d))
+              createdAt.push(d)
               temperature.push(sensor.temperature)
               maturity.push(sensor.maturity)
               LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })
