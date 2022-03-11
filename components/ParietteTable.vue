@@ -148,7 +148,9 @@
             <span v-else>
               {{ $t('action.waiting') }}
             </span>
-
+          </span>
+          <span v-else-if="column.col === 'sf'">
+            {{ $t(`action.signal${slot.data[column.col]}`) }}
           </span>
           <span v-else>{{ slot.data[column.col] }}</span>
         </template>

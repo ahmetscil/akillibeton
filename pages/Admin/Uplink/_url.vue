@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row>
-      <b-col cols="6" lg="4">
+      <b-col cols="6" lg="2">
         <div class="asc_pariette-card asc_pariette-minheight50 py-3">
           <h5 v-if="projectInfo">
             <i class="pi pi-question-circle" @click="infoModal = true" /> {{ measurementInfo.name }}
@@ -9,9 +9,20 @@
         </div>
       </b-col>
       <b-col cols="6" lg="2">
+        <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3" :class="sfClass">
+          <h5>
+            <i class="pi pi-wifi" />
+            {{ $t('action.signal') }}
+          </h5>
+          <h6>
+            {{ $t(`action.signal${measurementInfo.sf}`) }}
+          </h6>
+        </div>
+      </b-col>
+      <b-col cols="6" lg="2">
         <div class="asc_pariette-card asc_pariette-minheight50 pointer bg-primary text-light text-center py-3" @click="measurementStatus(measurementInfo.status)">
           <h5>
-             <i class="pi pi-clock" />
+            <i class="pi pi-clock" />
             {{ $t('action.measurementStatus') }}
           </h5>
           <h6>
@@ -137,10 +148,10 @@
         </div>
       </b-col>
     </b-row>
-    <Dialog :header="measurementInfo.name" :visible.sync="infoModal" :containerStyle="{width: '50vw'}" :modal="true">
+    <Dialog :header="measurementInfo.name" :visible.sync="infoModal" :container-style="{width: '50vw'}" :modal="true">
       <p>{{ measurementInfo.description }}</p>
     </Dialog>
-    <Dialog :header="$t('action.sensorStatus')" :visible.sync="sensorStatus" :containerStyle="{width: '50vw'}" :modal="true">
+    <Dialog :header="$t('action.sensorStatus')" :visible.sync="sensorStatus" :container-style="{width: '50vw'}" :modal="true">
       sensorStatus
     </Dialog>
   </div>
@@ -160,6 +171,7 @@ export default {
       uplData: [],
       projectInfo: {},
       sensorInfo: {},
+      sfClass: 'bg-primary text-light',
       measurementInfo: {},
       dataLimit: 10,
       dataLimits: [10, 50, 100, 250, 500],
@@ -179,26 +191,11 @@ export default {
       },
       temperatureChart: {
         labels: [],
-        datasets: [
-          {
-            label: 'temperature',
-            data: [],
-            fill: false,
-            borderColor: '#42A5F5'
-          }
-        ]
+        datasets: []
       },
       maturityChart: {
         labels: [],
-        datasets: [
-          {
-            label: 'strength',
-            data: [],
-            fill: false,
-            tension: 0.4,
-            borderColor: '#42A5F5'
-          }
-        ]
+        datasets: []
       },
       LrrRSSI: [],
       LrrSNR: []
@@ -241,9 +238,31 @@ export default {
             this.projectInfo = res.data.project
             this.sensorInfo = res.data.sensor
             this.measurementInfo = res.data.measurement
+            switch (res.data.measurement.sf) {
+              case '0':
+                this.sfClass = 'bg-danger text-light'
+                break
+              case '1':
+                this.sfClass = 'bg-danger text-light'
+                break
+              case '2':
+                this.sfClass = 'bg-warning text-dark'
+                break
+              case '3':
+                this.sfClass = 'bg-warning text-dark'
+                break
+              case '4':
+                this.sfClass = 'bg-success text-light'
+                break
+              case '5':
+                this.sfClass = 'bg-success text-light'
+                break
+              default:
+                this.sfClass = 'bg-primary text-light'
+                break
+            }
             this.uplData = res.data.uplinkdata
             const sensorData = res.data.uplinkdata
-
             const createdAt = []
             const temperature = []
             const maturity = []
@@ -253,7 +272,7 @@ export default {
               const sensor = sensorData[s]
               const d = moment(sensor.created_at).format('h:mm:ss')
 
-              createdAt.push(d)
+              createdAt.push(new Date(d))
               temperature.push(sensor.temperature)
               maturity.push(sensor.maturity)
               LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })
