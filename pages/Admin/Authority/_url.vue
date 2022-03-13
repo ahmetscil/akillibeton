@@ -20,24 +20,14 @@
         <b-row>
           <b-col cols="4">
             <label for="admin">admin</label>
-          </b-col>
-          <b-col>
             <ToggleButton v-model="select.admin" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.admin = select.admin" />
           </b-col>
-        </b-row>
-        <b-row>
           <b-col cols="4">
             <label for="admin">boss</label>
-          </b-col>
-          <b-col>
             <ToggleButton v-model="select.boss" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.boss = select.boss" />
           </b-col>
-        </b-row>
-        <b-row>
           <b-col cols="4">
             <label for="admin">status</label>
-          </b-col>
-          <b-col>
             <ToggleButton v-model="select.status" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.status = select.status" />
           </b-col>
         </b-row>
@@ -46,16 +36,16 @@
             Yetkiler
           </b-col>
           <b-col>
-            create
+            Listeleme
           </b-col>
           <b-col>
-            read
+            Okuma
           </b-col>
           <b-col>
-            update
+            Güncelleme
           </b-col>
           <b-col>
-            delete
+            Silme
           </b-col>
         </b-row>
         <b-row v-for="(role, r) in authList" :key="'role' + r" class="asc_pariette-bb1">
@@ -76,11 +66,11 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col cols="12" lg="6">
+      <!-- <b-col cols="12" lg="6">
         <h2>
           Projeler
         </h2>
-      </b-col>
+      </b-col> -->
     </b-row>
   </div>
 </template>
@@ -227,6 +217,7 @@ export default {
     }
   },
   mounted () {
+    this.$store.dispatch('getBreadcrumb', { query: 'where=authority' })
     this.getData()
   },
   methods: {

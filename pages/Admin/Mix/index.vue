@@ -89,15 +89,14 @@ export default {
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'projectName', label: this.$t('action.projectName'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'activation_energy', label: this.$t('action.activation_energy'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'a', label: this.$t('action.a'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'b', label: this.$t('action.b'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'status', label: this.$t('action.status'), type: 'Boolean', filter: true, sortable: true, options: [] }
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
       ]
       setTimeout(() => {
         this.isShowTable = true

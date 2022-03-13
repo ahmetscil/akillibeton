@@ -213,7 +213,7 @@
 
             <Password
               v-if="row.type === 'Password'"
-              v-model="select[row.label]"
+              v-model="form[row.label]"
               :required="row.required"
               :feedback="false"
               toggle-mask
@@ -276,7 +276,7 @@
 
           <Password
             v-if="row.type === 'Password'"
-            v-model="select[row.label]"
+            v-model="form[row.label]"
             :feedback="false"
             toggle-mask
           />
@@ -395,7 +395,8 @@ export default {
         max_temp: 0,
         min_temp: 0,
         days: 0,
-        strength: 0
+        strength: 0,
+        password: null
       },
       select: {
         company: null,

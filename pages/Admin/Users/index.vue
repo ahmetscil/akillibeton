@@ -4,7 +4,7 @@
       v-if="isShowTable"
       :head="tableHead"
       :operation="tableOperation"
-      selection-label="user"
+      selection-label="id"
       :api="pageApi"
       :create="createForm"
       :update="updateForm"
