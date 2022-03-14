@@ -150,7 +150,12 @@
             </span>
           </span>
           <span v-else-if="column.col === 'sf'">
-            {{ $t(`action.signal${slot.data[column.col]}`) }}
+            <template v-if="slot.data[column.col]">
+              {{ $t(`action.signal${slot.data[column.col]}`) }}
+            </template>
+            <template v-else>
+              no signal
+            </template>
           </span>
           <span v-else>{{ slot.data[column.col] }}</span>
         </template>
@@ -412,6 +417,7 @@ export default {
         sensor: null,
         status: null,
         days: null,
+        type: null,
         strength: null
       },
       updateModal: false,

@@ -89,17 +89,16 @@ export default {
         { label: 'project', type: this.$route.query.project ? 'Hidden' : 'Dropdown', default: this.$route.query.project ? this.$route.query.project : null, option: 'projectList', selector: 'id', val: 'title' },
         { label: 'title', type: 'InputText' },
         { label: 'DevEUI', type: 'InputText' },
-        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true, val: 'value' },
-        { label: 'type', type: 'Dropdown', option: this.lookup.sensorTypeList, selector: 'id', val: 'key' },
-        { label: 'type', type: 'Hidden', default: 1 },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'id', static: true, val: 'value' },
+        { label: 'type', type: 'Dropdown', required: false, option: 'sensorTypeList', selector: 'id', val: 'key' },
         { label: 'description', type: 'Textarea' }
       ]
       this.updateForm = [
-        { label: 'project', type: 'Dropdown', option: 'projectList', selector: 'id', val: 'title' },
+        { label: 'project', type: this.$route.query.project ? 'Hidden' : 'Dropdown', default: this.$route.query.project ? this.$route.query.project : null, option: 'projectList', selector: 'id', val: 'title' },
         { label: 'title', type: 'InputText' },
         { label: 'DevEUI', type: 'InputText' },
-        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'value', static: true },
-        { label: 'type', type: 'Hidden', default: 1 },
+        { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'id', static: true, val: 'value' },
+        { label: 'type', type: 'Dropdown', required: false, option: 'sensorTypeList', selector: 'id', val: 'key' },
         { label: 'description', type: 'Textarea' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]

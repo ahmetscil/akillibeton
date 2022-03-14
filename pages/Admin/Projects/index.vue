@@ -80,8 +80,7 @@ export default {
         { label: 'telephone', type: 'InputText' },
         { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
         { label: 'city', type: 'InputText' },
-        { label: 'address', type: 'InputText' },
-        { label: 'started_at', type: 'Calendar' }
+        { label: 'address', type: 'InputText' }
       ]
       this.updateForm = [
         { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
@@ -95,7 +94,6 @@ export default {
         { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'key', val: 'key' },
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' },
-        { label: 'started_at', type: 'Calendar' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [

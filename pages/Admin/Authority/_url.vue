@@ -36,7 +36,7 @@
             Yetkiler
           </b-col>
           <b-col>
-            Listeleme
+            Oluşturma
           </b-col>
           <b-col>
             Okuma

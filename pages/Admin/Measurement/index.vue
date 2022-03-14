@@ -54,19 +54,22 @@ export default {
   },
   methods: {
     getData () {
-      this.$store.dispatch('getState', { api: 'Mix', label: 'mixList' })
-      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
-      this.$store.dispatch('getLookup', { api: 'Sensors', label: 'sensorList' })
-
       let q = ''
+      let mixListQ = 'Mix'
+      let sensorListQ = 'Sensors'
       if (this.$route.query.sensor) {
         q = `&sensor=${this.$route.query.sensor}`
       } else if (this.$route.query.project) {
         q = `&project=${this.$route.query.project}`
+        sensorListQ = `Sensors?project=${this.$route.query.project}`
+        mixListQ = `Mix?project=${this.$route.query.project}`
       } else {
         q = ''
       }
 
+      this.$store.dispatch('getState', { api: mixListQ, label: 'mixList' })
+      this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
+      this.$store.dispatch('getLookup', { api: sensorListQ, label: 'sensorList' })
       this.$store.dispatch('getBreadcrumb', { query: `where=measurement${q}` })
       this.tableOperation = {
         create: true,
