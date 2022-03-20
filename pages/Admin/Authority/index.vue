@@ -41,6 +41,7 @@ export default {
         create: false,
         update: false,
         export: false,
+        activePassive: true,
         links: [
           { name: 'Authority', route: '../Admin/Authority', query: '/' }
         ]

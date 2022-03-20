@@ -1,9 +1,15 @@
 export default {
+  lng_0001: 'Kayıt Bulunamadı',
+  lng_0002: 'YETKİ HATASI',
+  lng_0003: 'Kayıt Hatası',
+  lng_0004: 'Güncelleme Hatası',
+  lng_0005: 'Böyle bir kayıt zaten sistemde var.',
+  lng_0006: 'Silme İşlemi Başarılı',
   err: {
-    lng_0001: 'not found',
-    lng_0002: 'authorization error',
-    lng_0003: 'create error',
-    lng_0004: 'update error',
+    lng_0001: 'Kayıt Bulunamadı',
+    lng_0002: 'YETKİ HATASI',
+    lng_0003: 'Oluşturma Hatası',
+    lng_0004: 'Güncelleme Hatası',
     undefined: 'Tanımsız Hata'
   },
   router: {
@@ -20,14 +26,16 @@ export default {
     Mix: 'Mix',
     Projects: 'Projeler',
     Sensors: 'Sensörler',
-    Uplink: 'Uplink',
+    Uplink: 'Veriler',
     Users: 'Kullanıcılar',
     Dashboard: 'Dashboard',
     AkilliBeton: 'Akıllı Beton',
     Logs: 'İşlem Kayıtları'
   },
   general: {
+    addUser: 'Kullanıcı Tanımla',
     Authority: 'Yetkiler',
+    Users: 'Kullanıcılar',
     selectCompany: 'Lütfen işlem yapacağınız projeyi seçin',
     searchTable: 'ara',
     searchBy: '{x} ara',
@@ -68,22 +76,43 @@ export default {
     email: 'E-Posta',
     forgotPass: 'Şifremi Unuttum',
     fillError: 'Lütfen tüm boş alanları doldurun',
-    pleaseWait: 'Lütfen Bekleyin'
+    pleaseWait: 'Lütfen Bekleyin',
+    auths: 'Yetkiler',
+    admin: 'Şirket Yetkilisi',
+    boss: 'Şirket Sahibi',
+    projects: 'Projeler',
+    status: 'Durum',
+    userAuths: 'Kullanıcı Yetkileri',
+    create: 'Oluşturma',
+    read: 'Görüntüleme',
+    update: 'Güncelleme',
+    delete: 'Silme'
   },
   header: {
     Action: 'İşlemler',
     Company: 'Firmalar'
   },
   form: {
+    updatePassword: 'Şifreyi Güncelle',
+    deleteUser: 'Sil',
+    addNewUser: 'Projeye Yeni Kullanıcı Tanımla',
     newRecord: 'Yeni Kayıt',
     updateRecord: 'Düzenle',
     cancel: 'Vazgeç',
     confirm: 'Oluştur',
     update: 'Güncelle',
     title: 'Başlık',
+    typeEmail: 'Lütfen E-Posta formatını doğru kullanın',
     description: 'İçerik'
   },
   action: {
+    confirmAlert: 'Dikkat!',
+    confirmMessage: 'Bu işlemi yapmak istediğinizden emin misiniz ?',
+    sensorPassive: 'Pasif',
+    sensorActive: 'Aktif',
+    sensorStandby: 'Beklemede',
+    sensorSleep: 'Uykuda',
+    sensorUpdateMessage: 'Yaptığınız değişikliklerin gerçekleşmesi 15 dakikayı alabilir.',
     measurementStatus: 'Ölçüm Durumu',
     sensorStatus: 'Sensör Durumu',
     telephone_title: 'Telefon İsmi',
@@ -116,7 +145,7 @@ export default {
     a: 'a',
     b: 'b',
     projectName: 'Proje İsmi',
-    temperature: 'Isı',
+    temperature: 'Sıcaklık',
     user: 'Kullanıcı',
     userName: 'Kullanıcı Adı',
     days: 'Günler',
@@ -151,7 +180,7 @@ export default {
     LrrRSSI: 'LrrRSSI',
     LrrSNR: 'LrrSNR',
     maturity: 'Olgunluk',
-    Uplink: 'Uplink',
+    Uplink: 'Veriler',
     company: 'Firma',
     code: 'Kod',
     last_mail_sended_at: 'Son Gönderilen E-Mail',
@@ -170,7 +199,7 @@ export default {
     mix_calibration: 'mix_calibration',
     projects: 'projects',
     sensors: 'sensors',
-    uplink: 'uplink',
+    uplink: 'veriler',
     users: 'users'
   }
 }

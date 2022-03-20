@@ -205,7 +205,7 @@ export default {
     commit('setReturn', 200)
     await this.$axios.$delete(`${state.companyToken}/${data.api}/${data.info}`)
       .then((res) => {
-        commit('setError', res.error)
+        commit('setReturn', 203)
       })
       .catch((err) => {
         commit('setError', err.message)

@@ -60,6 +60,7 @@ export default {
       this.tableOperation = {
         create: true,
         export: true,
+        activePassive: true,
         update: true
       }
       this.dataFields = ['a', 'activation_energy', 'b', 'created_at', 'description', 'id', 'project', 'status', 'temperature', 'title', 'updated_at', 'user']

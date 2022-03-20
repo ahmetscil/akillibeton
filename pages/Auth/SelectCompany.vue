@@ -7,16 +7,16 @@
     </b-col>
     <b-col cols="12" style="height: 65vh; overflow:auto">
       <div
-        v-for="(companies, c) in pleaseSelect"
+        v-for="(company, c) in pleaseSelect"
         :key="'cmp' + c"
         class="asc_pariette-auth-card pointer"
-        @click="selectSite(companies)"
+        @click="selectSite(company)"
       >
         <h2>
-          {{ companies.companyTitle }}
+          {{ company.companyTitle }}
         </h2>
         <h1>
-          {{ companies.projectTitle }}
+          {{ company.projectTitle }}
         </h1>
       </div>
     </b-col>

@@ -102,6 +102,7 @@ export default {
   }
   .login_img img {
     width: 300px;
+    max-width: 100%;
     margin: auto;
   }
 </style>

@@ -59,9 +59,11 @@ export default {
     },
     selectSite (e) {
       this.$store.commit('setStore', { company: e })
-      this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
+      // this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
       if (process.browser) {
-        location.reload()
+        setTimeout(() => {
+          location.reload()
+        }, 1000)
       }
       this.close()
     },

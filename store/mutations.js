@@ -21,7 +21,7 @@ export default {
       localStorage.setItem('storeData', JSON.stringify(payload.company))
       localStorage.setItem('companyToken', payload.company.companyToken + '-' + payload.company.projectId)
       state.storeData = JSON.parse(localStorage.getItem('storeData'))
-      // state.companyToken = JSON.parse(localStorage.getItem('companyToken'))
+      state.companyToken = localStorage.getItem('companyToken')
     }
   },
   sendLogin (state, payload) {

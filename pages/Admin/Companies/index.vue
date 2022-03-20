@@ -62,8 +62,10 @@ export default {
           create: true,
           export: true,
           update: true,
+          activePassive: true,
           links: [
-            { name: 'Projects', route: '../Admin/Projects', query: '?company=' }
+            { name: 'Projects', route: '../Admin/Projects', query: '?company=' },
+            { name: 'Users', route: '../Admin/Users', query: '?project=', icon: 'pi pi-users' }
           ]
         }
       }

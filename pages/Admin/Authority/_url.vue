@@ -15,62 +15,69 @@
     <b-row>
       <b-col cols="12" lg="6">
         <h2>
-          Yetkiler
+          {{ $t('auth.auths') }}
         </h2>
         <b-row>
           <b-col cols="4">
-            <label for="admin">admin</label>
+            <label for="admin">{{ $t('auth.admin') }}</label>
             <ToggleButton v-model="select.admin" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.admin = select.admin" />
           </b-col>
           <b-col cols="4">
-            <label for="admin">boss</label>
+            <label for="admin">{{ $t('auth.boss') }}</label>
             <ToggleButton v-model="select.boss" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.boss = select.boss" />
           </b-col>
           <b-col cols="4">
-            <label for="admin">status</label>
+            <label for="admin">{{ $t('auth.status') }}</label>
             <ToggleButton v-model="select.status" on-icon="pi pi-check" off-icon="pi pi-times" @change="form.status = select.status" />
           </b-col>
         </b-row>
         <b-row class="mt-5 asc_pariette-bb1">
           <b-col cols="4">
-            Yetkiler
+            {{ $t('auth.userAuths') }}
           </b-col>
-          <b-col>
-            Oluşturma
+          <b-col cols="2">
+            {{ $t('auth.create') }}
           </b-col>
-          <b-col>
-            Okuma
+          <b-col cols="2">
+            {{ $t('auth.read') }}
           </b-col>
-          <b-col>
-            Güncelleme
+          <b-col cols="2">
+            {{ $t('auth.update') }}
           </b-col>
-          <b-col>
-            Silme
+          <b-col cols="2">
+            {{ $t('auth.delete') }}
           </b-col>
         </b-row>
         <b-row v-for="(role, r) in authList" :key="'role' + r" class="asc_pariette-bb1">
           <b-col cols="4">
             <p>{{ role }}</p>
           </b-col>
-          <b-col>
+          <b-col cols="2">
             <ToggleButton v-model="select[role].create" on-icon="pi pi-check" off-icon="pi pi-times" />
           </b-col>
-          <b-col>
+          <b-col cols="2">
             <ToggleButton v-model="select[role].read" on-icon="pi pi-check" off-icon="pi pi-times" />
           </b-col>
-          <b-col>
+          <b-col cols="2">
             <ToggleButton v-model="select[role].update" on-icon="pi pi-check" off-icon="pi pi-times" />
           </b-col>
-          <b-col>
+          <b-col cols="2">
             <ToggleButton v-model="select[role].delete" on-icon="pi pi-check" off-icon="pi pi-times" />
           </b-col>
         </b-row>
       </b-col>
-      <!-- <b-col cols="12" lg="6">
+      <b-col cols="12" lg="6">
         <h2>
-          Projeler
+          {{ $t('auth.projects') }}
         </h2>
-      </b-col> -->
+        <b-row>
+          <b-col cols="12">
+            <p v-for="(user, u) in userData" :key="'userData' + u">
+              <i class="pi pi-trash mr-3 pointer" @click="deleteProject(user.id)" />{{ user.projectName }}
+            </p>
+          </b-col>
+        </b-row>
+      </b-col>
     </b-row>
   </div>
 </template>
@@ -81,6 +88,8 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
+      userId: null,
+      userData: [],
       pageApi: 'Authority',
       pageTitle: '',
       authList: ['auth', 'companies', 'downlink', 'galleries', 'log', 'lookup', 'lookup_item', 'measurement', 'mix', 'mix_calibration', 'projects', 'sensors', 'uplink', 'users'],
@@ -229,7 +238,8 @@ export default {
           this.form.admin = res.data.admin
           this.form.boss = res.data.boss
           this.form.status = res.data.status
-
+          this.userId = parseInt(res.data.user)
+          this.thisUser(this.userId)
           if (parseInt(res.data.admin) === 1) {
             this.select.admin = true
           }
@@ -453,6 +463,18 @@ export default {
         .catch((err) => {
           console.log(err)
         })
+    },
+    async thisUser () {
+      await this.$axios.$get(`${this.companyToken}/Authority?user=${this.userId}`)
+        .then((res) => {
+          this.userData = res.data
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    deleteProject (e) {
+      this.$store.dispatch('deleteData', { api: this.pageApi, info: e })
     },
     update () {
       let selectauth = this.select.auth.create === true ? '1' : '0'

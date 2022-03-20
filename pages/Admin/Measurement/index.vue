@@ -75,16 +75,19 @@ export default {
         create: true,
         export: true,
         update: true,
+        activePassive: true,
         links: [
           { name: 'Uplink', route: '../Admin/Uplink', query: '/', after: '?measurement=', afterLabel: 'id' }
         ]
       }
-      this.dataFields = ['name', 'description', 'mix', 'sensor', 'max_temp', 'min_temp', 'last_temp', 'readed_max', 'readed_min', 'started_at', 'ended_at', 'deployed_at', 'last_data_at', 'created_at', 'updated_at']
+      this.dataFields = ['name', 'description', 'mix', 'sensor', 'max_maturity', 'max_temp', 'min_temp', 'last_temp', 'readed_max', 'readed_min', 'started_at', 'ended_at', 'deployed_at', 'last_data_at', 'created_at', 'updated_at']
       this.createForm = [
         { label: 'name', type: 'InputText' },
         { label: 'description', type: 'InputText' },
         { label: 'mix', type: 'Dropdown', option: 'mixList', selector: 'id' },
         { label: 'sensor', type: this.$route.query.sensor ? 'Hidden' : 'Dropdown', default: this.$route.query.sensor ? this.$route.query.sensor : null, option: 'sensorList', selector: 'id', val: 'title' },
+        { label: 'sensor_no', type: 'Dropdown', default: 0, option: 'sensorList', selector: 'id', val: 'title' },
+        { label: 'max_maturity', type: 'Temperature' },
         { label: 'max_temp', type: 'Temperature' },
         { label: 'min_temp', type: 'Temperature' },
         { label: 'started_at', type: 'Calendar' },
@@ -93,14 +96,17 @@ export default {
       this.updateForm = [
         { label: 'name', type: 'InputText' },
         { label: 'description', type: 'InputText' },
+        { label: 'sensor_no', type: 'Dropdown', option: 'sensorList', selector: 'id', static: true, val: 'title' },
+        { label: 'max_maturity', type: 'Temperature' },
         { label: 'max_temp', type: 'Temperature' },
         { label: 'min_temp', type: 'Temperature' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
         { col: 'projectName', label: this.$t('action.projectName'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'sensorsTitle', label: this.$t('action.sensorsTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'sensorsTitle', label: this.$t('action.sensorsTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'sensor_no', label: this.$t('action.sensor_no'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'mixTitle', label: this.$t('action.mixTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'last_temp', label: this.$t('action.last_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'readed_max', label: this.$t('action.readed_max'), type: 'InputText', filter: true, sortable: true, options: [] },

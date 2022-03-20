@@ -75,6 +75,8 @@ body
     margin: 5vh auto
     padding: 5vh 2vw
     overflow: auto
+    @media (max-width: 991px)
+      width: 90%
     &:after
       background: #fff
       border-radius: 30px
@@ -118,7 +120,7 @@ body
 .asc_pariette-header
   height: $headerHeight
   width: calc(100% - $sidebarWidth)
-  position: fixed
+  position: absolute
   top: 0
   transition: .3s
   left: $sidebarWidth
@@ -263,13 +265,16 @@ body
     color: $lightText
     display: inline-block
     text-align: center
-    line-height: 38px
-    height: 33px
-    width: 33px
-    & a
+    & i
       display: block
+      line-height: 33px
       height: 33px
       width: 33px
+      cursor: pointer
+    & a
+      display: block
+      &:hover
+        text-decoration: none
     &:hover
       background: darken($light, 10)
 .p-datatable
@@ -284,6 +289,7 @@ body
     & tr
       & td
         border: 1px solid #f3f3f3 !important
+        word-wrap: break-word !important
     .p-highlight
       background: $color1
       color: $color1Text

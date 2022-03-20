@@ -68,6 +68,7 @@ export default {
         'Badge',
         'DataTable',
         'InputSwitch',
+        'InputMask',
         'Message',
         'Card',
         'Toast',

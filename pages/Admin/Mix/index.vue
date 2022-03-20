@@ -65,6 +65,7 @@ export default {
         create: true,
         export: true,
         update: true,
+        activePassive: true,
         links: [
           { name: 'MixCalibration', route: '../Admin/MixCalibration', query: '?mix=' }
         ]
@@ -84,8 +85,8 @@ export default {
         { label: 'description', type: 'Textarea' },
         { label: 'activation_energy', type: 'Temperature' },
         { label: 'temperature', type: 'Temperature' },
-        { label: 'a', type: 'InputText' },
-        { label: 'b', type: 'InputText' },
+        { label: 'a', type: 'InputNumber' },
+        { label: 'b', type: 'InputNumber' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
@@ -94,8 +95,8 @@ export default {
         { col: 'userName', label: this.$t('action.userName'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'activation_energy', label: this.$t('action.activation_energy'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'a', label: this.$t('action.a'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'b', label: this.$t('action.b'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'a', label: this.$t('action.a'), type: 'InputNumber', filter: true, sortable: true, options: [] },
+        { col: 'b', label: this.$t('action.b'), type: 'InputNumber', filter: true, sortable: true, options: [] },
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
       ]
       setTimeout(() => {

@@ -1,7 +1,7 @@
 <template>
   <div :class="template.header">
     <b-row>
-      <b-col>
+      <b-col lg="9" class="d-none d-lg-inline-block">
         <span v-if="template.showHides" class="asc_pariette-sitename-mobile">
           <img src="@/assets/akillibeton-dark.png" :alt="siteInfo.name">
         </span>
@@ -21,7 +21,7 @@
           </li>
         </ul>
       </b-col>
-      <b-col class="asc_pariette-header-operations">
+      <b-col cols="12" lg="3" class="asc_pariette-header-operations">
         <div class="asc_pariette-header-operations-opt" @click="hamburger()">
           <i class="pi pi-bars" />
         </div>

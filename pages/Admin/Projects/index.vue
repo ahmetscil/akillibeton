@@ -59,41 +59,65 @@ export default {
       this.tableOperation = {
         create: true,
         update: true,
+        activePassive: true,
         export: true,
+        // addUser: true,
         links: [
           { name: 'Sensors', route: '../Admin/Sensors', query: '?project=', icon: 'pi pi-wifi' },
           { name: 'Measurement', route: '../Admin/Measurement', query: '?project=', icon: 'pi pi-chart-bar' },
-          { name: 'Mix', route: '../Admin/Mix', query: '?project=', icon: 'pi pi-palette' }
+          { name: 'Mix', route: '../Admin/Mix', query: '?project=', icon: 'pi pi-palette' },
+          { name: 'Users', route: '../Admin/Users', query: '?project=', icon: 'pi pi-users' }
         ]
       }
       this.$store.dispatch('getBreadcrumb', { query: `where=projects${this.$route.query.company ? `&company=${this.$route.query.company}` : ''}` })
 
-      this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'email_title', 'id', 'logo', 'started_at', 'status', 'telephone', 'telephone_title', 'title', 'updated_at']
-      this.createForm = [
-        { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
-        { label: 'code', type: 'InputText' },
-        { label: 'title', type: 'InputText' },
-        { label: 'description', type: 'InputText' },
-        { label: 'email_title', type: 'InputText' },
-        { label: 'email', type: 'InputText' },
-        { label: 'telephone_title', type: 'InputText' },
-        { label: 'telephone', type: 'InputText' },
-        { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' },
-        { label: 'city', type: 'InputText' },
-        { label: 'address', type: 'InputText' }
-      ]
+      this.dataFields = ['address', 'city', 'code', 'company', 'country', 'created_at', 'description', 'email', 'id', 'logo', 'started_at', 'status', 'telephone', 'title', 'updated_at']
+
+      this.createForm = []
+
+      let cmp = {}
+      if ((this.storeData.admin === '0') && (this.storeData.boss = '0')) {
+        cmp = {
+          label: 'company',
+          type: 'Hidden',
+          default: this.storeData.company,
+          option: 'companyList',
+          selector: 'id',
+          val: 'title'
+        }
+      } else if ((this.storeData.admin === '1') || (this.storeData.boss = '1')) {
+        cmp = {
+          label: 'company',
+          type: this.$route.query.company ? 'Hidden' : 'Dropdown',
+          default: this.$route.query.company ? this.$route.query.company : null,
+          option: 'companyList',
+          selector: 'id',
+          val: 'title'
+        }
+      }
+
+      this.createForm.push(cmp)
+      this.createForm.push({ label: 'code', type: 'InputText' })
+      this.createForm.push({ label: 'title', type: 'InputText' })
+      this.createForm.push({ label: 'email_title', type: 'InputText' })
+      this.createForm.push({ label: 'email', type: 'InputMail', required: true })
+      this.createForm.push({ label: 'telephone_title', type: 'InputText' })
+      this.createForm.push({ label: 'telephone', type: 'InputPhone' })
+      this.createForm.push({ label: 'country', type: 'Dropdown', option: 'countryList', selector: 'id', val: 'key' })
+      this.createForm.push({ label: 'city', type: 'InputText' })
+      this.createForm.push({ label: 'address', type: 'InputText' })
+      this.createForm.push({ label: 'description', type: 'InputText' })
       this.updateForm = [
-        { label: 'company', type: this.$route.query.company ? 'Hidden' : 'Dropdown', default: this.$route.query.company ? this.$route.query.company : null, option: 'companyList', selector: 'id', val: 'title' },
         { label: 'code', type: 'InputText' },
         { label: 'title', type: 'InputText' },
-        { label: 'description', type: 'InputText' },
         { label: 'email_title', type: 'InputText' },
-        { label: 'email', type: 'InputText' },
+        { label: 'email', type: 'InputMail', required: true },
         { label: 'telephone_title', type: 'InputText' },
-        { label: 'telephone', type: 'InputText' },
+        { label: 'telephone', type: 'InputPhone' },
         { label: 'country', type: 'Dropdown', option: 'countryList', selector: 'key', val: 'key' },
         { label: 'city', type: 'InputText' },
         { label: 'address', type: 'InputText' },
+        { label: 'description', type: 'InputText' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [

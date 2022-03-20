@@ -4,6 +4,7 @@
       v-if="showParietteTable"
       ref="dataTable"
       class="p-datatable-sm"
+      responsive-layout="scroll"
       :value="tableData"
       :paginator="true"
       :rows="perpage"
@@ -63,10 +64,11 @@
           </b-col>
           <b-col cols="12" lg="6" align-self="end">
             <div class="float-right">
-              <div style="width: 120px; float:left; margin: 8px 1rem 0 0">
+              <div v-if="operation.activePassive" style="width: 120px; float:left; margin: 8px 1rem 0 0">
                 <v-select
                   v-model="apiFilter.statusText"
                   label="key"
+                  :clearable="false"
                   :options="lookup.statusList"
                   :placeholder="$t('general.status')"
                   @input="getFilteredData"
@@ -76,6 +78,7 @@
                 <i class="pi pi-search" />
                 <InputText v-model="filters['global']" :placeholder="$t('general.searchTable')" class="p-inputtext-sm" />
               </span>
+              <Button v-if="operation.addUser" icon="pi pi-users" :v-tooltip="$t('general.newUser')" class="p-button-sm p-button-success" @click="getMiniUserList()" />
               <Button v-if="operation.create" icon="pi pi-plus" :v-tooltip="$t('general.newRecord')" class="p-button-sm p-button-primary" @click="setCreateForm(true)" />
               <Button v-if="operation.export" icon="pi pi-file-excel" :v-tooltip="$t('general.exportTable')" class="p-button-sm p-button-secondary" @click="$refs.dataTable.exportCSV()" />
             </div>
@@ -120,6 +123,7 @@
             <v-select
               v-model="filters[column.col]"
               :label="column.val ? column.val : 'title'"
+              :clearable="false"
               :options="lookup[column.options]"
               :placeholder="$t('general.searchBy', { x: column.label})"
               @input="setModel(column.col, $event, column.selector)"
@@ -178,6 +182,22 @@
             <label>{{ $t('action.' + row.label) }}</label>
             <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
 
+            <InputMask
+              v-if="row.type === 'InputPhone'"
+              v-model="form[row.label]"
+              mask="(999)-9999999"
+              :required="row.required"
+              type="text"
+            />
+
+            <InputText
+              v-if="row.type === 'InputMail'"
+              v-model="form[row.label]"
+              :required="row.required"
+              type="email"
+              @blur="validateEmail(form[row.label])"
+            />
+
             <InputText
               v-if="row.type === 'InputText'"
               v-model="form[row.label]"
@@ -228,6 +248,7 @@
               v-if="row.type === 'Dropdown'"
               v-model="select[row.label]"
               :label="row.val ? row.val : 'title'"
+              :clearable="false"
               :options="row.static ? row.option : lookup[row.option]"
               :required="row.required"
               @input="setModel(row.label, $event, row.selector)"
@@ -241,7 +262,7 @@
         </div>
         <div class="col-12 col-md-6" />
         <div class="col-12 col-md-3">
-          <Button :label="$t('form.confirm')" class="float-right" icon="pi pi-check" autofocus @click="createData()" />
+          <Button :label="$t('form.confirm')" class="float-right" icon="pi pi-check" autofocus @click="createData(form)" />
         </div>
       </div>
     </Dialog>
@@ -253,23 +274,55 @@
       <div v-if="updateForm" class="row p-fluid" :style="{maxWidth: '1000px', width: '50vw'}">
         <div v-for="(row, c) in updateForm" :key="'input' + c" :class="create.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
           <label>{{ $t('action.' + row.label) }}</label>
-          <input v-if="row.type === 'Hidden'" v-model="form[row.label]" type="hidden">
-
-          <InputText v-if="row.type === 'InputText'" v-model="form[row.label]" type="text" />
-
-          <InputText v-if="row.type === 'InputNumber'" v-model="form[row.label]" type="number" />
+          <input
+            v-if="row.type === 'Hidden'"
+            v-model="form[row.label]"
+            type="hidden"
+          >
 
           <InputText
-            v-if="row.type === 'Temperature'"
+            v-else-if="row.type === 'InputText'"
+            v-model="form[row.label]"
+            type="text"
+          />
+
+          <InputMask
+            v-else-if="row.type === 'InputPhone'"
+            v-model="form[row.label]"
+            mask="(999)-9999999"
+            :required="row.required"
+            type="text"
+          />
+
+          <InputText
+            v-else-if="row.type === 'InputMail'"
+            v-model="form[row.label]"
+            :required="row.required"
+            type="email"
+            @blur="validateEmail(form[row.label])"
+          />
+
+          <InputText
+            v-else-if="row.type === 'InputNumber'"
+            v-model="form[row.label]"
+            type="number"
+          />
+
+          <InputText
+            v-else-if="row.type === 'Temperature'"
             v-model="form[row.label]"
             prefix="↑ "
             suffix="℃"
             type="number"
           />
 
-          <Textarea v-if="row.type === 'Textarea'" v-model="form[row.label]" rows="4" />
+          <Textarea
+            v-else-if="row.type === 'Textarea'"
+            v-model="form[row.label]"
+            rows="4"
+          />
 
-          <template v-if="row.type === 'Calendar'">
+          <template v-else-if="row.type === 'Calendar'">
             <Calendar
               v-model="form[row.label]"
               :show-time="false"
@@ -280,24 +333,43 @@
           </template>
 
           <Password
-            v-if="row.type === 'Password'"
+            v-else-if="row.type === 'Password'"
             v-model="form[row.label]"
             :feedback="false"
             toggle-mask
           />
 
-          <template v-if="row.type === 'Dropdown'">
+          <template v-else-if="row.type === 'Dropdown'">
             <v-select
               v-model="select[row.label]"
               :label="row.val ? row.val : 'title'"
+              :clearable="false"
               :options="lookup[row.option]"
               @input="setModel(row.label, $event, row.selector)"
             />
           </template>
 
-          <template v-if="row.type === 'Switch'">
+          <template v-else-if="row.type === 'Switch'">
             <ToggleButton v-model="form[row.label]" on-icon="pi pi-check" off-icon="pi pi-times" @change="setSwitch(row.label, $event, row.selector)" />
           </template>
+
+          <InputText
+            v-else
+            v-model="form[row.label]"
+            type="text"
+          />
+        </div>
+
+        <div v-if="operation.updatePassword">
+          <div class="p-field p-col-12 p-md-4">
+            <label for="basic">
+              {{ $t('auth.password') }}
+            </label>
+            <Password v-model="user.password" :feedback="false" toggle-mask />
+          </div>
+          <div class="p-field p-col-12 p-md-4">
+            <Button :label="$t('form.updatePassword')" icon="pi pi-check" @click="updatePass()" />
+          </div>
         </div>
       </div>
       <div class="row mt-5">
@@ -319,6 +391,33 @@
         <div v-for="(row, c) in dataFields" :key="'show' + c" :class="dataFields.length >= 6 ? 'col-12 col-md-6 p-field' : 'col-12 p-field'">
           <h6>{{ row }}</h6>
           <h4>{{ showingData[row] }}</h4>
+        </div>
+      </div>
+    </Dialog>
+
+    <Dialog :visible.sync="newUserModal" :modal="true">
+      <template #header>
+        <h3>{{ $t('form.addNewUser') }}</h3>
+      </template>
+      <div class="row p-fluid" :style="{maxWidth: '1000px', width: '50vw'}">
+        <div class="col-12 p-field">
+          <label>{{ $t('action.user') }}</label>
+          <v-select
+            v-model="newUser.name"
+            label="name"
+            :clearable="false"
+            :options="miniUserList"
+            @input="setNewUser"
+          />
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-12 col-md-3">
+          <Button :label="$t('form.cancel')" icon="pi pi-times" class="p-button-text" @click="close()" />
+        </div>
+        <div class="col-12 col-md-6" />
+        <div class="col-12 col-md-3">
+          <Button :label="$t('form.update')" class="float-right" icon="pi pi-check" autofocus @click="createData(newUser, 'Authority')" />
         </div>
       </div>
     </Dialog>
@@ -381,11 +480,19 @@ export default {
   },
   data () {
     return {
+      newUserModal: false,
       updateForm: {},
       createForm: {},
       apiFilter: {
         statusText: 'Aktif',
         status: 1
+      },
+      newUser: {
+        name: '',
+        project: null,
+        user: null,
+        company: '',
+        status: '1'
       },
       updateApi: '',
       selectionMode: 'single',
@@ -395,6 +502,7 @@ export default {
       selectedRow: null,
       filters: {},
       form: {
+        DevEUI: '',
         activation_energy: 0,
         temperature: 0,
         max_temp: 0,
@@ -402,6 +510,9 @@ export default {
         days: 0,
         strength: 0,
         password: null
+      },
+      user: {
+        password: ''
       },
       select: {
         company: null,
@@ -423,7 +534,8 @@ export default {
       updateModal: false,
       createModal: false,
       showingData: [],
-      showDataModal: false
+      showDataModal: false,
+      miniUserList: []
     }
   },
   computed: {
@@ -436,6 +548,9 @@ export default {
           this.$toast.add({ severity: 'warn', summary: 'authorization Error', life: 3000 })
           this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
           break
+        case 500:
+          this.$toast.add({ severity: 'warn', summary: 'Lütfen Tekrar Deneyin', life: 3000 })
+          break
       }
     }
   },
@@ -444,22 +559,32 @@ export default {
     this.$store.dispatch('getLookup', { api: 'Lookup/statusList', label: 'statusList' })
   },
   methods: {
-    async createData () {
+    async createData (form, api = this.api) {
       this.$store.commit('setReturn', 200)
       this.$store.commit('setLoader', true)
-      await this.$axios.$post(this.companyToken + '/' + this.api, this.form)
+      await this.$axios.$post(this.companyToken + '/' + api, form)
         .then((res) => {
-          if (res.data.authority) {
-            const bb = { data: { authority: res.data.authority } }
-            this.$store.commit('setSelectSite', bb)
-            this.$store.commit('setSidebar', true)
+          if (res.status === false) {
+            if (res.code === 500) {
+              this.$toast.add({ severity: 'warn', summary: this.$t(res.error), life: 3000 })
+            } else {
+              this.$toast.add({ severity: 'warn', summary: 'error', life: 3000 })
+              this.setCreateForm(false)
+              this.newUserModal = false
+            }
+          } else {
+            if (res.data.authority) {
+              const bb = { data: { authority: res.data.authority } }
+              this.$store.commit('setSelectSite', bb)
+              this.$store.commit('setSidebar', true)
+            }
+            this.setCreateForm(true)
+            this.form = {}
+            this.createModal = false
+            this.$store.commit('setReturn', 202)
+            this.$store.commit('setLoader', false)
+            this.getData()
           }
-          this.setCreateForm(true)
-          this.form = {}
-          this.createModal = false
-          this.$store.commit('setReturn', 202)
-          this.$store.commit('setLoader', false)
-          this.getData()
         })
         .catch((err) => {
           this.setCreateForm(false)
@@ -475,13 +600,47 @@ export default {
           if (res.status) {
             this.form = {}
             this.updateModal = false
-            this.getData()
             this.$store.commit('setReturn', 203)
             this.$store.commit('setLoader', false)
+            this.apiFilter.statusText = 'Aktif'
+            this.apiFilter.status = 1
             this.getData()
           } else {
             this.getData()
-            this.$store.commit('setReturn', 200)
+            this.$store.commit('setReturn', 500)
+            this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
+          }
+        })
+        .catch((err) => {
+          this.updateModal = true
+          this.$store.commit('setLoader', false)
+          const msgType = typeof err.message
+          this.getData()
+          if (msgType === 'string') {
+            this.$toast.add({ severity: 'warn', summary: err.message, life: 3000 })
+          } else if (msgType === 'object') {
+            for (const property in err.message) {
+              this.$toast.add({ severity: 'warn', summary: err.message[property], life: 3000 })
+            }
+          }
+        })
+    },
+    async updatePass () {
+      this.$store.commit('setReturn', 200)
+      this.$store.commit('setLoader', true)
+      await this.$axios.$put(`${this.companyToken}/Users/UpdatePassword/${this.selectedRow[this.selectionLabel]}`, this.user)
+        .then((res) => {
+          if (res.status) {
+            this.form = {}
+            this.updateModal = false
+            this.$store.commit('setReturn', 203)
+            this.$store.commit('setLoader', false)
+            this.apiFilter.statusText = 'Aktif'
+            this.apiFilter.status = 1
+            this.getData()
+          } else {
+            this.getData()
+            this.$store.commit('setReturn', 500)
             this.$toast.add({ severity: 'warn', summary: res.error, life: 3000 })
           }
         })
@@ -535,6 +694,19 @@ export default {
           this.updateModal = false
         })
     },
+    async getMiniUserList () {
+      await this.$axios.$get(`${this.companyToken}/Users?miniUserList=true`)
+        .then((res) => {
+          this.miniUserList = res.data
+          this.newUserModal = true
+        })
+    },
+    setNewUser (e) {
+      this.newUser.name = e.userName
+      this.newUser.project = parseInt(e.project)
+      this.newUser.user = parseInt(e.id)
+      this.newUser.company = parseInt(e.company)
+    },
     getData () {
       let apilink = this.api
       if (process.browser) {
@@ -560,6 +732,17 @@ export default {
     setDate (model, event) {
       this.select[model] = this.$moment(event).format('YYYY-MM-DD')
       this.form[model] = this.$moment(event).format('YYYY-MM-DD HH:mm:ss')
+    },
+    validateEmail (e) {
+      let show = false
+      if (/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(e)) {
+        show = false
+      } else {
+        show = true
+      }
+      if (show) {
+        this.$toast.add({ severity: 'warn', summary: this.$t('form.typeEmail'), life: 3000 })
+      }
     },
     close () {
       this.createModal = false
