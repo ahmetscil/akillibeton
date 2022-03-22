@@ -33,6 +33,7 @@ export default {
     Logs: 'İşlem Kayıtları'
   },
   general: {
+    data: 'Veriler',
     addUser: 'Kullanıcı Tanımla',
     Authority: 'Yetkiler',
     Users: 'Kullanıcılar',
@@ -49,7 +50,7 @@ export default {
     update: 'Güncelle',
     Projects: 'Projeler',
     Measurement: 'Ölçümler',
-    MixCalibration: 'Kalibasyon',
+    MixCalibration: 'Kalibrasyon',
     Uplink: 'UPLINK',
     Sensors: 'Sensörler',
     Mix: 'Mix',
@@ -106,6 +107,8 @@ export default {
     description: 'İçerik'
   },
   action: {
+    counter: 'Veri No',
+    max_maturity: 'Maksimum Olgunluk',
     confirmAlert: 'Dikkat!',
     confirmMessage: 'Bu işlemi yapmak istediğinizden emin misiniz ?',
     sensorPassive: 'Pasif',
@@ -120,7 +123,7 @@ export default {
     title: 'Başlık',
     status: 'durum',
     created_at: 'Oluşturma Tarihi',
-    name: 'isim',
+    name: 'İsim',
     sensorsTitle: 'Sensör',
     mixTitle: 'Mix İsmi',
     mix: 'Mix',
@@ -150,6 +153,8 @@ export default {
     userName: 'Kullanıcı Adı',
     days: 'Günler',
     sf: 'SF',
+    probe_no: 'Probe No',
+    signalStatus: 'Sinyal Durumu',
     signal: 'Sinyal',
     signal0: 'kötü',
     signal1: 's1',

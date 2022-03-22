@@ -12,7 +12,7 @@
         <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3" :class="sfClass">
           <h5>
             <i class="pi pi-wifi" />
-            {{ $t('action.signal') }}
+            {{ $t('action.signalStatus') }}
           </h5>
           <h6>
             {{ $t(`action.signal${measurementInfo.sf}`) }}
@@ -164,7 +164,7 @@
             v-if="isShowTable"
             :head="tableHead"
             :operation="tableOperation"
-            :api="pageApi"
+            :api="tableQuery"
             :show-modal="false"
             :data-fields="dataFields"
           />
@@ -275,11 +275,14 @@ export default {
     ...mapState(['companyToken', 'returnCode']),
     apiquery () {
       let q
-      q = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}`
+      q = `${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}`
       if (this.$route.query.measurement) {
-        q = `${this.companyToken}/${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}&measurement=${this.$route.query.measurement}`
+        q = `${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}&measurement=${this.$route.query.measurement}`
       }
       return q
+    },
+    tableQuery () {
+      return `Uplink?measurement=${this.$route.params.url}`
     }
   },
   watch: {
@@ -303,7 +306,7 @@ export default {
   methods: {
     async getData () {
       if (this.$route.params.url) {
-        await this.$axios.$get(this.apiquery)
+        await this.$axios.$get(this.companyToken + '/' + this.apiquery)
           .then((res) => {
             if (res.code === 200) {
               this.projectInfo = res.data.project
@@ -341,6 +344,7 @@ export default {
               for (let s = 0; s < sensorData.length; s++) {
                 const sensor = sensorData[s]
                 const t = new Date(sensor.created_at)
+                console.log(t)
                 temperature.push({ x: t, y: sensor.temperature, c: sensor.counter })
                 maturity.push({ x: t, y: sensor.maturity, c: sensor.counter })
                 LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })
@@ -378,7 +382,14 @@ export default {
                   x: {
                     type: 'time',
                     time: {
-                      unit: 'minute'
+                      unit: 'minute',
+                      tooltipFormat: 'YYYY-MM-DD HH:mm',
+                      displayFormats: {
+                        millisecond: 'HH:mm:ss.SSS',
+                        second: 'HH:mm:ss',
+                        minute: 'HH:mm',
+                        hour: 'HH'
+                      }
                     }
                   }
                 }
@@ -420,8 +431,6 @@ export default {
           { col: 'maturity', label: this.$t('action.maturity'), type: 'InputText', filter: true, sortable: true },
           { col: 'temperature', label: this.$t('action.temperature'), type: 'InputText', filter: true, sortable: true },
           { col: 'sf', label: this.$t('action.sf'), type: 'InputText', filter: true, sortable: true },
-          { col: 'LrrRSSI', label: this.$t('action.LrrRSSI'), type: 'InputText', filter: true, sortable: true },
-          { col: 'LrrSNR', label: this.$t('action.LrrSNR'), type: 'InputText', filter: true, sortable: true },
           { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true }
         ]
         this.tableOperation = {

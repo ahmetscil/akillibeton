@@ -77,7 +77,7 @@ export default {
         update: true,
         activePassive: true,
         links: [
-          { name: 'Uplink', route: '../Admin/Uplink', query: '/', after: '?measurement=', afterLabel: 'id' }
+          { name: 'Uplink', lang: 'data', route: '../Admin/Uplink', query: '/', after: '?measurement=', afterLabel: 'id' }
         ]
       }
       this.dataFields = ['name', 'description', 'mix', 'sensor', 'max_maturity', 'max_temp', 'min_temp', 'last_temp', 'readed_max', 'readed_min', 'started_at', 'ended_at', 'deployed_at', 'last_data_at', 'created_at', 'updated_at']
@@ -106,7 +106,7 @@ export default {
         { col: 'projectName', label: this.$t('action.projectName'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'name', label: this.$t('action.name'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'sensorsTitle', label: this.$t('action.sensorsTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'sensor_no', label: this.$t('action.sensor_no'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'sensor_no', label: this.$t('action.probe_no'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'mixTitle', label: this.$t('action.mixTitle'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'last_temp', label: this.$t('action.last_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'readed_max', label: this.$t('action.readed_max'), type: 'InputText', filter: true, sortable: true, options: [] },

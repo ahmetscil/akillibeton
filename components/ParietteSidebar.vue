@@ -68,7 +68,8 @@ export default {
       background: #3e3e3e8a !important
     .asc_pariette-sidebar-menu-list
       height: calc(99vh - 100px)
-      overflow: scroll
+      overflow-y: auto
+      overflow-x: hidden
       & ul
         list-style: none
         padding: 10px

@@ -4,7 +4,7 @@
 <script>
 export default {
   mounted () {
-    this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
+    this.$router.push(this.localeLocation({ name: 'Admin-Projects' }))
   }
 }
 </script>

@@ -27,7 +27,7 @@
               <template v-if="operation.links">
                 <span v-for="(link, l) in operation.links" :key="'link' + l" class="mr-1">
                   <nuxt-link
-                    v-tooltip="$t('general.' + link.name)"
+                    v-tooltip="link.lang ? $t('general.' + link.lang) : $t('general.' + link.name)"
                     :to="`${link.route}${link.query}${selectedRow[selectionLabel]}${link.after ? link.after : ''}${link.afterLabel ? selectedRow[link.afterLabel] : ''}`"
                   >
                     <i :class="link.icon ? link.icon : 'pi pi-link'" />
@@ -155,7 +155,8 @@
           </span>
           <span v-else-if="column.col === 'sf'">
             <template v-if="slot.data[column.col]">
-              {{ $t(`action.signal${slot.data[column.col]}`) }}
+              <!-- {{ $t(`action.signal${slot.data[column.col]}`) }} -->
+              {{ slot.data[column.col] }}
             </template>
             <template v-else>
               no signal
@@ -546,7 +547,7 @@ export default {
       switch (e) {
         case 403:
           this.$toast.add({ severity: 'warn', summary: 'authorization Error', life: 3000 })
-          this.$router.push(this.localeLocation({ name: 'Admin-Dashboard' }))
+          this.$router.push(this.localeLocation({ name: 'Admin-Projects' }))
           break
         case 500:
           this.$toast.add({ severity: 'warn', summary: 'Lütfen Tekrar Deneyin', life: 3000 })
