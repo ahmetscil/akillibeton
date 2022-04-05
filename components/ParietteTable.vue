@@ -153,14 +153,39 @@
               {{ $t('action.waiting') }}
             </span>
           </span>
+          <span v-else-if="column.col === 'last_data_at'">
+            {{ nDaysAgo(slot.data[column.col]) }}
+          </span>
           <span v-else-if="column.col === 'sf'">
             <template v-if="slot.data[column.col]">
-              <!-- {{ $t(`action.signal${slot.data[column.col]}`) }} -->
-              {{ slot.data[column.col] }}
+              <span v-if="slot.data[column.col] == 0" class="text-danger">
+                {{ slot.data[column.col] }}
+              </span>
+              <span v-if="slot.data[column.col] == 1" class="text-danger">
+                {{ slot.data[column.col] }}
+              </span>
+              <span v-if="slot.data[column.col] == 2" class="text-warning">
+                {{ slot.data[column.col] }}
+              </span>
+              <span v-if="slot.data[column.col] == 3" class="text-success">
+                {{ slot.data[column.col] }}
+              </span>
+              <span v-if="slot.data[column.col] == 4" class="text-primary">
+                {{ slot.data[column.col] }}
+              </span>
+              <span v-if="slot.data[column.col] == 5" class="text-info">
+                {{ slot.data[column.col] }}
+              </span>
             </template>
             <template v-else>
               no signal
             </template>
+          </span>
+          <span v-else-if="column.col === 'readed_max'" :class="slot.data.readed_max >= slot.data.max_temp ? 'text-danger' : 'text-success'">
+            {{ slot.data.readed_max }}
+          </span>
+          <span v-else-if="column.col === 'readed_min'" :class="slot.data.readed_min <= slot.data.min_temp ? 'text-danger' : 'text-success'">
+            {{ slot.data.readed_min }}
           </span>
           <span v-else>{{ slot.data[column.col] }}</span>
         </template>
@@ -433,6 +458,10 @@ export default {
       default () {
         return []
       }
+    },
+    mustApi: {
+      type: [String],
+      default: ''
     },
     api: {
       type: [String],
@@ -709,10 +738,15 @@ export default {
       this.newUser.company = parseInt(e.company)
     },
     getData () {
-      let apilink = this.api
-      if (process.browser) {
-        if (window.location.search) {
-          apilink = this.api + window.location.search
+      let apilink = ''
+      if (this.mustApi) {
+        apilink = this.mustApi
+      } else {
+        apilink = this.api
+        if (process.browser) {
+          if (window.location.search) {
+            apilink = this.api + window.location.search
+          }
         }
       }
       this.$store.dispatch('getTableData', { link: apilink })
@@ -733,6 +767,10 @@ export default {
     setDate (model, event) {
       this.select[model] = this.$moment(event).format('YYYY-MM-DD')
       this.form[model] = this.$moment(event).format('YYYY-MM-DD HH:mm:ss')
+    },
+    nDaysAgo (e) {
+      const d = this.$moment(e).format('YYYY-MM-DD')
+      return this.$moment(d).fromNow()
     },
     validateEmail (e) {
       let show = false
@@ -759,31 +797,6 @@ export default {
         this.select[model] = event.value.value
         this.form[model] = event[selector]
       }
-    },
-    filterDate (value, filter) {
-      if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
-        return true
-      }
-
-      if (value === undefined || value === null) {
-        return false
-      }
-
-      return value === this.formatDate(filter)
-    },
-    formatDate (date) {
-      let month = date.getMonth() + 1
-      let day = date.getDate()
-
-      if (month < 10) {
-        month = '0' + month
-      }
-
-      if (day < 10) {
-        day = '0' + day
-      }
-
-      return date.getFullYear() + '-' + month + '-' + day
     },
     setCreateForm (e) {
       const frm = this.create

@@ -67,6 +67,8 @@ export default {
         'ProgressSpinner',
         'Badge',
         'DataTable',
+        'TabView',
+        'TabPanel',
         'InputSwitch',
         'InputMask',
         'Message',

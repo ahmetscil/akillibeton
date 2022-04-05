@@ -1,206 +1,133 @@
 <template>
   <div>
     <b-row>
-      <b-col cols="6" lg="2">
-        <div class="asc_pariette-card asc_pariette-minheight50 py-3">
-          <h5 v-if="projectInfo">
-            <i class="pi pi-question-circle" @click="infoModal = true" /> {{ measurementInfo.name }}
-          </h5>
+      <b-col cols="12" lg="8">
+        <h5 v-if="projectInfo">
+          <i class="pi pi-question-circle" @click="infoModal = true" /> {{ measurementInfo.name }}
+        </h5>
+      </b-col>
+      <b-col cols="12" lg="4">
+        <div class="float-left">
+          <Calendar v-model="startDate" :manual-input="false" :placeholder="datesPlaceholder" />
+        </div>
+        <div class="float-left mx-1">
+          <Calendar v-model="endDate" :manual-input="false" :placeholder="datesPlaceholder" />
+        </div>
+        <div class="float-left">
+          <Button icon="pi pi-list" class="p-button-warning p-button-sm" label="getData" @click="getData()" />
         </div>
       </b-col>
-      <b-col cols="6" lg="2">
-        <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3" :class="sfClass">
-          <h5>
-            <i class="pi pi-wifi" />
-            {{ $t('action.signalStatus') }}
-          </h5>
-          <h6>
-            {{ $t(`action.signal${measurementInfo.sf}`) }}
-          </h6>
+    </b-row>
+    <b-row class="mt-3">
+      <b-col>
+        <div class="asc_pariette-card asc_pariette-minheightInherit text-center py-3" :class="sfClass">
+          <i class="pi pi-wifi" /> {{ $t('action.signalStatus') }}<br>{{ $t(`action.signal${measurementInfo.sf}`) }}
         </div>
       </b-col>
-      <b-col cols="6" lg="2">
-        <div class="asc_pariette-card asc_pariette-minheight50 pointer bg-primary text-light text-center py-3" @click="measurementStatus(measurementInfo.status)">
-          <h5>
-            <i class="pi pi-clock" />
-            {{ $t('action.measurementStatus') }}
-          </h5>
-          <h6>
-            {{ measurementInfo.status == 1 ? $t('action.active') : $t('action.passive') }}
-          </h6>
+      <b-col>
+        <div class="asc_pariette-card asc_pariette-minheightInherit pointer bg-primary text-light text-center py-3" @click="measurementStatus(measurementInfo.status)">
+          <i class="pi pi-clock" /> {{ $t('action.measurementStatus') }}<br>{{ measurementInfo.status == 1 ? $t('action.active') : $t('action.passive') }}
         </div>
       </b-col>
-      <b-col cols="6" lg="2">
-        <div v-if="sensorInfo.status == 0" class="asc_pariette-card asc_pariette-minheight50 pointer bg-danger text-light text-center py-3" @click="sensorStatusModal = true">
-          <h5>
-            <i class="pi pi-stop-circle" />
-            {{ $t('action.sensorStatus') }}
-          </h5>
-          <h6>
-            {{ $t('action.sensorPassive') }}
-          </h6>
+      <b-col>
+        <div v-if="sensorInfo.status == 0" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-danger text-light text-center py-3" @click="sensorStatusModal = true">
+          <i class="pi pi-stop-circle" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorPassive') }}
         </div>
-        <div v-if="sensorInfo.status == 1" class="asc_pariette-card asc_pariette-minheight50 pointer bg-success text-light text-center py-3" @click="sensorStatusModal = true">
-          <h5>
-            <i class="pi pi-play" />
-            {{ $t('action.sensorStatus') }}
-          </h5>
-          <h6>
-            {{ $t('action.sensorActive') }}
-          </h6>
+        <div v-if="sensorInfo.status == 1" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-success text-light text-center py-3" @click="sensorStatusModal = true">
+          <i class="pi pi-play" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorActive') }}
         </div>
-        <div v-if="sensorInfo.status == 8" class="asc_pariette-card asc_pariette-minheight50 pointer bg-warning text-light text-center py-3" @click="sensorStatusModal = true">
-          <h5>
-            <i class="pi pi-clock" />
-            {{ $t('action.sensorStatus') }}
-          </h5>
-          <h6>
-            {{ $t('action.sensorStandby') }}
-          </h6>
+        <div v-if="sensorInfo.status == 8" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-warning text-light text-center py-3" @click="sensorStatusModal = true">
+          <i class="pi pi-clock" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorStandby') }}
         </div>
-        <div v-if="sensorInfo.status == 9" class="asc_pariette-card asc_pariette-minheight50 pointer bg-secondary text-light text-center py-3" @click="sensorStatusModal = true">
-          <h5>
-            <i class="pi pi-pause" />
-            {{ $t('action.sensorStatus') }}
-          </h5>
-          <h6>
-            {{ $t('action.sensorSleep') }}
-          </h6>
+        <div v-if="sensorInfo.status == 9" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-secondary text-light text-center py-3" @click="sensorStatusModal = true">
+          <i class="pi pi-pause" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorSleep') }}
+        </div>
+        <div v-else class="asc_pariette-card asc_pariette-minheightInherit pointer bg-secondary text-light text-center py-3" @click="sensorStatusModal = true">
+          <i class="pi pi-pause" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorSleep') }}
         </div>
       </b-col>
-      <b-col cols="6" lg="2">
-        <div class="asc_pariette-card asc_pariette-minheight50 bg-danger text-light text-center py-3">
-          <h6>{{ $t('general.readed_max') }}</h6>
-          <h5>{{ measurementInfo.readed_max }}</h5>
+      <b-col>
+        <div
+          class="asc_pariette-card asc_pariette-minheightInherit text-light text-center py-3"
+          :class="measurementInfo.readed_max >= measurementInfo.max_temp ? 'bg-danger' : 'bg-success'"
+        >
+          {{ $t('general.readed_max') }}<br>{{ measurementInfo.readed_max }} <small>({{ measurementInfo.max_temp }}°C)</small>
         </div>
       </b-col>
-      <b-col cols="6" lg="2">
-        <div class="asc_pariette-card asc_pariette-minheight50 bg-warning text-center py-3">
-          <h6>{{ $t('general.readed_min') }}</h6>
-          <h5>{{ measurementInfo.readed_min }}</h5>
+      <b-col>
+        <div
+          class="asc_pariette-card asc_pariette-minheightInherit text-light text-center py-3"
+          :class="measurementInfo.readed_min <= measurementInfo.min_temp ? 'bg-danger' : 'bg-success'"
+        >
+          {{ $t('general.readed_min') }}<br>{{ measurementInfo.readed_min }} <small>({{ measurementInfo.min_temp }}°C)</small>
         </div>
       </b-col>
+      <b-col>
+        <div class="asc_pariette-card asc_pariette-minheightInherit bg-info text-light text-center py-3">
+          {{ $t('general.last_temp') }}<br>{{ measurementInfo.last_temp }}°C
+        </div>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col cols="12" class="my-3">
-        <b-row>
-          <b-col>
-            <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3">
-              <h6>{{ $t('general.deployed_at') }}</h6>
-              <h5>{{ measurementInfo.deployed_at }}</h5>
-            </div>
-          </b-col>
-          <b-col>
-            <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3">
-              <h6>{{ $t('general.started_at') }}</h6>
-              <h5>{{ measurementInfo.started_at }}</h5>
-            </div>
-          </b-col>
-          <b-col>
-            <div class="asc_pariette-card asc_pariette-minheight50 text-center py-3">
-              <h6>{{ $t('general.ended_at') }}</h6>
-              <h5>{{ measurementInfo.ended_at }}</h5>
-            </div>
-          </b-col>
-          <b-col>
-            <div class="asc_pariette-card asc_pariette-minheight50 bg-info text-light text-center py-3">
-              <h6>{{ $t('general.last_temp') }}</h6>
-              <h5>{{ measurementInfo.last_temp }}</h5>
-            </div>
-          </b-col>
-          <b-col>
-            <div class="asc_pariette-card asc_pariette-minheight50 bg-primary text-light text-center py-3">
-              <h6>{{ $t('general.max_temp') }}</h6>
-              <h5>{{ measurementInfo.max_temp }}</h5>
-            </div>
-          </b-col>
-          <b-col>
-            <div class="asc_pariette-card asc_pariette-minheight50 bg-secondary text-light text-center py-3">
-              <h6>{{ $t('general.min_temp') }}</h6>
-              <h5>{{ measurementInfo.min_temp }}</h5>
-            </div>
-          </b-col>
-        </b-row>
-      </b-col>
-      <b-col cols="12" :lg="dataLimit === 10 ? 6 : 12" class="mb-3">
         <div class="asc_pariette-card">
-          <h5 class="float-left">
-            {{ $t('action.temperature') }}
-          </h5>
-          <div class="float-right">
-            <v-select
-              v-model="dataLimitVal"
-              :options="dataLimits"
-              label="label"
-              :clearable="false"
-              style="width:120px"
-              @input="setLimit"
-            />
+          <div v-if="showLoader" class="asc_pariette-loader">
+            <ProgressSpinner />
           </div>
-          <div class="clearfix" />
-          <Chart type="line" :data="temperatureChart" :options="chartOpt" />
+          <TabView v-else>
+            <TabPanel :header="$t('action.temperature')">
+              <h5 class="float-left">
+                {{ $t('action.temperature') }}
+              </h5>
+              <div class="float-right">
+                <v-select
+                  v-model="dataLimitVal"
+                  :options="dataLimits"
+                  label="label"
+                  :clearable="false"
+                  style="width:120px"
+                  @input="setLimit"
+                />
+              </div>
+              <div class="clearfix" />
+              <Chart type="line" :data="temperatureChart" :options="chartOpt" />
+            </TabPanel>
+            <TabPanel :header="$t('action.maturity')">
+              <h5 class="float-left">
+                {{ $t('action.maturity') }}
+              </h5>
+              <div class="float-right">
+                <v-select
+                  v-model="dataLimitVal"
+                  :options="dataLimits"
+                  label="label"
+                  :clearable="false"
+                  style="width:120px"
+                  @input="setLimit"
+                />
+              </div>
+              <div class="clearfix" />
+              <Chart type="line" :data="maturityChart" :options="chartOpt" />
+            </TabPanel>
+            <TabPanel v-if="tableQuery" :header="$t('action.Uplink')">
+              <ParietteTable
+                v-if="isShowTable"
+                :head="tableHead"
+                :operation="tableOperation"
+                :must-api="tableQuery"
+                :show-modal="false"
+                :data-fields="dataFields"
+              />
+            </TabPanel>
+          </TabView>
         </div>
       </b-col>
-      <b-col cols="12" :lg="dataLimit === 10 ? 6 : 12" class="mb-3">
-        <div class="asc_pariette-card">
-          <h5 class="float-left">
-            {{ $t('action.maturity') }}
-          </h5>
-          <div class="float-right">
-            <v-select
-              v-model="dataLimitVal"
-              :options="dataLimits"
-              label="label"
-              :clearable="false"
-              style="width:120px"
-              @input="setLimit"
-            />
-          </div>
-          <div class="clearfix" />
-          <Chart type="line" :data="maturityChart" :options="chartOpt" />
-        </div>
-      </b-col>
-      <b-col cols="12" class="my-3">
-        <div class="asc_pariette-pagecard">
-          <ParietteTable
-            v-if="isShowTable"
-            :head="tableHead"
-            :operation="tableOperation"
-            :api="tableQuery"
-            :show-modal="false"
-            :data-fields="dataFields"
-          />
-        </div>
-      </b-col>
-      <!-- <b-col cols="12" lg="6" class="mb-3">
-        <div class="asc_pariette-card">
-          <DataTable :value="LrrRSSI" responsive-layout="scroll" :paginator="true" :rows="10">
-            <Column field="created_at" header="CreatedAt" />
-            <Column field="data" header="Data" />
-          </DataTable>
-        </div>
-      </b-col>
-      <b-col cols="12" lg="6" class="mb-3">
-        <div class="asc_pariette-card">
-          <DataTable :value="LrrSNR" responsive-layout="scroll" :paginator="true" :rows="10">
-            <Column field="created_at" header="CreatedAt" />
-            <Column field="data" header="Data" />
-          </DataTable>
-        </div>
-      </b-col>
-      <b-col cols="12" lg="12" class="mb-3">
-        <div class="asc_pariette-card">
-          <DataTable :value="uplData" responsive-layout="scroll" :paginator="true" :rows="10">
-            <Column field="created_at" header="created_at" />
-            <Column field="measurement" header="measurement" />
-            <Column field="strength" header="strength" />
-            <Column field="temperature" header="temperature" />
-            <Column field="LrrRSSI" header="LrrRSSI" />
-            <Column field="LrrSNR" header="LrrSNR" />
-          </DataTable>
-        </div>
-      </b-col> -->
     </b-row>
     <Dialog :header="measurementInfo.name" :visible.sync="infoModal" :container-style="{width: '50vw'}" :modal="true">
       <p>{{ measurementInfo.description }}</p>
+      <p><span><b>{{ $t('general.deployed_at') }}</b><br>{{ measurementInfo.deployed_at }}</span></p>
+      <p><span><b>{{ $t('general.started_at') }}</b><br>{{ measurementInfo.started_at }}</span></p>
+      <p><span><b>{{ $t('general.ended_at') }}</b><br>{{ measurementInfo.ended_at }}</span></p>
     </Dialog>
     <Dialog :header="$t('action.sensorStatus')" :visible.sync="sensorStatusModal" :container-style="{width: '50vw'}" :modal="true">
       <Button :label="$t('action.sensorPassive')" class="p-button-danger" icon="pi pi-stop-circle" @click="setSensorStatus(0)" />
@@ -222,6 +149,8 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
+      tableQuery: '',
+      showLoader: false,
       isShowTable: true,
       tableHead: [],
       tableOperation: {},
@@ -229,14 +158,13 @@ export default {
       infoModal: false,
       sensorStatusModal: false,
       polling: null,
-      pageApi: 'Uplink',
       uplData: [],
       projectInfo: {},
       sensorInfo: {},
       sfClass: 'bg-primary text-light',
       measurementInfo: {},
-      dataLimit: 10,
-      dataLimitVal: '10',
+      dataLimit: 50,
+      dataLimitVal: '50',
       dataLimits: [
         { label: '10', value: 10 },
         { label: '50', value: 50 },
@@ -247,6 +175,9 @@ export default {
         { label: 'Tümü', value: 0 }
       ],
       dataset: [],
+      startDate: '2020-01-01',
+      endDate: '2050-12-31',
+      datesPlaceholder: '',
       uplink: {
         DevEUI: '',
         LrrRSSI: '',
@@ -272,18 +203,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['companyToken', 'returnCode']),
-    apiquery () {
-      let q
-      q = `${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}`
-      if (this.$route.query.measurement) {
-        q = `${this.pageApi}/${this.$route.params.url}?limit=${this.dataLimit}&measurement=${this.$route.query.measurement}`
-      }
-      return q
-    },
-    tableQuery () {
-      return `Uplink?measurement=${this.$route.params.url}`
-    }
+    ...mapState(['companyToken', 'returnCode'])
   },
   watch: {
     'returnCode' (e) {
@@ -305,8 +225,17 @@ export default {
   },
   methods: {
     async getData () {
+      const start = this.$moment(this.startDate).format('YYYY-MM-DD')
+      const end = this.$moment(this.endDate).format('YYYY-MM-DD')
+      let apiQuery = `Uplink/${this.$route.params.url}?limit=${this.dataLimit}&startDate=${start}&endDate=${end}`
+      if (this.$route.query.measurement) {
+        apiQuery += `&measurement=${this.$route.query.measurement}`
+      }
+      this.tableQuery = `Uplink?limit=${this.dataLimit}&startDate=${start}&endDate=${end}&measurement=${this.$route.query.measurement}`
+
       if (this.$route.params.url) {
-        await this.$axios.$get(this.companyToken + '/' + this.apiquery)
+        this.showLoader = true
+        await this.$axios.$get(this.companyToken + '/' + apiQuery)
           .then((res) => {
             if (res.code === 200) {
               this.projectInfo = res.data.project
@@ -344,7 +273,6 @@ export default {
               for (let s = 0; s < sensorData.length; s++) {
                 const sensor = sensorData[s]
                 const t = new Date(sensor.created_at)
-                console.log(t)
                 temperature.push({ x: t, y: sensor.temperature, c: sensor.counter })
                 maturity.push({ x: t, y: sensor.maturity, c: sensor.counter })
                 LrrRSSI.push({ created_at: sensor.created_at, data: sensor.LrrRSSI })
@@ -417,11 +345,16 @@ export default {
               this.LrrRSSI = LrrRSSI
               this.LrrSNR = LrrSNR
             } else {
+              this.sensorInfo = []
+              this.measurementInfo = []
+              this.temperatureChart = []
+              this.maturityChart = []
               this.$toast.add({ severity: 'warn', summary: this.$t('err.' + res.error), life: 3000 })
-              this.$router.push(this.localeLocation({ name: 'Admin-Measurement' }))
             }
+            this.showLoader = false
           })
           .catch((err) => {
+            this.showLoader = false
             console.log(err)
           })
         this.tableHead = [
@@ -479,6 +412,9 @@ export default {
           console.log(err)
         })
     },
+    goBack () {
+      this.$router.push(this.localeLocation({ name: 'Admin-Measurement' }))
+    },
     setSensorStatus (e) {
       if (e === 9) {
         this.$confirm.require({
@@ -510,17 +446,21 @@ export default {
         pm = 'action.startMessage'
         frm.status = 1
       }
-      this.$confirm.require({
-        message: this.$t(pm),
-        header: this.$t(ps),
-        icon: 'pi pi-exclamation-triangle',
-        accept: () => {
-          this.updateMeasurement(frm)
-        },
-        reject: () => {
-          // asd
-        }
-      })
+      if (this.measurementInfo.concrete_pouring_time) {
+        this.$confirm.require({
+          message: this.$t(pm),
+          header: this.$t(ps),
+          icon: 'pi pi-exclamation-triangle',
+          accept: () => {
+            this.updateMeasurement(frm)
+          },
+          reject: () => {
+            // asd
+          }
+        })
+      } else {
+        this.$toast.add({ severity: 'warn', summary: this.$t('err.concrete_pouring_error'), life: 3000 })
+      }
     },
     pollData () {
       this.polling = setInterval(() => {
