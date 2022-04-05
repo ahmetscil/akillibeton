@@ -90,6 +90,9 @@ export default {
         { label: 'max_maturity', type: 'Temperature' },
         { label: 'max_temp', type: 'Temperature' },
         { label: 'min_temp', type: 'Temperature' },
+        { label: 'concrete_pouring_time', type: 'InputText' },
+        { label: 'concrete_pouring_temp', type: 'Temperature' },
+        { label: 'reference_temp', type: 'Temperature' },
         { label: 'started_at', type: 'Calendar' },
         { label: 'deployed_at', type: 'Calendar' }
       ]
@@ -100,6 +103,9 @@ export default {
         { label: 'max_maturity', type: 'Temperature' },
         { label: 'max_temp', type: 'Temperature' },
         { label: 'min_temp', type: 'Temperature' },
+        { label: 'concrete_pouring_time', type: 'InputText' },
+        { label: 'concrete_pouring_temp', type: 'Temperature' },
+        { label: 'reference_temp', type: 'Temperature' },
         { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.tableHead = [
@@ -113,6 +119,9 @@ export default {
         { col: 'readed_min', label: this.$t('action.readed_min'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'started_at', label: this.$t('action.started_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'deployed_at', label: this.$t('action.deployed_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
+        { col: 'concrete_pouring_time', label: this.$t('action.concrete_pouring_time'), type: 'Calendar', filter: true, sortable: true, options: [] },
+        { col: 'concrete_pouring_temp', label: this.$t('action.concrete_pouring_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'reference_temp', label: this.$t('action.reference_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'ended_at', label: this.$t('action.ended_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
       ]
