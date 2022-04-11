@@ -5,7 +5,7 @@
         <span v-if="template.showHides" class="asc_pariette-sitename-mobile">
           <img src="@/assets/akillibeton-dark.png" :alt="siteInfo.name">
         </span>
-        <ul v-if="breadcrumb.items" class="asc_pariette-breadcrumb">
+        <ul v-if="(breadcrumb.items) && (breadcrumb.items.length >= 1)" class="asc_pariette-breadcrumb">
           <li v-for="(item, i) in breadcrumb.items" :key="'breadcrumb' + i" class="asc_pariette-breadcrumb-links">
             <router-link :to="$route.params.url ? '../' + item.route : '../Admin/' + item.route">
               <span v-if="item.locale">

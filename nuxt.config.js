@@ -50,6 +50,9 @@ export default {
       regular: true
     }]
   ],
+  moment: {
+    locales: ['tr']
+  },
   googleFonts: {
     families: {
       Inter: [100, 400, 600, 900],

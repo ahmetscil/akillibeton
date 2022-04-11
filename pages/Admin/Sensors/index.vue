@@ -67,8 +67,8 @@ export default {
         { col: 'title', label: this.$t('action.title'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'DevEUI', label: this.$t('action.DevEUI'), type: 'InputText', filter: true, sortable: true, options: [] },
         { col: 'sf', label: this.$t('action.signal'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'InputText', filter: true, sortable: true, options: [] }
+        { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'InputText', filter: true, sortable: true, options: [] },
+        { col: 'created_at', label: this.$t('action.created_at'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
       this.tableOperation = {
         create: true,
@@ -101,8 +101,7 @@ export default {
         // { label: 'sensor_no', type: 'Dropdown', option: snsrList, selector: 'id', static: true, val: 'value' },
         // { label: 'type', type: 'Dropdown', required: false, option: 'sensorTypeList', selector: 'id', val: 'key' },
         { label: 'description', type: 'Textarea' },
-        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' },
-        { col: 'last_data_at', label: this.$t('action.last_data_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
+        { label: 'status', type: 'Dropdown', option: 'statusList', selector: 'value', val: 'key' }
       ]
       this.$store.dispatch('getBreadcrumb', { query: `where=sensors${this.$route.query.project ? `&project=${this.$route.query.project}` : ''}` })
       setTimeout(() => {

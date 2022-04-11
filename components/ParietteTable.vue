@@ -153,10 +153,10 @@
               {{ $t('action.waiting') }}
             </span>
           </span>
-          <span v-else-if="column.col === 'last_data_at'">
-            {{ nDaysAgo(slot.data[column.col]) }}
-          </span>
-          <span v-else-if="column.col === 'sf'">
+          <div v-else-if="column.col === 'last_data_at'">
+            <span v-html="nDaysAgo(slot.data[column.col])" />
+          </div>
+          <div v-else-if="column.col === 'sf'">
             <template v-if="slot.data[column.col]">
               <span v-if="slot.data[column.col] == 0" class="text-danger">
                 {{ slot.data[column.col] }}
@@ -180,7 +180,7 @@
             <template v-else>
               no signal
             </template>
-          </span>
+          </div>
           <span v-else-if="column.col === 'readed_max'" :class="slot.data.readed_max >= slot.data.max_temp ? 'text-danger' : 'text-success'">
             {{ slot.data.readed_max }}
           </span>
@@ -769,8 +769,18 @@ export default {
       this.form[model] = this.$moment(event).format('YYYY-MM-DD HH:mm:ss')
     },
     nDaysAgo (e) {
+      const startTime = this.$moment(e)
+      const endTime = this.$moment()
+      const hoursDiff = this.$moment(endTime).diff(this.$moment(startTime), 'hours')
       const d = this.$moment(e).format('YYYY-MM-DD')
-      return this.$moment(d).fromNow()
+      const r = this.$moment(d).fromNow()
+      let rert = ''
+      if (hoursDiff >= 1) {
+        rert = `<span class="text-danger">${r}</span>`
+      } else {
+        rert = `<span class="text-success">${r}</span>`
+      }
+      return rert
     },
     validateEmail (e) {
       let show = false
