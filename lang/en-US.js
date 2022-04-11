@@ -38,6 +38,7 @@ export default {
     Authority: 'Authorizations',
     Users: 'Users',
     selectCompany: 'Please select a company',
+    selectLang: 'Select Language',
     searchTable: 'search',
     searchBy: 'Search {x}',
     exportTable: 'Export',
@@ -107,6 +108,7 @@ export default {
     description: 'Description'
   },
   action: {
+    getData: 'Get Data',
     counter: 'Data No',
     max_maturity: 'Maximim Maturity',
     confirmAlert: 'Attention!',

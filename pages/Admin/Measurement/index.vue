@@ -120,10 +120,7 @@ export default {
         { col: 'started_at', label: this.$t('action.started_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'deployed_at', label: this.$t('action.deployed_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
         { col: 'concrete_pouring_time', label: this.$t('action.concrete_pouring_time'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'concrete_pouring_temp', label: this.$t('action.concrete_pouring_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'reference_temp', label: this.$t('action.reference_temp'), type: 'InputText', filter: true, sortable: true, options: [] },
-        { col: 'ended_at', label: this.$t('action.ended_at'), type: 'Calendar', filter: true, sortable: true, options: [] },
-        { col: 'created_at', label: this.$t('action.created_at'), type: 'Calendar', filter: true, sortable: true, options: [] }
+        { col: 'concrete_pouring_temp', label: this.$t('action.concrete_pouring_temp'), type: 'InputText', filter: true, sortable: true, options: [] }
       ]
       setTimeout(() => {
         this.isShowTable = true

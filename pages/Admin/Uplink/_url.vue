@@ -1,20 +1,16 @@
 <template>
   <div>
     <b-row>
-      <b-col cols="12" lg="8">
+      <b-col cols="12" lg="6">
         <h5 v-if="projectInfo">
           <i class="pi pi-question-circle" @click="infoModal = true" /> {{ measurementInfo.name }}
         </h5>
       </b-col>
-      <b-col cols="12" lg="4">
-        <div class="float-left">
+      <b-col cols="12" lg="6" class="text-right">
+        <div class="float-right">
           <Calendar v-model="startDate" :manual-input="false" :placeholder="datesPlaceholder" />
-        </div>
-        <div class="float-left mx-1">
           <Calendar v-model="endDate" :manual-input="false" :placeholder="datesPlaceholder" />
-        </div>
-        <div class="float-left">
-          <Button icon="pi pi-list" class="p-button-warning p-button-sm" label="getData" @click="getData()" />
+          <Button icon="pi pi-list" class="p-button-warning p-button-sm" :label="$t('action.getData')" @click="getData()" />
         </div>
       </b-col>
     </b-row>

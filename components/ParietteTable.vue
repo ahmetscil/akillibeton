@@ -181,12 +181,16 @@
               no signal
             </template>
           </div>
-          <span v-else-if="column.col === 'readed_max'" :class="slot.data.readed_max >= slot.data.max_temp ? 'text-danger' : 'text-success'">
-            {{ slot.data.readed_max }}
-          </span>
-          <span v-else-if="column.col === 'readed_min'" :class="slot.data.readed_min <= slot.data.min_temp ? 'text-danger' : 'text-success'">
-            {{ slot.data.readed_min }}
-          </span>
+          <div v-else-if="column.col === 'readed_max'">
+            <b-badge :variant="slot.data.readed_max >= slot.data.max_temp ? 'danger' : 'success'">
+              {{ slot.data.readed_max }}
+            </b-badge>
+          </div>
+          <div v-else-if="column.col === 'readed_min'">
+            <b-badge :variant="slot.data.readed_min <= slot.data.min_temp ? 'danger' : 'success'">
+              {{ slot.data.readed_min }}
+            </b-badge>
+          </div>
           <span v-else>{{ slot.data[column.col] }}</span>
         </template>
       </Column>

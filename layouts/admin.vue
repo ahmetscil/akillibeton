@@ -12,12 +12,38 @@
     <Sidebar :visible.sync="showSidebar" position="right" :show-close-icon="false">
       <b-row>
         <b-col cols="10">
-          {{ $t('general.selectCompany') }}
+          {{ userData.name }}
         </b-col>
         <b-col cols="2">
           <Button icon="pi pi-times" class="p-button-warning p-button-sm" @click="close()" />
         </b-col>
-        <b-col cols="12" style="height: 75vh; overflow:auto">
+      </b-row>
+      <b-row>
+        <b-col cols="12">
+          <h5>
+            {{ $t('general.selectLang') }}
+          </h5>
+        </b-col>
+        <b-col>
+          <div
+            v-for="(lang, c) in languages"
+            :key="'lang' + c"
+            class="pointer d-block mx-3"
+            @click="setLang(lang.code)"
+          >
+            <p>
+              <i :class="`fas fa-${lang.flag}`" /> {{ lang.title }}
+            </p>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row class="mt-3">
+        <b-col cols="12">
+          <h5>
+            {{ $t('general.selectCompany') }}
+          </h5>
+        </b-col>
+        <b-col cols="12" style="height: 58vh; overflow:auto;">
           <div
             v-for="(companies, c) in pleaseSelect"
             :key="'cmp' + c"
@@ -43,8 +69,12 @@
 import { mapState } from 'vuex'
 export default {
   data: () => ({
+    languages: [
+      { title: 'Türkçe', code: 'tr', flag: 'tr' },
+      { title: 'English', code: 'en', flag: 'us' }
+    ]
   }),
-  computed: mapState(['template', 'showSidebar', 'pleaseSelect']),
+  computed: mapState(['template', 'userData', 'showSidebar', 'pleaseSelect']),
   mounted () {
     this.$store.commit('getSelectSite')
   },
@@ -56,6 +86,9 @@ export default {
           localStorage.clear()
         )
       }
+    },
+    setLang (e) {
+      this.$i18n.setLocale(e)
     },
     selectSite (e) {
       this.$store.commit('setStore', { company: e })
