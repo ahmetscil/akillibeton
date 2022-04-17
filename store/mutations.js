@@ -167,6 +167,7 @@ export default {
     state.uploaded.error = payload.error
   },
   setUploadedImages (state, payload) {
+    state.returnCode = 701
     state.uploadedImages.name = payload.name
     state.uploadedImages.image = payload.url
   },

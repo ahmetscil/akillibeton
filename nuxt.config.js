@@ -68,6 +68,7 @@ export default {
     ['primevue/nuxt', {
       components: [
         'ProgressSpinner',
+        'ImagePreview',
         'Badge',
         'DataTable',
         'TabView',

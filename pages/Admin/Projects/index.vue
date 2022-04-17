@@ -59,6 +59,7 @@ export default {
       this.tableOperation = {
         create: true,
         update: true,
+        preview: true,
         activePassive: true,
         export: true,
         // addUser: true,

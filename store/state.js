@@ -8,12 +8,12 @@ export default () => ({
   siteInfo: {
     name: 'AKILLIBETON',
     logo: 'pariette-header-logo.svg',
-    cdn_url: 'https://pariette-cdn.s3.eu-central-1.amazonaws.com/uploads/',
+    cdn_url: process.browser ? process.env.CANVAS_CDN_URL : 'https://api.akillibeton.com/uploads/',
     copyright: '© 2021 CANVAS TEKNOLOJI',
     footer: '© 2021 AKILLI BETON. All Rights Reserved.'
   },
   myStore: {
-    cdn_url: 'https://pariette-cdn.s3.eu-central-1.amazonaws.com/uploads/',
+    cdn_url: process.browser ? process.env.CANVAS_CDN_URL : 'https://api.akillibeton.com/uploads/',
     logo: 'pariette.png',
     css: '',
     name: ''

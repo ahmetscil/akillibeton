@@ -12,7 +12,6 @@
             class="asc_pariette-dropzone-input-file"
             @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
           >
-          <!-- accept="image/*" -->
           <p v-if="isInitial">
             {{ $t('general.uploadInfo') }}
           </p>
@@ -21,37 +20,6 @@
           </p>
         </div>
       </form>
-      <b-row v-if="isSuccess">
-        <b-col cols="12">
-          <div class="asc_pariette-dropzone-info">
-            <p v-if="uploadedFiles">
-              {{ $t('general.uploadOK', { val: uploadedFiles.length }) }}
-            </p>
-            <b-button variant="light" class="px-5" type="button" size="sm" @click="reset()">
-              {{ $t('general.reUpload') }}
-            </b-button>
-          </div>
-        </b-col>
-        <b-col v-if="position === 'modal'" cols="12" class="mt-2">
-          <b-img :src="uploadedFiles['imgsm']" fluid />
-          <b-button variant="light" type="button" size="sm" @click="useIt(uploadedFiles['file'])">
-            use it
-          </b-button>
-        </b-col>
-      </b-row>
-      <b-row v-if="isFailed">
-        <b-col>
-          <div class="asc_pariette-dropzone-info">
-            <p>
-              {{ $t('general.uploadError') }}
-            </p>
-            <b-button variant="dark" class="px-5" type="button" size="sm" @click="reset()">
-              {{ $t('general.reUpload') }}
-            </b-button>
-            <pre>{{ uploadError }}</pre>
-          </div>
-        </b-col>
-      </b-row>
     </b-col>
   </b-row>
 </template>
@@ -70,11 +38,6 @@ export default {
       type: String,
       required: false,
       default: ''
-    },
-    where: {
-      type: String,
-      required: false,
-      default: 'simple'
     },
     filedata: {
       type: Object,
@@ -126,29 +89,20 @@ export default {
   },
   methods: {
     async save (form) {
+      this.$store.commit('setReturn', 1)
       this.$store.commit('setUploadedStatus', false)
       this.currentStatus = STATUS_SAVING
-      const upl = await this.$axios.$post(`upload/${this.where}`, form)
+      const upl = await this.$axios.$post(`${this.companyToken}/Upload`, form)
       if (upl.status) {
         this.$store.commit('setUploadedStatus', true)
         this.uploadedFiles = [].concat(upl)
         this.uploadedFiles = upl.data
         this.currentStatus = STATUS_SUCCESS
-        switch (this.where) {
-          case 'uploadPincode':
-            this.$store.commit('setUploadedPins', upl.data)
-            break
-          case 'uploadImage':
-            this.$store.commit('setUploadedImages', upl.data)
-            break
-        }
+        this.$store.commit('setUploadedImages', upl.data)
       } else {
         this.uploadError = upl
         this.currentStatus = STATUS_FAILED
       }
-    },
-    useIt (e) {
-      this.$store.commit('UPLOADED_FILE', e)
     },
     filesChange (fieldName, fileList) {
       const formData = new FormData()
@@ -158,20 +112,10 @@ export default {
       Array
         .from(Array(fileList.length).keys())
         .map((x) => {
-          switch (this.where) {
-            case 'uploadPincode':
-              formData.append('suppliers', this.filedata.suppliers)
-              formData.append('purchasePrice', this.filedata.purchasePrice)
-              formData.append('ended_at', this.filedata.ended_at)
-              formData.append('pin', this.filedata.pin)
-              break
-            case 'uploadImage':
-              formData.append('storeToken', this.companyToken.token)
-              formData.append('user', this.$auth.user.id)
-              formData.append('tag', this.tag)
-              formData.append(fieldName, fileList[x], fileList[x].name)
-              break
-          }
+          formData.append('project', this.filedata.project)
+          formData.append('tag', this.filedata.tag)
+          formData.append('storeToken', this.companyToken)
+          formData.append('user', this.$auth.user.id)
           formData.append(fieldName, fileList[x], fileList[x].name)
           return formData
         })

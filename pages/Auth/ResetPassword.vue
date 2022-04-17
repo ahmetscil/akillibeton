@@ -8,31 +8,26 @@
         {{ $t('auth.loginTry') }}
       </Message>
     </div>
+    <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.code.$error }">
+      <label for="code">
+        {{ $t('auth.code') }}
+      </label>
+      <InputText v-model="form.code" />
+    </div>
     <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.email.$error }">
       <label for="email">
         {{ $t('auth.email') }}
       </label>
-      <InputText v-model="form.email" @keyup.enter="loginForm()" />
+      <InputText v-model="form.email" />
     </div>
     <div class="p-field p-col-12 p-md-4" :class="{ 'input--alert': $v.form.password.$error }">
       <label for="basic">
-        {{ $t('auth.password') }}
+        {{ $t('auth.newPassword') }}
       </label>
       <Password v-model="form.password" :feedback="false" toggle-mask @keyup.enter="loginForm()" />
     </div>
-    <!-- <div class="p-field-checkbox p-col-6 p-md-4">
-      <Checkbox id="rememberMe" v-model="form.rememberMe" :binary="true" />
-      <label for="binary">
-        {{ $t('auth.rememberMe') }}
-      </label>
-    </div> -->
-    <div class="p-field-checkbox p-col-6 p-md-4">
-      <nuxt-link :to="localeLocation({ name: 'Auth-ForgotPassword' })">
-        {{ $t('auth.forgotPass') }}
-      </nuxt-link>
-    </div>
     <div class="p-field-checkbox p-col-2 p-md-4">
-      <Button icon="pi pi-check" :label="$t('auth.login')" class="p-button-warning p-button-rounded" :disabled="disableBtn" @click="loginForm()" />
+      <Button icon="pi pi-check" :label="$t('auth.changePassword')" class="p-button-warning p-button-rounded" :disabled="disableBtn" @click="loginForm()" />
     </div>
   </div>
 </template>
@@ -45,7 +40,7 @@ export default {
     form: {
       email: '',
       password: '',
-      rememberMe: false
+      code: ''
     },
     disableBtn: false,
     loginError: false
@@ -57,19 +52,23 @@ export default {
       if (this.$v.$invalid) {
         this.$toast.add({ severity: 'warn', summary: this.$t('auth.fillError'), life: 3000 })
       } else {
-        this.disableBtn = true
+        // this.disableBtn = true
         this.loginError = false
         try {
           this.$toast.add({ severity: 'success', summary: this.$t('auth.pleaseWait'), life: 3000 })
-          const login = await this.$auth.loginWith('laravelJWT', { data: this.form })
-          if (parseInt(login.status) === 200) {
-            this.disableBtn = false
-            this.$store.commit('setLogin', this.$auth.$state)
-            this.$store.commit('setSelectSite', { data: login.data })
-          } else {
-            this.disableBtn = false
-            this.$toast.add({ severity: 'success', summary: login.data.error, life: 3000 })
-          }
+
+          await this.$axios.$post('auth/updatePassword', this.form)
+            .then((res) => {
+              if (res.status) {
+                this.$toast.add({ severity: 'info', summary: this.$t('auth.resetted'), life: 3000 })
+                this.$router.push(this.localeLocation({ name: 'Auth-Login' }))
+              } else {
+                this.$toast.add({ severity: 'warn', summary: this.$t('err.lng_0004'), life: 3000 })
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            })
         } catch (err) {
           this.disableBtn = false
           this.$toast.add({ severity: 'error', summary: err.response.data.error, life: 3000 })
@@ -83,6 +82,10 @@ export default {
   },
   validations: {
     form: {
+      code: {
+        required,
+        minLength: minLength(4)
+      },
       email: {
         required,
         minLength: minLength(3),
