@@ -34,6 +34,7 @@ export default {
     '~/plugins/vuelidate.js',
     '~/plugins/select.js',
     { src: '~/plugins/editor.js', ssr: false },
+    { src: '~/plugins/gauge.js', ssr: false },
     { src: '~/plugins/datagrid.js', ssr: false }
   ],
 

@@ -1,66 +1,70 @@
 <template>
   <div>
     <b-row>
-      <b-col cols="12" lg="6">
-        <h5 v-if="projectInfo">
-          <i class="pi pi-question-circle" @click="infoModal = true" /> {{ measurementInfo.name }}
-        </h5>
+      <b-col cols="12" lg="9">
+        <b-row>
+          <b-col>
+            <h5 v-if="projectInfo">
+              <i class="pi pi-question-circle" @click="infoModal = true" /> {{ measurementInfo.name }}
+            </h5>
+          </b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col>
+            <div class="asc_pariette-card asc_pariette-minheightInherit text-center py-3" :class="sfClass">
+              <i class="pi pi-wifi" /> {{ $t('action.signalStatus') }}<br>{{ $t(`action.signal${measurementInfo.sf}`) }}
+            </div>
+          </b-col>
+          <b-col>
+            <div class="asc_pariette-card asc_pariette-minheightInherit pointer bg-primary text-light text-center py-3" @click="measurementStatus(measurementInfo.status)">
+              <i class="pi pi-clock" /> {{ $t('action.measurementStatus') }}<br>{{ measurementInfo.status == 1 ? $t('action.active') : $t('action.passive') }}
+            </div>
+          </b-col>
+          <b-col>
+            <div v-if="sensorInfo.status == 0" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-danger text-light text-center py-3" @click="sensorStatusModal = true">
+              <i class="pi pi-stop-circle" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorPassive') }}
+            </div>
+            <div v-if="sensorInfo.status == 1" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-success text-light text-center py-3" @click="sensorStatusModal = true">
+              <i class="pi pi-play" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorActive') }}
+            </div>
+            <div v-if="sensorInfo.status == 8" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-warning text-light text-center py-3" @click="sensorStatusModal = true">
+              <i class="pi pi-clock" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorStandby') }}
+            </div>
+            <div v-if="sensorInfo.status == 9" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-secondary text-light text-center py-3" @click="sensorStatusModal = true">
+              <i class="pi pi-pause" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorSleep') }}
+            </div>
+            <div v-else class="asc_pariette-card asc_pariette-minheightInherit pointer bg-secondary text-light text-center py-3" @click="sensorStatusModal = true">
+              <i class="pi pi-pause" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorSleep') }}
+            </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="12" class="text-right">
+            <div class="float-right">
+              <Calendar v-model="startDate" :manual-input="false" :placeholder="datesPlaceholder" />
+              <Calendar v-model="endDate" :manual-input="false" :placeholder="datesPlaceholder" />
+              <Button icon="pi pi-list" class="p-button-warning p-button-sm" :label="$t('action.getData')" @click="getData()" />
+            </div>
+          </b-col>
+        </b-row>
       </b-col>
-      <b-col cols="12" lg="6" class="text-right">
-        <div class="float-right">
-          <Calendar v-model="startDate" :manual-input="false" :placeholder="datesPlaceholder" />
-          <Calendar v-model="endDate" :manual-input="false" :placeholder="datesPlaceholder" />
-          <Button icon="pi pi-list" class="p-button-warning p-button-sm" :label="$t('action.getData')" @click="getData()" />
-        </div>
-      </b-col>
-    </b-row>
-    <b-row class="mt-3">
-      <b-col>
-        <div class="asc_pariette-card asc_pariette-minheightInherit text-center py-3" :class="sfClass">
-          <i class="pi pi-wifi" /> {{ $t('action.signalStatus') }}<br>{{ $t(`action.signal${measurementInfo.sf}`) }}
-        </div>
-      </b-col>
-      <b-col>
-        <div class="asc_pariette-card asc_pariette-minheightInherit pointer bg-primary text-light text-center py-3" @click="measurementStatus(measurementInfo.status)">
-          <i class="pi pi-clock" /> {{ $t('action.measurementStatus') }}<br>{{ measurementInfo.status == 1 ? $t('action.active') : $t('action.passive') }}
-        </div>
-      </b-col>
-      <b-col>
-        <div v-if="sensorInfo.status == 0" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-danger text-light text-center py-3" @click="sensorStatusModal = true">
-          <i class="pi pi-stop-circle" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorPassive') }}
-        </div>
-        <div v-if="sensorInfo.status == 1" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-success text-light text-center py-3" @click="sensorStatusModal = true">
-          <i class="pi pi-play" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorActive') }}
-        </div>
-        <div v-if="sensorInfo.status == 8" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-warning text-light text-center py-3" @click="sensorStatusModal = true">
-          <i class="pi pi-clock" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorStandby') }}
-        </div>
-        <div v-if="sensorInfo.status == 9" class="asc_pariette-card asc_pariette-minheightInherit pointer bg-secondary text-light text-center py-3" @click="sensorStatusModal = true">
-          <i class="pi pi-pause" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorSleep') }}
-        </div>
-        <div v-else class="asc_pariette-card asc_pariette-minheightInherit pointer bg-secondary text-light text-center py-3" @click="sensorStatusModal = true">
-          <i class="pi pi-pause" /> {{ $t('action.sensorStatus') }}<br>{{ $t('action.sensorSleep') }}
-        </div>
-      </b-col>
-      <b-col>
+      <b-col cols="12" lg="3">
         <div
-          class="asc_pariette-card asc_pariette-minheightInherit text-light text-center py-3"
-          :class="measurementInfo.readed_max >= measurementInfo.max_temp ? 'bg-danger' : 'bg-success'"
+          v-if="measurementInfo.readed_max"
+          class="asc_pariette-card asc_pariette-minheightInherit text-light text-center"
         >
-          {{ $t('general.readed_max') }}<br>{{ measurementInfo.readed_max }} <small>({{ measurementInfo.max_temp }}°C)</small>
-        </div>
-      </b-col>
-      <b-col>
-        <div
-          class="asc_pariette-card asc_pariette-minheightInherit text-light text-center py-3"
-          :class="measurementInfo.readed_min <= measurementInfo.min_temp ? 'bg-danger' : 'bg-success'"
-        >
-          {{ $t('general.readed_min') }}<br>{{ measurementInfo.readed_min }} <small>({{ measurementInfo.min_temp }}°C)</small>
-        </div>
-      </b-col>
-      <b-col>
-        <div class="asc_pariette-card asc_pariette-minheightInherit bg-info text-light text-center py-3">
-          {{ $t('general.last_temp') }}<br>{{ measurementInfo.last_temp }}°C
+          <vue-gauge
+            :refid="'_' + Math.random().toString(36).substr(2, 9)"
+            :options="{
+              needleValue: measurementInfo.last_temp,
+              needleColor: 'black',
+              arcDelimiters: [parseInt(measurementInfo.readed_min) / 0.6, parseInt(measurementInfo.readed_max) / 0.6],
+              arcColors: ['rgb(61,204,91)', 'rgb(239,214,19)', 'rgb(255,84,84)'],
+              arcLabels: [measurementInfo.readed_min + '°C', measurementInfo.readed_max + '°C'],
+              rangeLabel: [measurementInfo.min_temp + '°C', measurementInfo.max_temp + '°C'],
+              centralLabel: measurementInfo.last_temp + '°C',
+            }"
+          />
         </div>
       </b-col>
     </b-row>
