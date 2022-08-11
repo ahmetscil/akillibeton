@@ -76,7 +76,8 @@ export default {
         activePassive: true,
         update: true,
         links: [
-          { name: 'Measurement', route: '../Admin/Measurement', query: '?sensor=', after: null, afterLabel: null }
+          { name: 'Measurement', route: '../Admin/Measurement', query: '?sensor=', after: null, afterLabel: null },
+          { name: 'Uplink', lang: 'data', route: '../Admin/Uplink', query: '/', after: '?sensor=', afterLabel: 'id' }
         ]
       }
       // const snsrList = [
